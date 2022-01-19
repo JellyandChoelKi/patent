@@ -183,8 +183,9 @@
 </script>
 <div class="flex center w100 h100 rela" style="overflow: hidden;">
 	<form name="regiform" id="regiform" method="post" action="/Kr/MyInfoProc">
-		<input type="hidden" name="id_check_yn" value="N"> <!--아이디 중복확인 여부-->
-		<input type="hidden" name="email_check_yn" value="N"> <!--이메일 인증 여부-->
+		<input type="hidden" name="Id" value="@(Model.Id)">
+		<input type="hidden" name="id_check_yn" value="N">
+		<input type="hidden" name="email_check_yn" value="N">
 		<div class="flex pad10">
 			<input id="memberid" class="style required" placeholder="아이디" asp-for="@(Model.MemberId)" autocomplete="off">
 			<input type="button" id="id_check_btn" value="중복확인" onclick="memberid_check();">

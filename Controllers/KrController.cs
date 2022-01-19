@@ -11,12 +11,27 @@ using K2GGTT.Data;
 using Newtonsoft.Json;
 using System.Net.Mail;
 using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
+using System.Text;
+
 namespace K2GGTT.Controllers
 {
 	public class KrController : Controller
 	{
 		private readonly ILogger<KrController> _logger;
 		private readonly DBContext _context;
+
+		public string SHA256Hash(string password)
+		{
+			SHA256 sha = new SHA256Managed();
+			byte[] hash = sha.ComputeHash(Encoding.ASCII.GetBytes(password));
+			StringBuilder stringBuilder = new StringBuilder();
+			foreach (byte b in hash)
+			{
+				stringBuilder.AppendFormat("{0:x2}", b);
+			}
+			return stringBuilder.ToString();
+		}
 
 		public KrController(ILogger<KrController> logger, DBContext DBContext)
 		{
@@ -75,7 +90,7 @@ namespace K2GGTT.Controllers
 			{
 				return Content(@"<script type='text/javascript'>alert('가입된 이메일 정보가 없습니다. 다시 확인 바랍니다.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
 			}
-			member.Password = code;
+			member.Password = SHA256Hash(code);
 			_context.SaveChanges();
 
 			MailMessage mail = new MailMessage();
@@ -99,7 +114,7 @@ namespace K2GGTT.Controllers
 		[HttpPost]
 		public IActionResult LoginProc(string memberid, string password)
 		{
-			var member = _context.Member.Where(x => x.MemberId == memberid && x.Password == password).FirstOrDefault();
+			var member = _context.Member.Where(x => x.MemberId == memberid && x.Password == SHA256Hash(password)).FirstOrDefault();
 			if (member == null)
 			{
 				return Content(@"<script type='text/javascript'>alert('로그인 정보가 없습니다.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
@@ -127,6 +142,7 @@ namespace K2GGTT.Controllers
 			if (Id > 0)
 			{
 				var member = _context.Member.Where(x => x.Id == Id).FirstOrDefault();
+				model.Id = member.Id;
 				model.MemberId = member.MemberId;
 				model.Name = member.Name;
 				model.Contact = member.Contact;
@@ -156,7 +172,7 @@ namespace K2GGTT.Controllers
 			MailMessage mail = new MailMessage();
 			mail.From = new MailAddress("no-reply@yellowknife.io", "K2G", System.Text.Encoding.UTF8);
 			mail.To.Add(email);
-			mail.Subject = "K2G에서 이메일 인증코드를 보내드립니다.";
+			mail.Subject = "[K2G] 이메일 인증코드를 보내드립니다.";
 			mail.Body = "사용자 인증을 위해 6자리 코드 보내드립니다. 회원가입 화면에 6자리 코드 입력 바랍니다. 인증코드 : " + code;
 			mail.IsBodyHtml = true;
 			mail.SubjectEncoding = System.Text.Encoding.UTF8;
@@ -180,7 +196,7 @@ namespace K2GGTT.Controllers
 			}
 			Member member = new Member();
 			member.MemberId = model.MemberId;
-			member.Password = model.Password;
+			member.Password = SHA256Hash(model.Password);
 			member.Gubun = model.Gubun;
 			member.Name = model.Name;
 			member.CompanyRegistrationNumber = model.CompanyRegistrationNumber;
@@ -194,7 +210,7 @@ namespace K2GGTT.Controllers
 			_context.Member.Add(member);
 			_context.SaveChanges();
 
-			return Redirect("/Kr/MyInfo");
+			return Content(@"<script type='text/javascript'>alert('회원가입이 완료되었습니다.');location.href='/Kr/Index';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 	}
 }

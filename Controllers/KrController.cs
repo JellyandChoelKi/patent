@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using K2GGTT.Data;
 using Newtonsoft.Json;
 using System.Net.Mail;
-
+using Microsoft.AspNetCore.Http;
 namespace K2GGTT.Controllers
 {
 	public class KrController : Controller
@@ -26,7 +26,19 @@ namespace K2GGTT.Controllers
 
 		public IActionResult Index()
 		{
+			var SessionMemberId = HttpContext.Session.GetString("MemberId");
+			if (SessionMemberId != null)
+			{
+				ViewBag.SessionMemberId = SessionMemberId;
+			}
 			return View();
+		}
+
+		[HttpGet]
+		public IActionResult Logout()
+		{
+			HttpContext.Session.Clear();
+			return Content(@"<script type='text/javascript'>alert('정상적으로 로그아웃 되었습니다.');location.href='/Kr/Index';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult Action(string keywords)
@@ -49,6 +61,19 @@ namespace K2GGTT.Controllers
 		public IActionResult Member()
 		{
 			return View();
+		}
+
+		[HttpPost]
+		public IActionResult LoginProc(string memberid, string password)
+		{
+			var member = _context.Member.Where(x => x.MemberId == memberid && x.Password == password).FirstOrDefault();
+			if (member == null)
+			{
+				return Content(@"<script type='text/javascript'>alert('로그인 정보가 없습니다.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
+			}
+			HttpContext.Session.SetString("MemberId", member.MemberId);
+			HttpContext.Session.SetString("MemberName", member.Name);
+			return Redirect("/Kr/Index");
 		}
 
 		public IActionResult About()

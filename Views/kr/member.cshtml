@@ -1,11 +1,31 @@
-﻿<div class="pad30">
+﻿<script type="text/javascript">
+	$(document).ready(function () {
+		$("#Save").click(function () {
+			var memberid = $("input[name='memberid']").val();
+			if (!memberid) {
+				alert("ID를 입력해주세요.");
+				$("input[name='memberid']").focus();
+				return false;
+			}
+			var password = $("input[name='password']").val();
+			if (!password) {
+				alert("PW를 입력해주세요.");
+				$("input[name='password']").focus();
+				return false;
+			}
+			var form = document.loginform;
+			form.submit();
+		});
+    });
+</script>
+<div class="pad30">
     <h3 class="tc">로그인</h3>
     <div class="flex center w100 h100 rela" style="overflow: hidden;">
-        <form name="search" method="get" class="" action="/db/member_check.html">
+        <form name="loginform" id="loginform" method="post" action="/Kr/LoginProc">
             <div>
-                <input type="text" placeholder="ID" class="style vertical">
-                <input type="password" placeholder="PW" class="style vertical">
-                <input type="submit" value="로그인" class="vertical style w100">
+                <input type="text" placeholder="ID" name="memberid" class="style vertical">
+                <input type="password" placeholder="PW" name="password" class="style vertical">
+                <input type="button" value="로그인" class="vertical style w100" id="Save">
                 <div class="flex between mt10">
                     <a href="/kr/password" class="link">비밀번호 찾기</a>
                     <a href="/kr/register" class="link">회원가입</a>

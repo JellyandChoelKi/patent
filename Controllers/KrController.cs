@@ -26,11 +26,6 @@ namespace K2GGTT.Controllers
 
 		public IActionResult Index()
 		{
-			var SessionMemberId = HttpContext.Session.GetString("MemberId");
-			if (SessionMemberId != null)
-			{
-				ViewBag.SessionMemberId = SessionMemberId;
-			}
 			return View();
 		}
 

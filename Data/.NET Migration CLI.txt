@@ -1,3 +1,7 @@
 -- 2022.01.04 회원 테이블 추가
 Add-Migration AddMember -Context DBContext
 Update-Database -Context DBContext
+
+-- 2022.01.189 회원 테이블 수정
+Add-Migration ModMember -Context DBContext
+Update-Database -Context DBContext

@@ -1,8 +1,8 @@
 using System;
 
-namespace K2GGTT.Models
+namespace K2GGTT.ViewModels
 {
-	public class Member
+	public class MyInfoViewModel
 	{
 		public int Id { get; set; }
 		public string MemberId { get; set; }

@@ -1,47 +1,240 @@
-﻿<div class="pad30 w400">
-    <h3 class="tc">회원가입</h3>
-    <div class="" style="overflow: hidden;">
-        <form name="" method="post" action="./register_complete.html" autocomplete="off">
-            <div class="flex pad10">
-                <input id="input_id" class="style" placeholder="아이디" required autocomplete="off">
-                <button class="style">중복확인</button>
-            </div>
-            <div class="pad10">
-                <input id="input_password" type="password" class="style w100" placeholder="비밀번호" required autocomplete="off">
-                <input id="input_password_re" type="password" class="style w100" placeholder="비밀번호 재입력" required autocomplete="off">
-                <div id="password_confirm" class="small red">
-                </div>
-            </div>
-            <div class="flex pad10 vcenter">
-                <input type="radio" name="member_ca" value="1" id="member_ca1"><label for="member_ca1">개인</label>
-                <input type="radio" name="member_ca" value="2" id="member_ca2"><label for="member_ca2">기업</label>
-            </div>
-            <div><input id="input_name" class="style" placeholder="고객명"></div>
-            <div class="flex pad10">
-                <input id="input_contact" class="style" placeholder="연락처">
-            </div>
-            <div class="flex pad10">
-                <input id="input_email" class="style" placeholder="이메일">
-                <button class="style">이메일 인증</button>
-            </div>
-            <div class="tc pad30">
-                <button class="style">가입 완료</button>
-            </div>
-        </form>
-    </div>
-</div>
-
-<script>
-		$('#input_password_re').on('change',function(){
-			var password1 = $('#input_password').val();
-			var password2 = $('#input_password_re').val();
-
-			if(password1 == password2) {
-				$('#password_confirm').css('color','#0C0');
-				$('#password_confirm').text('비밀번호가 일치합니다.');
-			} else {
-				$('#password_confirm').css('color','#C00');
-				$('#password_confirm').text('비밀번호가 일치하지않습니다.');
+﻿@model K2GGTT.ViewModels.MyInfoViewModel
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+	// 엔터로인한 submit 방지
+	$(document).keypress(function (e) { if (e.keyCode == 13) e.preventDefault(); });
+	function memberid_check() {
+		var memberid = $("input[name='MemberId']").val();
+		if (!memberid) {
+			alert("아이디를 입력해주세요.");
+			$("input[name='MemberId']").focus();
+			return false;
+		}
+		$.ajax({
+			url: "/Kr/MemberIdCheck",
+			type: "POST",
+			async: false,
+			data: { memberid: memberid },
+			success: function (data) {
+				var res = JSON.parse(data);
+				if (res == "N") {
+					$("#memberid").prop("readonly", true);
+					$("#memberid").css("background-color", "lightgray");
+					$("#id_check_btn").css("display", "none");
+					$("#id_recheck_btn").css("display", "");
+					$("input[name='id_check_yn']").val("Y");
+				} else {
+					alert("이미 가입된 아이디입니다. 다시 등록 바랍니다.");
+					return false;
+				}
 			}
 		});
+	}
+	function memberid_recheck() {
+		$("#memberid").val("");
+		$("#memberid").prop("readonly", false);
+		$("#memberid").css("background-color", "white");
+		$("#id_check_btn").css("display", "");
+		$("#id_recheck_btn").css("display", "none");
+		$("input[name='id_check_yn']").val("N");
+	}
+	$(document).ready(function () {
+		$("#postcode").click(function () {
+			new daum.Postcode({
+				oncomplete: function (data) {
+					var addr = "";
+					if (data.userSelectedType === 'R') {
+						addr = data.roadAddress;
+					} else {
+						addr = data.jibunAddress;
+					}
+					$("input[name='Zipcode']").val(data.zonecode);
+					$("input[name='Addr1']").val(addr);
+					$("input[name='Addr2']").focus();
+				}
+			}).open();
+		});
+		$("#Save").click(function () {
+			var memberid = $("input[name='MemberId']").val();
+			if (!memberid) {
+				alert("아이디를 입력해주세요.");
+				$("input[name='MemberId']").focus();
+				return false;
+			}
+			var id_check_yn = $("input[name='id_check_yn']").val();
+			if (id_check_yn == "N") {
+				alert("아이디 중복확인을 해주세요.");
+				return false;
+			}
+			var reg = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/;
+			var input_password = $("#input_password").val();
+			var input_password_re = $("#input_password_re").val();
+			if (!input_password) {
+				alert("비밀번호를 입력해주세요.");
+				$("#input_password").focus();
+				return false;
+			}
+			if (!input_password_re) {
+				alert("비밀번호 재입력을 입력해주세요.");
+				$("#input_password_re").focus();
+				return false;
+			}
+			if (!reg.test(input_password)) {
+				alert("비밀번호는 문자+숫자+특수문자 조합 8~20자로 입력해주세요.");
+				return false;
+			}
+			if (input_password != input_password_re) {
+				alert("비밀번호와 재입력한 비밀번호가 맞지 않습니다.");
+				return false;
+			}
+			var name = $("input[name='Name']").val();
+			if (!name) {
+				alert("고객명(기업명)을 입력해주세요.");
+				$("input[name='Name']").focus();
+				return false;
+			}
+			/*var contact = $("input[name='Contact']").val();
+			if (!name) {
+				alert("연락처를 입력해주세요.");
+				$("input[name='Contact']").focus();
+				return false;
+			}
+			var zipcode = $("input[name='Zipcode']").val();
+			if (!zipcode) {
+				alert("주소찾기를 이용하여 우편번호를 입력해주세요.");
+				return false;
+			}
+			var addr1 = $("input[name='Addr1']").val();
+			if (!addr1) {
+				alert("주소찾기를 이용하여 주소를 입력해주세요.");
+				return false;
+			}
+			var addr2 = $("input[name='Addr2']").val();
+			if (!addr2) {
+				alert("주소(상세)를 입력해주세요.");
+				$("input[name='Addr2']").focus();
+				return false;
+			}*/
+			var email_check_yn = $("input[name='email_check_yn']").val();
+			if (email_check_yn == "N") {
+				alert("이메일 인증을 진행해주세요.");
+				return false;
+			}
+			if (confirm("회원가입 하시겠습니까?")) {
+				var form = document.regiform;
+				form.submit();
+			}
+			return false;
+		});
+		var code = "";
+		$("#email_certification").click(function () {
+			var email_check_yn = $("input[name='email_check_yn']").val();
+			if (email_check_yn == "Y") {
+				alert("이미 인증이 완료되었습니다.");
+				return false;
+			}
+			var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+			var email = $("input[name='Email']").val();
+			if (email.match(regExp) != null) {
+				$.ajax({
+					url: "/Kr/EmailCertification",
+					type: "POST",
+					async: false,
+					data: { email: email },
+					success: function (data) {
+						code = JSON.parse(data);
+						alert("메일이 성공적으로 발송되었습니다.\n인증번호 확인 후 입력하시기 바랍니다.");
+						$("#email_certification_check_area").css("display", "");
+						$("input[name='email_certification_code']").focus();
+					}
+				});
+			}
+			else {
+				alert('이메일 형식이 올바르지 않습니다. 다시 입력해주세요.');
+				$("input[name='Email']").focus();
+			}
+		});
+		$("#email_certification_check").click(function () {
+			var email_certification_code = $("input[name='email_certification_code']").val();
+			if (!email_certification_code) {
+				alert("인증코드를 입력해주세요.");
+				$("input[name='email_certification_code']").focus();
+				return false;
+			}
+			if (email_certification_code != code) {
+				alert("이메일 인증코드가 올바르지 않습니다. 다시 입력해주세요.");
+				return false;
+			}
+			alert("이메일 인증이 완료되었습니다!");
+			$("input[name='email_check_yn']").val("Y");
+			$("#email_certification_code").prop("readonly", true);
+			$("#email_certification_code").css("background-color", "lightgray");
+		});
+		$("#gubun1").click(function () {
+			$("input[name='CompanyRegistrationNumber']").val("");
+			$("input[name='Representative']").val("");
+			$("input[name='TaxInvoiceOfficer']").val("");
+			$("#enterprise_input_area").css("display", "none");
+		});
+		$("#gubun2").click(function () {
+			$("#enterprise_input_area").css("display", "");
+		});
+	});
 </script>
+<div class="flex center w100 h100 rela" style="overflow: hidden;">
+	<form name="regiform" id="regiform" method="post" action="/Kr/MyInfoProc">
+		<input type="hidden" name="id_check_yn" value="N"> <!--아이디 중복확인 여부-->
+		<input type="hidden" name="email_check_yn" value="N"> <!--이메일 인증 여부-->
+		<div class="flex pad10">
+			<input id="memberid" class="style required" placeholder="아이디" asp-for="@(Model.MemberId)" autocomplete="off">
+			<input type="button" id="id_check_btn" value="중복확인" onclick="memberid_check();">
+			<input type="button" id="id_recheck_btn" value="다시입력" style="display: none;" onclick="memberid_recheck();">
+		</div>
+		<div class="pad10">
+			<input id="input_password" type="password" asp-for="@(Model.Password)" class="style required" placeholder="비밀번호 입력 (문자+숫자+특수문자 조합 8 ~ 20자)" maxlength="20" autocomplete="off"><br>
+			<input id="input_password_re" type="password" class="style required" placeholder="비밀번호 재입력" maxlength="20" autocomplete="off">
+		</div>
+		<div class="flex pad10 vcenter">
+			<input type="radio" asp-for="@(Model.Gubun)" id="gubun1" value="1" checked="checked"><label for="gubun1">개인</label>
+			<input type="radio" asp-for="@(Model.Gubun)" id="gubun2" value="2"><label for="gubun2">기업</label>
+		</div>
+		<div class="flex pad10">
+			<input id="input_name" class="style required" asp-for="@(Model.Name)" placeholder="고객명(기업명)">
+		</div>
+		<div id="enterprise_input_area" style="display: none;">
+			<div class="flex pad10">
+				<input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="사업자등록번호">
+			</div>
+			<div class="flex pad10">
+				<input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="대표자명">
+			</div>
+			<div class="flex pad10">
+				<input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="세금계산서 담당자명">
+			</div>
+		</div>
+		<div class="flex pad10">
+			<input type="text" id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="연락처(숫자만)">
+		</div>
+		<div class="flex pad10">
+			<input id="input_contact" class="style required" asp-for="@(Model.Zipcode)" placeholder="우편번호" readonly>
+			<input type="button" class="style" id="postcode" value="주소찾기" />
+		</div>
+		<div class="flex pad10">
+			<input id="input_contact" class="style required" asp-for="@(Model.Addr1)" placeholder="주소입력">
+		</div>
+		<div class="flex pad10">
+			<input id="input_contact" class="style required" asp-for="@(Model.Addr2)" placeholder="주소입력(상세)">
+		</div>
+		<div class="flex pad10">
+			<input id="input_email" class="style required" asp-for="@(Model.Email)" placeholder="이메일">
+			<input type="button" class="style" id="email_certification" value="이메일 인증" />
+		</div>
+		<div class="flex pad10" id="email_certification_check_area" style="display: none;">
+			<input id="email_certification_code" class="style required" name="email_certification_code" placeholder="인증코드 입력">
+			<input type="button" class="style" id="email_certification_check" value="확인" />
+		</div>
+		<div class="tc pad30">
+			<button class="style" id="Save">가입 완료</button>
+		</div>
+	</form>
+</div>

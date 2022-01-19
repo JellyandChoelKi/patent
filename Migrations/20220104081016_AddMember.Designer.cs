@@ -21,22 +21,22 @@ namespace K2GGTT.Migrations
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("K2GGTT.Models.Member", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+            {
+                b.Property<int>("Id")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("int")
+                    .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("MemberId")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("MemberId")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
+                b.Property<string>("Name")
+                    .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                b.HasKey("Id");
 
-                    b.ToTable("Member");
-                });
+                b.ToTable("Member");
+            });
 #pragma warning restore 612, 618
         }
     }

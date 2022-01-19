@@ -68,11 +68,24 @@ namespace K2GGTT.Controllers
 			return View();
 		}
 
-		public IActionResult Member()
+		public IActionResult Login()
 		{
 			return View();
 		}
 
+		[HttpPost]
+		public IActionResult LoginProc(string memberid, string password)
+		{
+			var member = _context.Member.Where(x => x.MemberId == memberid && x.Password == SHA256Hash(password)).FirstOrDefault();
+			if (member == null)
+			{
+				return Content(@"<script type='text/javascript'>alert('로그인 정보가 없습니다.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
+			}
+			HttpContext.Session.SetString("Id", member.Id.ToString());
+			HttpContext.Session.SetString("MemberId", member.MemberId);
+			HttpContext.Session.SetString("MemberName", member.Name);
+			return Redirect("/Kr/Index");
+		}
 		public IActionResult Password()
 		{
 			return View();
@@ -108,21 +121,7 @@ namespace K2GGTT.Controllers
 			SmtpServer.Send(mail);
 			mail.Dispose();
 
-			return Content(@"<script type='text/javascript'>alert('입력하신 이메일 주소로 새로운 비밀번호가 전송되었습니다.');location.href='/Kr/Member';</script>", "text/html", System.Text.Encoding.UTF8);
-		}
-
-		[HttpPost]
-		public IActionResult LoginProc(string memberid, string password)
-		{
-			var member = _context.Member.Where(x => x.MemberId == memberid && x.Password == SHA256Hash(password)).FirstOrDefault();
-			if (member == null)
-			{
-				return Content(@"<script type='text/javascript'>alert('로그인 정보가 없습니다.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
-			}
-			HttpContext.Session.SetString("Id", member.Id.ToString());
-			HttpContext.Session.SetString("MemberId", member.MemberId);
-			HttpContext.Session.SetString("MemberName", member.Name);
-			return Redirect("/Kr/Index");
+			return Content(@"<script type='text/javascript'>alert('입력하신 이메일 주소로 새로운 비밀번호가 전송되었습니다.');location.href='/Kr/Login';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult About()
@@ -135,18 +134,9 @@ namespace K2GGTT.Controllers
 			return View();
 		}
 
-		public IActionResult Myinfo()
+		public IActionResult SignUp()
 		{
 			MyInfoViewModel model = new MyInfoViewModel();
-			int Id = Convert.ToInt32(HttpContext.Session.GetString("Id"));
-			if (Id > 0)
-			{
-				var member = _context.Member.Where(x => x.Id == Id).FirstOrDefault();
-				model.Id = member.Id;
-				model.MemberId = member.MemberId;
-				model.Name = member.Name;
-				model.Contact = member.Contact;
-			}
 			return View(model);
 		}
 
@@ -188,12 +178,8 @@ namespace K2GGTT.Controllers
 		}
 
 		[HttpPost]
-		public IActionResult MyInfoProc(MyInfoViewModel model)
+		public IActionResult SignUpProc(MyInfoViewModel model)
 		{
-			if (!ModelState.IsValid)
-			{
-				return View(model);
-			}
 			Member member = new Member();
 			member.MemberId = model.MemberId;
 			member.Password = SHA256Hash(model.Password);
@@ -211,6 +197,35 @@ namespace K2GGTT.Controllers
 			_context.SaveChanges();
 
 			return Content(@"<script type='text/javascript'>alert('회원가입이 완료되었습니다.');location.href='/Kr/Index';</script>", "text/html", System.Text.Encoding.UTF8);
+		}
+
+		public IActionResult MyPage()
+		{
+			MyInfoViewModel model = new MyInfoViewModel();
+			int Id = Convert.ToInt32(HttpContext.Session.GetString("Id"));
+			if (Id > 0)
+			{
+				var member = _context.Member.Where(x => x.Id == Id).FirstOrDefault();
+				model.Id = member.Id;
+				model.MemberId = member.MemberId;
+				model.Name = member.Name;
+				model.Gubun = member.Gubun;
+				model.CompanyRegistrationNumber = member.CompanyRegistrationNumber;
+				model.Representative = member.Representative;
+				model.TaxInvoiceOfficer = member.TaxInvoiceOfficer;
+				model.Contact = member.Contact;
+				model.Zipcode = member.Zipcode;
+				model.Addr1 = member.Addr1;
+				model.Addr2 = member.Addr2;
+				model.Email = member.Email;
+			}
+			return View(model);
+		}
+
+		[HttpPost]
+		public IActionResult MyPageProc(MyInfoViewModel model)
+		{
+			return Content(@"<script type='text/javascript'>alert('회원정보 수정이 완료되었습니다.');location.href='/Kr/MyPage';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 	}
 }

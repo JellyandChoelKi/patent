@@ -1,0 +1,47 @@
+﻿<div class="pad30 w400">
+    <h3 class="tc">회원가입</h3>
+    <div class="" style="overflow: hidden;">
+        <form name="" method="post" action="./register_complete.html" autocomplete="off">
+            <div class="flex pad10">
+                <input id="input_id" class="style" placeholder="아이디" required autocomplete="off">
+                <button class="style">중복확인</button>
+            </div>
+            <div class="pad10">
+                <input id="input_password" type="password" class="style w100" placeholder="비밀번호" required autocomplete="off">
+                <input id="input_password_re" type="password" class="style w100" placeholder="비밀번호 재입력" required autocomplete="off">
+                <div id="password_confirm" class="small red">
+                </div>
+            </div>
+            <div class="flex pad10 vcenter">
+                <input type="radio" name="member_ca" value="1" id="member_ca1"><label for="member_ca1">개인</label>
+                <input type="radio" name="member_ca" value="2" id="member_ca2"><label for="member_ca2">기업</label>
+            </div>
+            <div><input id="input_name" class="style" placeholder="고객명"></div>
+            <div class="flex pad10">
+                <input id="input_contact" class="style" placeholder="연락처">
+            </div>
+            <div class="flex pad10">
+                <input id="input_email" class="style" placeholder="이메일">
+                <button class="style">이메일 인증</button>
+            </div>
+            <div class="tc pad30">
+                <button class="style">가입 완료</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+		$('#input_password_re').on('change',function(){
+			var password1 = $('#input_password').val();
+			var password2 = $('#input_password_re').val();
+
+			if(password1 == password2) {
+				$('#password_confirm').css('color','#0C0');
+				$('#password_confirm').text('비밀번호가 일치합니다.');
+			} else {
+				$('#password_confirm').css('color','#C00');
+				$('#password_confirm').text('비밀번호가 일치하지않습니다.');
+			}
+		});
+</script>

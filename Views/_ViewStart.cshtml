@@ -1,0 +1,16 @@
+﻿@{
+	var controller = ViewContext.RouteData.Values["controller"].ToString();
+	if (controller == "Admin")
+	{
+		string page = ViewContext.HttpContext.Request.Path.Value;
+		if (page.IndexOf("/Admin/login") == -1)
+		{
+			Layout = "~/Views/Shared/_AdminLayout.cshtml";
+		}
+
+	}
+	else
+	{
+		Layout = "~/Views/Shared/_Layout.cshtml";
+	}
+}  

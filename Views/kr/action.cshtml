@@ -1,0 +1,27 @@
+﻿<div class="flex center w100 h100">
+	<a href="/kr/result">[결과화면클릭] 파라미터 => @(ViewBag.Keywords)</a>
+    <div id="thesis"></div>
+</div>
+
+@section Scripts {
+	<script>
+
+        $(document).ready(function () {
+            $.ajax({
+                url: 'https://k2gdoc2vec.azurewebsites.net/thesisData?searchWord=car',
+                type: 'get',
+                beforeSend: function () {
+                    $('html').css("cursor", "wait");
+                },
+                complete: function () {
+                    $('html').css("cursor", "auto");
+                },
+                //data: '',
+                success: function (data) {
+                    $('#thesis').html(data);
+                }
+            });
+        });
+
+	</script>
+}

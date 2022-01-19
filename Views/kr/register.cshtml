@@ -1,0 +1,31 @@
+﻿<div class="pad30 w1200">
+    <h3 class="tc">회원가입</h3>
+    <div class="" style="overflow: hidden;">
+        <form name="" method="post" action="./myinfo">
+            <div class="pad30">
+                <h4>회원약관</h4>
+                <textarea readonly class="style">회원약관입니다.</textarea>
+                <input name="agreeTerms" id="agreeTerms" required type="checkbox" onChange="checkBox()"><label for="agreeTerms">회원약관에 동의합니다.</label>
+            </div>
+            <div class="pad30">
+                <h4>개인정보보호방침</h4>
+                <textarea readonly class="style">개인정보보호방침입니다.</textarea>
+                <input id="agreePolicy" name="agreePolicy" required type="checkbox" onChange="checkBox()"><label for="agreePolicy">개인정보보호방침에 동의합니다.</label>
+            </div>
+            <input id="agreeAll" type="checkbox" onChange="checkBox()"><label for="agreeAll">위 내용에 전부 동의합니다.</label>
+            <div class="tc pad30">
+                <button type="submit" class="style">다음</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function checkBox() {
+        var allCheck = $('#agreeAll').attr('checked');
+        if (allCheck == 'checked') {
+            $('#agreeTerms').attr('checked', 'checked');
+            $('#agreePolicy').attr('checked', 'checked');
+        }
+    }
+
+</script>

@@ -225,6 +225,30 @@ namespace K2GGTT.Controllers
 		[HttpPost]
 		public IActionResult MyPageProc(MyInfoViewModel model)
 		{
+			if (model.Id <= 0)
+			{
+				return Content(@"<script type='text/javascript'>alert('알수없는 이유로 세션이 종료되었습니다. 다시 로그인 바랍니다.');location.href='/Kr/Login';</script>", "text/html", System.Text.Encoding.UTF8);
+			}
+			var member = _context.Member.Where(x => x.Id == model.Id).FirstOrDefault();
+			if (member.Password != SHA256Hash(model.CurrentPassword))
+			{
+				return Content(@"<script type='text/javascript'>alert('비밀번호가 일치하지 않습니다.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
+			}
+			if (!string.IsNullOrEmpty(model.Password))
+			{
+				member.Password = SHA256Hash(model.Password);
+			}
+			member.Gubun = model.Gubun;
+			member.Name = model.Name;
+			member.CompanyRegistrationNumber = model.CompanyRegistrationNumber;
+			member.Representative = model.Representative;
+			member.TaxInvoiceOfficer = model.TaxInvoiceOfficer;
+			member.Contact = model.Contact;
+			member.Zipcode = model.Zipcode;
+			member.Addr1 = model.Addr1;
+			member.Addr2 = model.Addr2;
+			_context.SaveChanges();
+
 			return Content(@"<script type='text/javascript'>alert('회원정보 수정이 완료되었습니다.');location.href='/Kr/MyPage';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 	}

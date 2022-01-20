@@ -20,26 +20,34 @@
 			}).open();
 		});
 		$("#Save").click(function () {
+			var CurrentPassword = $("input[name='CurrentPassword']").val();
+			if (!CurrentPassword) {
+				alert("정보수정을 위해 계정 비밀번호를 입력해주세요.");
+				$("input[name='CurrentPassword']").focus();
+				return false;
+			}
 			var reg = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/;
 			var input_password = $("#input_password").val();
 			var input_password_re = $("#input_password_re").val();
-			if (!input_password) {
-				alert("비밀번호를 입력해주세요.");
-				$("#input_password").focus();
-				return false;
-			}
-			if (!input_password_re) {
-				alert("비밀번호 재입력을 입력해주세요.");
-				$("#input_password_re").focus();
-				return false;
-			}
-			if (!reg.test(input_password)) {
-				alert("비밀번호는 문자+숫자+특수문자 조합 8~20자로 입력해주세요.");
-				return false;
-			}
-			if (input_password != input_password_re) {
-				alert("비밀번호와 재입력한 비밀번호가 맞지 않습니다.");
-				return false;
+			if (input_password != "" || input_password_re != "") {
+				if (!input_password) {
+					alert("비밀번호를 입력해주세요.");
+					$("#input_password").focus();
+					return false;
+				}
+				if (!input_password_re) {
+					alert("비밀번호 재입력을 입력해주세요.");
+					$("#input_password_re").focus();
+					return false;
+				}
+				if (!reg.test(input_password)) {
+					alert("비밀번호는 문자+숫자+특수문자 조합 8~20자로 입력해주세요.");
+					return false;
+				}
+				if (input_password != input_password_re) {
+					alert("비밀번호와 재입력한 비밀번호가 맞지 않습니다.");
+					return false;
+				}
 			}
 			var name = $("input[name='Name']").val();
 			if (!name) {
@@ -113,6 +121,15 @@
 		<input type="hidden" asp-for="@(Model.Id)">
 		<div class="flex pad10">
 			<input id="memberid" class="style required" placeholder="아이디" asp-for="@(Model.MemberId)" autocomplete="off" readonly style="background-color: lightgray;">
+		</div>
+		<div class="flex pad10">
+			<input type="password" class="style required" placeholder="현재 비밀번호" asp-for="@(Model.CurrentPassword)">
+		</div>
+		<div class="flex pad10">
+			<input id="input_password" type="password" asp-for="@(Model.Password)" class="style required" placeholder="변경 비밀번호 입력 (문자+숫자+특수문자 조합 8 ~ 20자)" maxlength="20" autocomplete="off"><br>
+		</div>
+		<div class="flex pad10">
+			<input id="input_password_re" type="password" class="style required" placeholder="비밀번호 재입력" maxlength="20" autocomplete="off">
 		</div>
 		<div class="flex pad10 vcenter">
 			<input type="radio" asp-for="@(Model.Gubun)" id="gubun1" value="1" checked="checked"><label for="gubun1">개인</label>

@@ -27,7 +27,7 @@
     function searchPatent() {
 
         $.ajax({ // 논문 API
-            url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + keywords,
+            url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + keywords.replace(' ', '*'),
             type: "GET",
             dataType: "JSON",
             beforeSend: function () {
@@ -156,5 +156,5 @@
 <script>
 
     searchPatent();
-
+    
 </script>

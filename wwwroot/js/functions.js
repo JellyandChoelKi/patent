@@ -59,7 +59,7 @@ function loadToc (legendName, type) {
 	if(dataCount > 0){
 		$('#table_wrap > table').html(tableHead);
 		for(i=0; i<dataCount; i++){
-			$('#table_wrap > table').append('<tr class="rows" id="row'+(i+1)+'"><td><input type="checkbox" id="chk"'+(i+1)+'></td><td><a class="href" href="" target="_blank">'+dataFrom[subject][i]+'</a></td><td>'+dataFrom[author][i]+'</td><td>'+dataFrom[time][i]+'</td><td><a href="/kr/report.html?type='+type+'&id='+dataFrom[id][i]+'" class="report" target="_blank">리포트</a></td></tr>');
+			$('#table_wrap > table').append('<tr class="rows" id="row'+(i+1)+'"><td><input type="checkbox" id="chk"'+(i+1)+'></td><td><a class="href" href="" target="_blank">'+dataFrom[subject][i]+'</a></td><td>'+dataFrom[author][i]+'</td><td>'+dataFrom[time][i]+'</td><td><a href="/kr/report?type='+type+'&id='+dataFrom[id][i]+'" class="report" target="_blank">리포트</a></td></tr>');
 		}
 	} else if(dataCount == 0) {
 		$('#table_wrap > table').html('<tr><th>해당하는 항목이 없습니다.</th></tr>');

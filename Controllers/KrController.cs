@@ -13,6 +13,12 @@ using System.Net.Mail;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
 using System.Text;
+using K2GGTT.Utils;
+using Newtonsoft.Json.Linq;
+using System.Web;
+using System.IO;
+using System.Net;
+using System.Xml;
 
 namespace K2GGTT.Controllers
 {
@@ -20,6 +26,20 @@ namespace K2GGTT.Controllers
 	{
 		private readonly ILogger<KrController> _logger;
 		private readonly DBContext _context;
+
+		//맥주소 입력해주세요.
+		public static string MAC_address = "80-FA-5B-68-EB-43";
+		//발급받은 client_id를 입력해주세요.
+		public static string clientID = "0ade3f2ef692f608addbaeb263fd3356809bdb01007fd09ccfcfcfb76b0895dd";
+		//API Gateway로부터 발급받은 인증키를 입력해주세요.
+		public static string key = "128e05eb22ca4396adbdad82dc369f96";
+
+		//refresh Token을 입력해주세요.(Access Token 재발급시 입력)
+		public static string refreshToken = "Your RefreshToken";
+		//accessToken을 입력해주세요(데이터요청시 이용)
+		public static string accessToken = "Your AccessToken";
+		//iv의 값은 변하지 않습니다.
+		private static string iv = "jvHJ1EFA0IXBrxxz";
 
 		public string SHA256Hash(string password)
 		{
@@ -60,6 +80,50 @@ namespace K2GGTT.Controllers
 		public IActionResult Result(string keywords)
 		{
 			ViewBag.Keywords = keywords;
+			return View();
+		}
+
+		public IActionResult Report(string type, string id)
+		{
+			var tokenResponse = createToken();
+
+			string query = HttpUtility.UrlEncode("{\"CN\":\"" + id + "\"}");
+			string target_URL = "https://apigateway.kisti.re.kr/openapicall.do?" +
+			"client_id=" + clientID + "&token=" + accessToken + "&version=1.0" + "&action=search" +
+			"&target=ARTI" + "&searchQuery=" + query;
+
+			string response = getResponse(target_URL);
+			Console.WriteLine(response);
+
+			XmlDocument xml = new XmlDocument();
+			xml.LoadXml(response);
+
+			var statusCode = xml["MetaData"]["resultSummary"]["statusCode"].InnerText;
+
+			XmlNodeList nodeList = xml["MetaData"]["recordList"].GetElementsByTagName("record");
+			foreach (XmlNode record in nodeList)
+			{
+				foreach (XmlNode item in record.ChildNodes)
+				{
+					if (item.Attributes["metaCode"].InnerText.Equals("Title"))
+					{
+						ViewBag.Title = item.InnerText;
+					}
+					else if (item.Attributes["metaCode"].InnerText.Equals("Abstract"))
+					{
+						ViewBag.Abstract = item.InnerText;
+					}
+					else if (item.Attributes["metaCode"].InnerText.Equals("Author"))
+					{
+						ViewBag.Author = item.InnerText;
+					}
+					else if (item.Attributes["metaCode"].InnerText.Equals("Pubyear"))
+					{
+						ViewBag.Pubyear = item.InnerText;
+					}
+				}
+			}
+
 			return View();
 		}
 
@@ -226,6 +290,93 @@ namespace K2GGTT.Controllers
 		public IActionResult MyPageProc(MyInfoViewModel model)
 		{
 			return Content(@"<script type='text/javascript'>alert('회원정보 수정이 완료되었습니다.');location.href='/Kr/MyPage';</script>", "text/html", System.Text.Encoding.UTF8);
+		}
+
+		/**
+		 * 1) 최초 토큰발급 요청인 경우, RefreshToken 값이 만료(2주 기한)되어 신규로 AccessToken, RefreshToken 둘 다 전체 토큰발급이 필요한 경우
+		 * 2) API Gateway 신청시 제출한 맥주소 값, 발급받은 클라이어트 ID 값이 필요함
+		 * 3) 정상적으로 토큰발급이 완료되면, AccessToken, RefreshToken 값을 저장한 이 후에 이 값을 사용해야 함
+		 */
+		public static string createToken()
+		{
+			string date = DateTime.Now.ToString("yyyyMMddHHmmss");
+
+			var json = new JObject();
+			json.Add("datetime", date);
+			json.Add("mac_address", MAC_address);
+
+			string encrypted_txt = HttpUtility.UrlEncode(encrypt(json.ToString(), key));
+
+			string target_URL = "https://apigateway.kisti.re.kr/tokenrequest.do?accounts=" + encrypted_txt +
+			"&client_id=" + clientID;
+
+
+			JObject responseJson = JObject.Parse(getResponse(target_URL));
+			refreshToken = responseJson["refresh_token"].ToString();
+			accessToken = responseJson["access_token"].ToString();
+			Console.WriteLine("access_token : " + accessToken);
+			Console.WriteLine("refresh_token : " + refreshToken);
+			return responseJson.ToString();
+		}
+
+		public static string getResponse(string target_URL)
+		{
+			string responseText = string.Empty;
+
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(target_URL);
+			request.Method = "GET";
+
+			try
+			{
+				using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+				{
+					HttpStatusCode statusCode = response.StatusCode;
+					Console.WriteLine(statusCode);
+
+					Stream respStream = response.GetResponseStream();
+					using (StreamReader sr = new StreamReader(respStream))
+					{
+						responseText = sr.ReadToEnd();
+					}
+				}
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e.Message);
+			}
+			return responseText;
+		}
+
+		public static string encrypt(string plainText, string key)
+		{
+			{
+				UTF8Encoding ue = new UTF8Encoding();
+
+				using (Aes aesAlg = Aes.Create())
+				{
+					aesAlg.Padding = PaddingMode.PKCS7;
+					aesAlg.Mode = CipherMode.CBC;
+					aesAlg.Key = ue.GetBytes(key);
+					aesAlg.IV = ue.GetBytes(iv);
+
+					byte[] message = ue.GetBytes(plainText.Replace("\r\n", "").Replace(" ", ""));
+					byte[] enc;
+
+					// Create an encryptor to perform the stream transform.
+					ICryptoTransform encryptor = aesAlg.CreateEncryptor();
+
+					using (MemoryStream msEncrypt = new MemoryStream())
+					{
+						using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+						{
+							csEncrypt.Write(message, 0, message.Length);
+						}
+
+						enc = msEncrypt.ToArray();
+					}
+					return Convert.ToBase64String(enc, 0, enc.Length).Replace("/", "_").Replace("+", "-");
+				}
+			}
 		}
 	}
 }

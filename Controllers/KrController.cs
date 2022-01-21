@@ -19,9 +19,35 @@ using System.Web;
 using System.IO;
 using System.Net;
 using System.Xml;
-
+using System.Xml.Linq;
+using System.IO.Compression;
+using System.Threading;
 namespace K2GGTT.Controllers
 {
+	
+
+	public static class XMLExtension
+	{
+		public static string ReplaceAt(this string str, int index, int length, string replace)
+		{
+			return str.Remove(index, Math.Min(length, str.Length - index)).Insert(index, replace);
+		}
+
+		public static string UnescapeXMLValue(this string str)
+		{
+			if (str == null) throw new ArgumentNullException("xmlString");
+			return str
+				.Replace("&apos;", "'")
+				.Replace("&quot;", "\"")
+				.Replace("&gt;", ">")
+				.Replace("&lt;", "<")
+				.Replace("&amp;", "&")
+				.Replace("&deg;", "")
+				.Replace("&le;", "")
+				.Replace("&lsqb;", "");
+		}
+	}
+
 	public class KrController : Controller
 	{
 		private readonly ILogger<KrController> _logger;
@@ -123,9 +149,153 @@ namespace K2GGTT.Controllers
 					}
 				}
 			}
-
 			return View();
 		}
+
+		// 사용자용(압축파일) 나중에
+		/*
+		public IActionResult UserPatentDataMigrations(string target_zip_file)
+		{
+			MongoDBConf db = new MongoDBConf();
+			BsonDocument BsonDoc = new BsonDocument();
+
+			string WWWROOTPATH = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "kipris" + Path.DirectorySeparatorChar;
+			string zipFilePath = System.IO.Path.Combine(WWWROOTPATH, target_zip_file);  // 같은 폴더에 압축풀고
+			string extractionPath = WWWROOTPATH;
+
+			// 압축을 다 풀기도 전에 아래 프로세스를 실행해버림... 스레드 끝나고 돌려주자
+			var t = new Thread(() =>
+			{
+				ZipFile.ExtractToDirectory(zipFilePath, extractionPath);
+			});
+			t.Start();
+
+			// 자동으로 점유율 끝날때까지 기다려야할듯 2초정도??
+			Thread.Sleep(2000);
+
+			System.IO.File.Delete(zipFilePath);
+
+			// 사용자용 웹루트 경로에 타겟폴더 kipris로 만들어줘야함
+			string PATH = System.IO.Path.Combine(WWWROOTPATH, target_zip_file);
+			List<string> xmlPathList = new List<string>();
+			DirectoryInfo di = new DirectoryInfo(PATH);
+			if (di.Exists)
+			{
+				DirectoryInfo[] di_arr = di.GetDirectories("*", SearchOption.AllDirectories);
+				foreach (DirectoryInfo xmlPath in di_arr)
+				{
+					if (xmlPath.FullName.IndexOf("Examined" + Path.DirectorySeparatorChar + "xml") != -1)
+					{
+						xmlPathList.Add(xmlPath.FullName);
+					}
+				}
+			}
+
+			foreach (var path in xmlPathList)
+			{
+				string[] folder_arr = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+				foreach (string file in folder_arr)
+				{
+					try
+					{
+						string xml_to_str = HttpUtility.HtmlDecode(System.IO.File.ReadAllText(file)).Replace("&", "");
+						XDocument doc = XDocument.Parse(xml_to_str);
+
+						// 출원번호
+						XElement node = (from n in doc.Descendants("B210") select n).FirstOrDefault();
+						string app_no = node.Value;
+
+						try
+						{
+							// UnExamined에 이미 중복 출원번호 있으면 패스
+							var p = db.LoadRecordById<BsonDocument>("kipris", "app_no", app_no);
+							if (p != null)
+							{
+								continue;
+							}
+						}
+						catch
+						{
+							string to_json_str = JsonConvert.SerializeObject(doc);
+							string parse_json_str = to_json_str.ReplaceAt(to_json_str.Length - 1, 0, ",\"app_no\":\"" + app_no + "\"");
+
+							BsonDoc = BsonDocument.Parse(parse_json_str);
+							db.InsertRecord("kipris", BsonDoc);
+
+							System.IO.File.Delete(file);
+						}
+					}
+					catch
+					{
+						try
+						{
+							XmlDocument doc = new XmlDocument();
+							doc.Load(file);
+
+							// 출원번호
+							XmlNode node = doc.SelectSingleNode("/kr-patent-document/SDOBI/B200/B210");
+							string app_no = node.InnerText;
+
+							try
+							{
+								// UnExamined에 이미 중복 출원번호 있으면 패스
+								var p = db.LoadRecordById<BsonDocument>("kipris", "app_no", app_no);
+								if (p != null)
+								{
+									continue;
+								}
+
+							}
+							catch
+							{
+								string to_json_str = JsonConvert.SerializeObject(doc);
+								string parse_json_str = to_json_str.ReplaceAt(to_json_str.Length - 1, 0, ",\"app_no\":\"" + app_no + "\"");
+
+								BsonDoc = BsonDocument.Parse(parse_json_str);
+								db.InsertRecord("kipris", BsonDoc);
+
+								System.IO.File.Delete(file);
+							}
+						}
+						catch (Exception e)
+						{
+							JObject rv = new JObject();
+							rv.Add("error_path", file);
+							rv.Add("error_msg", e.Message);
+							string toJson = JsonConvert.SerializeObject(rv);
+
+							BsonDoc = BsonDocument.Parse(toJson);
+							db.InsertRecord("kipris_error_log", BsonDoc);
+						}
+					}
+				}
+			}
+
+			// 에러파일 이동시키자
+			var list = from a in db.LoadRecord<FilePath>("kipris_error_log") select new FilePath { error_path = a.error_path };
+			foreach (var p in list.ToList())
+			{
+				string file_path = p.error_path;
+				string[] file_arr = p.error_path.Split(new string[] { "\\" }, StringSplitOptions.None);
+				string file = file_arr[file_arr.Length - 1];
+				try
+				{
+					string error_folder = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "kipris_error" + Path.DirectorySeparatorChar;
+					string target_path = System.IO.Path.Combine(error_folder, file);  // 사용자용 웹루트 경로에 타겟폴더 kipris_error로 만들어줘야함
+					FileInfo info = new FileInfo(target_path);
+					if (!info.Exists)
+					{
+						System.IO.File.Copy(file_path, target_path, true);
+					}
+				}
+				catch
+				{
+
+				}
+			}
+			return Ok();
+		}
+		*/
 
 		public IActionResult Contact()
 		{
@@ -394,6 +564,7 @@ namespace K2GGTT.Controllers
 						using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
 						{
 							csEncrypt.Write(message, 0, message.Length);
+							
 						}
 
 						enc = msEncrypt.ToArray();

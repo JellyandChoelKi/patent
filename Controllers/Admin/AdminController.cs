@@ -14,7 +14,6 @@ namespace K2GGTT.Controllers
 	{
 		private readonly ILogger<HomeController> _logger;
 
-
 		public AdminController(ILogger<HomeController> logger)
 		{
 			_logger = logger;
@@ -22,11 +21,6 @@ namespace K2GGTT.Controllers
 
 		public IActionResult Index()
 		{
-			var session = HttpContext.Session.GetString("userId");
-			if (session == null)
-			{
-				return Redirect("/Admin/login");
-			}
 			return View();
 		}
 
@@ -39,7 +33,7 @@ namespace K2GGTT.Controllers
 		public IActionResult LoginProc()
 		{
 			HttpContext.Session.SetString("userId", "test");
-			return RedirectToAction("Index", "Admin");
+			return RedirectToAction("Member", "Admin");
 		}
 
 		[HttpGet]
@@ -47,6 +41,16 @@ namespace K2GGTT.Controllers
 		{
 			HttpContext.Session.Clear();
 			return Redirect("/Admin/login");
+		}
+
+		public IActionResult Member()
+		{
+			var session = HttpContext.Session.GetString("userId");
+			if (session == null)
+			{
+				return Redirect("/Admin/login");
+			}
+			return View();
 		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

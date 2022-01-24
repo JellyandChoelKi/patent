@@ -1,0 +1,116 @@
+﻿@{
+    Layout = null;
+}
+@model K2GGTT.ViewModels.ArticleViewModel
+<!doctype html>
+<html>
+<!-- META { -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="/css/style.css" rel="stylesheet">
+    <title>GTT-Global Technology Trading</title>
+</head>
+<!-- META } -->
+<body>
+    <script src="/js/jquery-1.8.3.min.js" language="javascript"></script>
+    <link href="/css/report.css" rel="stylesheet">
+    <div class="w100 h100">
+
+        <!-- Type == Articles { -->
+
+        @for (var i = 0; i < Model.ArticleIdList.Count; i++)
+        {
+            <h2 class="pad30">@Model.TitleList[i]</h2>
+
+            <table class="w100">
+                <tr>
+                    <th class="head">
+                        Id
+                    </th>
+                    <td>
+                        @Model.ArticleIdList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Publication Year
+                    </th>
+                    <td>
+                        @Model.PubyearList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Journal Name
+                    </th>
+                    <td>
+                        @Model.JournalNameList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Volume
+                    </th>
+                    <td>
+                        v.@(Model.VolNo1List[i]), no.@(Model.VolNo2List[i])
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Page
+                    </th>
+                    <td>
+                        @Model.PageInfoList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Keyword
+                    </th>
+                    <td>
+                        @Model.KeywordList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Appicant
+                    </th>
+                    <td>
+                        @Model.AuthorList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        Link
+                    </th>
+                    <td>
+                        <a href="@(Model.ContentURLList[i])" target="_blank" class="link">Link</a>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2">
+                        Description
+                    </th>
+                </tr>
+                <tr>
+                    <td class="abstract" colspan="2" class="pad30">
+                        @Model.AbstractList[i]
+                    </td>
+                </tr>
+            </table>
+        }
+
+        <!-- Type == Articles } -->
+    </div>
+
+    <script>
+        $('.abstract').each(function () {
+            const text = $(this).text();
+            let textNew = text.replace('PURPOSE:', '<span class="emphasis">PURPOSE</span>');
+            textNew = textNew.replace('CONSTITUTION:', '<span class="emphasis">CONSTITUTION</span>');
+            $(this).html(textNew);
+        });
+    </script>
+</body>
+</html>

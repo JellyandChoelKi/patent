@@ -109,47 +109,92 @@ namespace K2GGTT.Controllers
 			return View();
 		}
 
-		public IActionResult Report(string type, string id)
+		public IActionResult ArticleReport(string id)
 		{
-			var tokenResponse = createToken();
-
-			string query = HttpUtility.UrlEncode("{\"CN\":\"" + id + "\"}");
-			string target_URL = "https://apigateway.kisti.re.kr/openapicall.do?" +
-			"client_id=" + clientID + "&token=" + accessToken + "&version=1.0" + "&action=search" +
-			"&target=ARTI" + "&searchQuery=" + query;
-
-			string response = getResponse(target_URL);
-			Console.WriteLine(response);
-
-			XmlDocument xml = new XmlDocument();
-			xml.LoadXml(response);
-
-			var statusCode = xml["MetaData"]["resultSummary"]["statusCode"].InnerText;
-
-			XmlNodeList nodeList = xml["MetaData"]["recordList"].GetElementsByTagName("record");
-			foreach (XmlNode record in nodeList)
+			ArticleViewModel model = new ArticleViewModel()
 			{
-				foreach (XmlNode item in record.ChildNodes)
+				TitleList = new List<string>(),
+				ArticleIdList = new List<string>(),
+				AbstractList = new List<string>(),
+				AuthorList = new List<string>(),
+				PubyearList = new List<string>(),
+				JournalNameList = new List<string>(),
+				VolNo1List = new List<string>(),
+				VolNo2List = new List<string>(),
+				PageInfoList = new List<string>(),
+				KeywordList = new List<string>(),
+				ContentURLList = new List<string>()
+			};
+			var tokenResponse = createToken();
+			var id_Arr = id.Split('|');
+
+			foreach (var ids in id_Arr)
+			{
+				string query = HttpUtility.UrlEncode("{\"CN\":\"" + ids + "\"}");
+				string target_URL = "https://apigateway.kisti.re.kr/openapicall.do?" +
+				"client_id=" + clientID + "&token=" + accessToken + "&version=1.0" + "&action=search" +
+				"&target=ARTI" + "&searchQuery=" + query;
+
+				string response = getResponse(target_URL);
+				Console.WriteLine(response);
+
+				XmlDocument xml = new XmlDocument();
+				xml.LoadXml(response);
+
+				XmlNodeList nodeList = xml["MetaData"]["recordList"].GetElementsByTagName("record");
+				foreach (XmlNode record in nodeList)
 				{
-					if (item.Attributes["metaCode"].InnerText.Equals("Title"))
+					foreach (XmlNode item in record.ChildNodes)
 					{
-						ViewBag.Title = item.InnerText;
-					}
-					else if (item.Attributes["metaCode"].InnerText.Equals("Abstract"))
-					{
-						ViewBag.Abstract = item.InnerText;
-					}
-					else if (item.Attributes["metaCode"].InnerText.Equals("Author"))
-					{
-						ViewBag.Author = item.InnerText;
-					}
-					else if (item.Attributes["metaCode"].InnerText.Equals("Pubyear"))
-					{
-						ViewBag.Pubyear = item.InnerText;
+						if (item.Attributes["metaCode"].InnerText.Equals("Title"))
+						{
+							model.TitleList.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("ArticleId"))
+						{
+							model.ArticleIdList.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("Abstract"))
+						{
+							model.AbstractList.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("Author"))
+						{
+							model.AuthorList.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("Pubyear"))
+						{
+							model.PubyearList.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("JournalName"))
+						{
+							model.JournalNameList.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("VolNo1"))
+						{
+							model.VolNo1List.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("VolNo2"))
+						{
+							model.VolNo2List.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("PageInfo"))
+						{
+							model.PageInfoList.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("Keyword"))
+						{
+							model.KeywordList.Add(item.InnerText);
+						}
+						else if (item.Attributes["metaCode"].InnerText.Equals("ContentURL"))
+						{
+							model.ContentURLList.Add(item.InnerText);
+						}
 					}
 				}
 			}
-			return View();
+			
+			return View(model);
 		}
 
 		// 사용자용(압축파일) 나중에

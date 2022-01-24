@@ -1,0 +1,23 @@
+﻿th {
+    background-color: #EEE;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: #111 1px solid;
+}
+
+table {
+    border-spacing: 0;
+    border-top: #111 2px solid;
+}
+
+.emphasis {
+    color: #C00;
+    border-bottom: #C00 1px solid;
+    padding: 10px;
+    display: block;
+    margin: 10px auto;
+    font-weight: 700;
+    font-size: 0.9em;
+}

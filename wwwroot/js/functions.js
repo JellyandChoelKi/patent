@@ -101,7 +101,7 @@ function downAll() {
 	$('input[name="checkbox"]').each(function () {
 		arr.push($(this).data('id'));
 	});
-	location.href = "/Kr/HtmlToPDF?id=" + arr.join('|');
+	location.href = "/Kr/TocAllDataPDFDownload?id=" + arr.join('|');
 }
 
 function popupReport(type, id) {

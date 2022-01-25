@@ -87,7 +87,7 @@ namespace K2GGTT.Controllers
 			_context = DBContext;
 		}
 
-		public IActionResult HtmlToPDF(string id)
+		public IActionResult TocAllDataPDFDownload(string id)
 		{
 			string html = string.Empty;
 			html += "<!doctype html>";
@@ -99,16 +99,14 @@ namespace K2GGTT.Controllers
 			html += "</head>";
 			html += "<body style=\"font-size: 1.0em;\">";
 			html += "	<link href=\"https://localhost:44325/css/report.css\" rel=\"stylesheet\">";
-
-			var id_Arr = id.Split('|');
-			foreach (var ids in id_Arr)
+			foreach (var app_no in id.Split('|'))
 			{
 				html += "	<div style=\"width: 1500px;\">";
 				html += "		<h2 class=\"pad30\">Title</h2>";
 				html += "		<table class=\"w100\">";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication No.</th>";
-				html += "				<td>" + ids + "</td>";
+				html += "				<td>{Publication No.}</td>";
 				html += "				<td rowspan=\"8\" style=\"400px;\"><img src=\"{ImgURL}\" alt=\"Image\" style=\"max-width: 100%; max-height: 100%;\"></td>";
 				html += "			</tr>";
 				html += "			<tr>";
@@ -161,7 +159,7 @@ namespace K2GGTT.Controllers
 			Stream outputStream = new MemoryStream();
 			pdfDocument.Save(outputStream);
 
-			string fileName = Guid.NewGuid() + ".pdf";
+			string fileName = "[K2G]all_toc_pdf_" + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf";
 			return File(outputStream, System.Net.Mime.MediaTypeNames.Application.Pdf, fileName);
 		}
 

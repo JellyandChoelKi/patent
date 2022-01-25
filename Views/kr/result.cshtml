@@ -9,25 +9,10 @@
     var currentPage = 1;
     var pagePosts = 30;
 
-    var getParameters = function (paramName) {
-        var returnValue;
-        var url = location.href;
-        var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
-        for (var i = 0; i < parameters.length; i++) {
-            var varName = parameters[i].split('=')[0];
-            if (varName.toUpperCase() == paramName.toUpperCase()) {
-                returnValue = parameters[i].split('=')[1];
-                return decodeURIComponent(returnValue);
-            }
-        }
-    };
-
-    var keywords = getParameters('keywords');
-
     function searchPatent() {
-
+        
         $.ajax({ // 논문 API
-            url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + keywords.replaceAll(' ', '*'),
+            url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
             type: "GET",
             dataType: "JSON",
             beforeSend: function () {
@@ -54,7 +39,7 @@
 
     function searchArticles() {
         $.ajax({ // 논문 API
-            url: 'https://k2gdoc2vec.azurewebsites.net/thesisData?searchWord=' + keywords,
+            url: 'https://k2gdoc2vec.azurewebsites.net/thesisData?searchWord=' + '@ViewBag.ArticleKeyword',
             type: "GET",
             dataType: "JSON",
             beforeSend: function () {

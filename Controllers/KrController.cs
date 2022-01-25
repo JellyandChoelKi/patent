@@ -105,7 +105,14 @@ namespace K2GGTT.Controllers
 
 		public IActionResult Result(string keywords)
 		{
-			ViewBag.Keywords = keywords;
+			ViewBag.PatentKeyword = keywords.Replace(' ', '*');
+			ViewBag.ArticleKeyword = keywords;
+
+			return View();
+		}
+
+		public IActionResult PatentReport(string id)
+		{
 			return View();
 		}
 

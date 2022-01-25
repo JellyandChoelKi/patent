@@ -1,0 +1,189 @@
+﻿@model K2GGTT.ViewModels.MyInfoViewModel
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script type="text/javascript">
+	// 엔터로인한 submit 방지
+	$(document).keypress(function (e) { if (e.keyCode == 13) e.preventDefault(); });
+	$(document).ready(function () {
+		$("#postcode").click(function () {
+			new daum.Postcode({
+				oncomplete: function (data) {
+					var addr = "";
+					if (data.userSelectedType === 'R') {
+						addr = data.roadAddress;
+					} else {
+						addr = data.jibunAddress;
+					}
+					$("input[name='Zipcode']").val(data.zonecode);
+					$("input[name='Addr1']").val(addr);
+					$("input[name='Addr2']").focus();
+				}
+			}).open();
+		});
+		$("#Save").click(function () {
+			var CurrentPassword = $("input[name='CurrentPassword']").val();
+			if (!CurrentPassword) {
+				alert("정보수정을 위해 계정 비밀번호를 입력해주세요.");
+				$("input[name='CurrentPassword']").focus();
+				return false;
+			}
+			var reg = /^(?=.*[a-zA-Z])((?=.*\d)(?=.*\W)).{8,20}$/;
+			var input_password = $("#input_password").val();
+			var input_password_re = $("#input_password_re").val();
+			if (input_password != "" || input_password_re != "") {
+				if (!input_password) {
+					alert("비밀번호를 입력해주세요.");
+					$("#input_password").focus();
+					return false;
+				}
+				if (!input_password_re) {
+					alert("비밀번호 재입력을 입력해주세요.");
+					$("#input_password_re").focus();
+					return false;
+				}
+				if (!reg.test(input_password)) {
+					alert("비밀번호는 문자+숫자+특수문자 조합 8~20자로 입력해주세요.");
+					return false;
+				}
+				if (input_password != input_password_re) {
+					alert("비밀번호와 재입력한 비밀번호가 맞지 않습니다.");
+					return false;
+				}
+			}
+			var name = $("input[name='Name']").val();
+			if (!name) {
+				alert("고객명(기업명)을 입력해주세요.");
+				$("input[name='Name']").focus();
+				return false;
+			}
+			var contact = $("input[name='Contact']").val();
+			if (!contact) {
+				alert("연락처를 입력해주세요.");
+				$("input[name='Contact']").focus();
+				return false;
+			}
+
+			if ($("#gubun2").is(':checked')){
+				var CompanyRegistrationNumber = $("input[name='CompanyRegistrationNumber']").val();
+				if (!CompanyRegistrationNumber) {
+					alert("사업자등록번호를 입력해주세요.");
+					$("input[name='CompanyRegistrationNumber']").focus();
+					return false;
+				}
+				var Representative = $("input[name='Representative']").val();
+				if (!Representative) {
+					alert("대표자명을 입력해주세요.");
+					$("input[name='Representative']").focus();
+					return false;
+				}
+				var TaxInvoiceOfficer = $("input[name='TaxInvoiceOfficer']").val();
+				if (!TaxInvoiceOfficer) {
+					alert("세금계산서 담당자명을 입력해주세요.");
+					$("input[name='TaxInvoiceOfficer']").focus();
+					return false;
+				}
+			}
+
+			var zipcode = $("input[name='Zipcode']").val();
+			if (!zipcode) {
+				alert("주소찾기를 이용하여 우편번호를 입력해주세요.");
+				return false;
+			}
+			var addr1 = $("input[name='Addr1']").val();
+			if (!addr1) {
+				alert("주소찾기를 이용하여 주소를 입력해주세요.");
+				return false;
+			}
+			var addr2 = $("input[name='Addr2']").val();
+			if (!addr2) {
+				alert("주소(상세)를 입력해주세요.");
+				$("input[name='Addr2']").focus();
+				return false;
+			}
+			if (confirm("정보를 수정하시겠습니까?")) {
+				var form = document.regiform;
+				form.submit();
+			}
+			return false;
+		});
+		$("#gubun1").click(function () {
+			$("input[name='CompanyRegistrationNumber']").val("");
+			$("input[name='Representative']").val("");
+			$("input[name='TaxInvoiceOfficer']").val("");
+			$("#enterprise_input_area").css("display", "none");
+		});
+		$("#gubun2").click(function () {
+			$("#enterprise_input_area").css("display", "");
+		});
+	});
+</script>
+<div class="flex center w100 h100 rela" style="overflow: hidden;">
+    <form name="regiform" id="regiform" method="post" action="/En/MyPageProc">
+        <input type="hidden" asp-for="@(Model.Id)">
+        <div class="flex pad10">
+            <input id="memberid" class="style required" placeholder="아이디" asp-for="@(Model.MemberId)" autocomplete="off" readonly style="background-color: lightgray;">
+        </div>
+        <div class="flex pad10">
+            <input type="password" class="style required" placeholder="현재 비밀번호" asp-for="@(Model.CurrentPassword)">
+        </div>
+        <div class="flex pad10">
+            <input id="input_password" type="password" asp-for="@(Model.Password)" class="style required" placeholder="변경 비밀번호 입력 (문자+숫자+특수문자 조합 8 ~ 20자)" maxlength="20" autocomplete="off"><br>
+        </div>
+        <div class="flex pad10">
+            <input id="input_password_re" type="password" class="style required" placeholder="비밀번호 재입력" maxlength="20" autocomplete="off">
+        </div>
+        <div class="flex pad10 vcenter">
+            <input type="radio" asp-for="@(Model.Gubun)" id="gubun1" value="1" checked="checked"><label for="gubun1">개인</label>
+            <input type="radio" asp-for="@(Model.Gubun)" id="gubun2" value="2"><label for="gubun2">기업</label>
+        </div>
+        <div class="flex pad10">
+            <input id="input_name" class="style required" asp-for="@(Model.Name)" placeholder="고객명(기업명)" autocomplete="off">
+        </div>
+        @if (Model.Gubun == 2)
+        {
+            <div id="enterprise_input_area">
+                <div class="flex pad10">
+                    <input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="사업자등록번호" autocomplete="off">
+                </div>
+                <div class="flex pad10">
+                    <input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="대표자명" autocomplete="off">
+                </div>
+                <div class="flex pad10">
+                    <input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="세금계산서 담당자명" autocomplete="off">
+                </div>
+            </div>
+        }
+        else
+        {
+            <div id="enterprise_input_area" style="display: none;">
+                <div class="flex pad10">
+                    <input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="사업자등록번호" autocomplete="off">
+                </div>
+                <div class="flex pad10">
+                    <input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="대표자명" autocomplete="off">
+                </div>
+                <div class="flex pad10">
+                    <input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="세금계산서 담당자명" autocomplete="off">
+                </div>
+            </div>
+        }
+        <div class="flex pad10">
+            <input id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="연락처(숫자만)" autocomplete="off">
+        </div>
+        <div class="flex pad10">
+            <input id="input_contact" class="style required" asp-for="@(Model.Zipcode)" placeholder="우편번호" readonly autocomplete="off">
+            <input type="button" class="style" id="postcode" value="주소찾기" />
+        </div>
+        <div class="flex pad10">
+            <input id="input_contact" class="style required" asp-for="@(Model.Addr1)" placeholder="주소입력" autocomplete="off">
+        </div>
+        <div class="flex pad10">
+            <input id="input_contact" class="style required" asp-for="@(Model.Addr2)" placeholder="주소입력(상세)" autocomplete="off">
+        </div>
+        <div class="flex pad10">
+            <input id="input_email" class="style required" asp-for="@(Model.Email)" placeholder="이메일" autocomplete="off" readonly style="background-color: lightgray;">
+        </div>
+        <div class="tc pad30">
+            <button class="style" id="Save">정보 수정</button>
+        </div>
+    </form>
+</div>

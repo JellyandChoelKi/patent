@@ -96,6 +96,14 @@ function loadToc(legendName, type, lang) {
 function loadAll() {
 }
 
+function downAll() {
+	let arr = [];
+	$('input[name="checkbox"]').each(function () {
+		arr.push($(this).data('id'));
+	});
+	location.href = "/Kr/HtmlToPDF?id=" + arr.join('|');
+}
+
 function popupReport(type, id) {
 	const url = "./" + type + "report?id=" + id;
 	const name = "Report";

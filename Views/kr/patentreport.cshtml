@@ -1,0 +1,116 @@
+﻿@{
+    Layout = null;
+}
+
+<!doctype html>
+<html>
+<!-- META { -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="/css/style.css" rel="stylesheet">
+    <title>GTT-Global Technology Trading</title>
+</head>
+<!-- META } -->
+<body>
+    <script src="/js/jquery-1.8.3.min.js" language="javascript"></script>
+    <link href="/css/report.css" rel="stylesheet">
+    <div class="w100 h100">
+
+        <!-- for문 시작 -->
+
+        <h2 class="pad30">{Title}</h2>
+        <!-- Type == Patent { -->
+        <table class="w100">
+            <tr>
+                <th class="head">
+                    Publication No.
+                </th>
+                <td>
+                    {Publication No.}
+                </td>
+                <td rowspan="8" style="width:400px;">
+                    <img src="{ImgURL}" alt="Image" style="max-width: 100%; max-height: 100%;">
+                </td>
+            </tr>
+            <tr>
+                <th class="head">
+                    Publication Date
+                </th>
+                <td>
+                    {Publication Date}
+                </td>
+            </tr>
+            <tr>
+                <th class="head">
+                    Application No.
+                </th>
+                <td>
+                    {Application No.}
+                </td>
+            </tr>
+            <tr>
+                <th class="head">
+                    Publication Date
+                </th>
+                <td>
+                    {Publication Date}
+                </td>
+            </tr>
+            <tr>
+                <th class="head">
+                    Category
+                </th>
+                <td>
+                    {분류명}
+                </td>
+            </tr>
+            <tr>
+                <th class="head">
+                    CPC
+                </th>
+                <td>
+                    {CPC}
+                </td>
+            </tr>
+            <tr>
+                <th class="head">
+                    Appicant
+                </th>
+                <td>
+                    {Author}
+                </td>
+            </tr>
+            <tr>
+                <th>
+                    Link
+                </th>
+                <td>
+                    <a href="{Link}" target="_blank" class="link">Link</a>
+                </td>
+            </tr>
+            <tr>
+                <th colspan="3">
+                    Description
+                </th>
+            </tr>
+            <tr>
+                <td class="abstract" colspan="3" class="pad30">
+                    PURPOSE: A fuel carbon time correction is provided to improve the fuel ratio of vehicle by changing the fuel outlet part to the small amount.CONSTITUTION: A fuel carbon time correction comprises as follows. When 900 of the engine RPM is normal, the engine RPM falls down less than 900 if fuel decreases to small amount. The high speed of engine RPM is matched with the power and smoke confirmation time within two seconds. The smoke carbon is confirmed within three seconds after RPM rises at high speed. The fuel ratio of vehicle is improved and the smoke is reduced.Ò KIPO 2009
+                </td>
+            </tr>
+        </table>
+        <!-- Type == Patent } -->
+        <!-- for문 끝 -->
+    </div>
+
+    <script>
+		$('.abstract').each(function() {
+			const text = $(this).text();
+			let textNew = text.replace('PURPOSE:', '<span class="emphasis">PURPOSE</span>');
+			textNew = textNew.replace('CONSTITUTION:', '<span class="emphasis">CONSTITUTION</span>');
+			$(this).html(textNew);
+		});
+    </script>
+</body>
+</html>

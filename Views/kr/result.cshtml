@@ -1,37 +1,24 @@
 ﻿<script src="/js/data.js" language="javascript"></script>
 <script>
+
     const legends = {
         patent: ['A90', 'A80', 'A70', 'A60', 'A50', 'A40', 'A30', 'A20', 'A10', 'A00'],
         article: ['B90', 'B80', 'B70', 'B60', 'B50', 'B40', 'B30', 'B20', 'B10', 'B00'],
-        //	color:['#DC1010','#8D4342','#00F','#FC0','#FCC'],
     };
+    const shapes = {
+        patent: 'circle',
+        article: 'rect',
+    }
     var series = [];
     var currentPage = 1;
     var pagePosts = 30;
 
-    var getParameters = function (paramName) {
-        var returnValue;
-        var url = location.href;
-        var parameters = (url.slice(url.indexOf('?') + 1, url.length)).split('&');
-        for (var i = 0; i < parameters.length; i++) {
-            var varName = parameters[i].split('=')[0];
-            if (varName.toUpperCase() == paramName.toUpperCase()) {
-                returnValue = parameters[i].split('=')[1];
-                return decodeURIComponent(returnValue);
-            }
-        }
-    };
-
-    var keywords = getParameters('keywords');
-
     function searchPatent() {
-
         $.ajax({ // 논문 API
-            url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + keywords.replaceAll(' ', '*'),
+            url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
             type: "GET",
             dataType: "JSON",
             beforeSend: function () {
-                console.log('Patent Start');
                 $('#loading>div').append('<p>특허데이터를 분석 중입니다.</p>');
             },
             success: function (result) {
@@ -54,11 +41,10 @@
 
     function searchArticles() {
         $.ajax({ // 논문 API
-            url: 'https://k2gdoc2vec.azurewebsites.net/thesisData?searchWord=' + keywords,
+            url: 'https://k2gdoc2vec.azurewebsites.net/thesisData?searchWord=' + '@ViewBag.ArticleKeyword',
             type: "GET",
             dataType: "JSON",
             beforeSend: function () {
-                console.log('Article Start');
                 $('#loading>div').append('<p>논문 데이터를 분석 중입니다.</p>')
             },
             success: function (result) {
@@ -78,20 +64,17 @@
     }
 
     function initiateChart() {
-        console.log(series);
         showChart();
         myChart.setOption(option);
         legendAll();
     }
-
-    //Adding Series
 </script>
 
 <div class="rela">
     <div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
-        <div>
-            <img src="/img/loading.gif" alt="loading">
-            <h4 class="tc">검색 중입니다. 검색어에 따라 2~10분 정도 소요됩니다.</h4>
+        <div class="tc">
+            <img src="/img/loading.gif" alt="loading" style="width:200px;">
+            <h4 class="mb10 wh">검색 중입니다. <wbr>검색어에 따라 2~10분 정도 소요됩니다.</h4>
         </div>
     </div>
 
@@ -112,7 +95,10 @@
     </div>
 </div>
 <div id="table_wrap" class="pad20 w1200">
-    <h3 id="table_title" class="pad20"></h3>
+    <div class="flex between">
+        <h3 id="table_title" class="pad20"></h3>
+        <div id="btn_wrap"></div>
+    </div>
     <table class="w100 tc">
     </table>
 
@@ -135,7 +121,7 @@
                     name: dataName,
                     type: 'scatter',
                     coordinateSystem: 'polar',
-                    symbol: 'circle',
+                    symbol: shapes[type],
                     data: data[type][dataName]['coordinate'],
                     //color:legends["color"][i],
                     animationDelay: function (idx) { return idx * 5; }
@@ -156,5 +142,5 @@
 <script>
 
     searchPatent();
-    
+
 </script>

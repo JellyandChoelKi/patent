@@ -37,15 +37,15 @@ function loadToc(legendName, type, lang) {
 	var pageData = '';
 	var rowData = '';
 	var tableTitle = '';
-	console.log(lang);
+	let buttons = '';
 
 	if (type == 'patent') {
 		if (lang == 'en') {
 			var tableTitle = "Patent";
-			var tableHead = "<th class='no'></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Date</th><th class='report'>Report</th>";
+			var tableHead = "<tr><th class='no'></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Date</th><th class='report'></th></tr>";
 		} else {
 			var tableTitle = "특허";
-			var tableHead = "<th class='no'></th><th class='title'>발명제목</th><th class='author'>출원인</th><th class='year'>출원일</th><th class='report'>리포트</th>";
+			var tableHead = "<tr><th class='no'></th><th class='title'>발명제목</th><th class='author'>출원인</th><th class='year'>출원일</th><th class='report'></th></tr>";
 		}
 		var subject = "inventionname";
 		var author = "inventors";
@@ -54,23 +54,34 @@ function loadToc(legendName, type, lang) {
 	} else if (type == 'article') {
 		if (lang == 'en') {
 			var tableTitle = "Articles";
-			var tableHead = "<th class='no'></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Date</th><th class='report'>Report</th>";
+			var tableHead = "<tr><th class='no'></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Year</th><th class='report'></th></tr>";
 		} else {
 			var tableTitle = "논문";
-			var tableHead = "<th class='no'></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Date</th><th class='report'>Report</th>";
+			var tableHead = "<tr><th class='no'></th><th class='title'>제목</th><th class='author'>저자</th><th class='year'>연도</th><th class='report'></th></tr>";
 		}
 		var subject = "title";
 		var author = "author";
 		var time = "pubyear";
 		var id = "articleid";
 	}
+
 	$('#table_wrap > table').html('');
 	var dataCount = dataFrom["coordinate"].length;
 	var pageCount = parseInt(dataCount / pagePosts) + 1;
+
 	if (dataCount > 0) {
+
+		if (lang == 'en') {
+			buttons = "<button class='pad10' onClick='popupReportSelected()'>Report Selected</button><button class='pad10' onClick='downAll()'>Download All</button>";
+		} else {
+			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll()'>전체 다운로드</button>";
+		}
+
+		$('#table_title').html(tableTitle);
+		$('#btn_wrap').html(buttons);
 		$('#table_wrap > table').html(tableHead);
 		for (i = 0; i < dataCount; i++) {
-			$('#table_wrap > table').append('<tr class="rows" id="row' + (i + 1) + '"><td><input type="checkbox" id="chk"' + (i + 1) + '></td><td>' + dataFrom[subject][i] + '</td><td>' + dataFrom[author][i] + '</td><td>' + dataFrom[time][i] + '</td><td><a onClick=popupReport(\"' + type + '\",\"' + dataFrom[id][i] + '\") class="report">Report</a></td></tr>');
+			$('#table_wrap > table').append('<tr class="rows" id="row' + (i + 1) + '"><td><input onChange="countCheck(' + i + ', \'' + lang + '\')" type="checkbox" name="checkbox" id="chk' + (i + 1) + '" data-id="' + dataFrom[id][i] + '"></td><td><a onClick=popupReport(\"' + type + '\",\"' + dataFrom[id][i] + '\") class="bold">' + dataFrom[subject][i] + '</a></td><td>' + dataFrom[author][i] + '</td><td>' + dataFrom[time][i] + '</td><td class="tc"><a onClick=popupReport(\"' + type + '\",\"' + dataFrom[id][i] + '\") class="mhide"><img src="/img/seo.png" style="width:50px;"></a></td></tr>');
 		}
 	} else if (dataCount == 0) {
 		$('#table_wrap > table').html('<tr><th>No posts here.</th></tr>');
@@ -86,11 +97,43 @@ function loadAll() {
 }
 
 function popupReport(type, id) {
-	//var url = "./report.html?type=" + type + "&id=" + id;
-	var url = "./" + type + "report?id=" + id;
-	var name = "Report";
-	var option = "width = 920, height = 1200, top = 100, left = 200";
+	const url = "./" + type + "report?id=" + id;
+	const name = "Report";
+	const option = "width = 920, height = 1200, top = 100, left = 200";
 	window.open(url, name, option);
+}
+
+function popupReportSelected(type) {
+	let id = '';
+	let arr = [];
+	let checkCount = $('input:checkbox[name="checkbox"]:checked').length;
+	if (checkCount == 0) {
+		alert('선택된 리스트가 없습니다. No list selected.');
+	} else {
+		$('input[name="checkbox"]:checked').each(function () {
+			arr.push($(this).data('id'));
+			id += ($(this).data('id')) + '|';
+		});
+		const url = "./" + type + "report?id=" + arr.join('|');
+		const name = "Report";
+		const option = "width = 920, height = 1200, top = 100, left = 200";
+		window.open(url, name, option);
+	}
+}
+
+function countCheck(e, lang) {
+	let alertCount = '';
+	let checkCount = $('input:checkbox[name="checkbox"]:checked').length;
+	console.log(checkCount);
+	if (lang == 'en') {
+		alertCount = "Cannot check more than 10 lists.";
+	} else {
+		alertCount = "10개 이상 체크할 수 없습니다.";
+	}
+	if (checkCount > 10) {
+		alert(alertCount);
+		$("input#chk" + (e + 1)).prop("checked", false);
+	}
 }
 
 function pagination(e, type) {
@@ -116,4 +159,10 @@ function focusRange(a) {
 		startValue: 1.0,
 		endValue: a,
 	});
+}
+
+function testRun() {
+	pushSeries("patent");
+	pushSeries("article");
+	initiateChart();
 }

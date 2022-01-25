@@ -23,6 +23,9 @@ using System.Xml.Linq;
 using System.IO.Compression;
 using System.Threading;
 using Aspose.Pdf;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
 
 namespace K2GGTT.Controllers
 {
@@ -101,6 +104,9 @@ namespace K2GGTT.Controllers
 			html += "	<link href=\"https://localhost:44325/css/report.css\" rel=\"stylesheet\">";
 			foreach (var app_no in id.Split('|'))
 			{
+				MongoDBConf db = new MongoDBConf();
+				var info = db.LoadRecordById<BsonDocument>("kipris", "app_no", app_no);
+
 				html += "	<div style=\"width: 1500px;\">";
 				html += "		<h2 class=\"pad30\">Title</h2>";
 				html += "		<table class=\"w100\">";

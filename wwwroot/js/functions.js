@@ -72,7 +72,7 @@ function loadToc(legendName, type, lang) {
 	if (dataCount > 0) {
 
 		if (lang == 'en') {
-			buttons = "<button class='pad10' onClick='popupReportSelected()'>Report Selected</button><button class='pad10' onClick='downAll()'>Download All</button>";
+			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>Report Selected</button><button class='pad10' onClick='downAll()'>Download All</button>";
 		} else {
 			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll()'>전체 다운로드</button>";
 		}

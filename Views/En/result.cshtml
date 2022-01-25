@@ -19,16 +19,16 @@
             type: "GET",
             dataType: "JSON",
             beforeSend: function () {
-                $('#loading>div').append('<p>특허데이터를 분석 중입니다.</p>');
+                $('#loading>div').append('<p>Analyzing Patent Data...</p>');
             },
             success: function (result) {
                 console.log('Patent Success');
-                $('#loading>div').append('<p>특허데이터 분석이 완료되었습니다.</p>');
+                $('#loading>div').append('<p>Patent data Analysis Completed.</p>');
                 data["patent"] = result;
                 pushSeries("patent");
             },
             error: function () {
-                $('#loading>div').append('<p style="color:#C00;">특허데이터 획득에 실패하였습니다.</p>');
+                $('#loading>div').append('<p style="color:#C00;">Failed to searching Patent data.</p>');
             },
             complete: function () {
                 console.log('Patent End');
@@ -45,16 +45,16 @@
             type: "GET",
             dataType: "JSON",
             beforeSend: function () {
-                $('#loading>div').append('<p>논문 데이터를 분석 중입니다.</p>')
+                $('#loading>div').append('<p>Analyzing Article Data...</p>')
             },
             success: function (result) {
                 console.log('Article Success');
-                $('#loading>div').append('<p>논문데이터 분석이 완료되었습니다.</p>')
+                $('#loading>div').append('<p>Article data Analysis Completed.</p>')
                 data["article"] = result;
                 pushSeries("article");
             },
             error: function () {
-                $('#loading>div').append('<p style="color:#C00;">논문데이터 분석이 실패하였습니다.</p>');
+                $('#loading>div').append('<p style="color:#C00;">Failed to searching Article data.</p>');
             },
             complete: function () {
                 console.log('Article Ended');
@@ -74,18 +74,18 @@
     <div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
         <div class="tc">
             <img src="/img/loading.gif" alt="loading" style="width:200px;">
-            <h4 class="mb10 wh">검색 중입니다. <wbr>검색어에 따라 2~10분 정도 소요됩니다.</h4>
+            <h4 class="mb10">Searching... It takes 2-10 minutes depending on keywords.</h4>
         </div>
     </div>
 
 
-    <h3 class="tc">범주를 선택하세요.</h3>
+    <h3 class="tc">Select a Legend</h3>
     <div>
         <div class="flex center">
-            <select id="custom_legend" class="style" onChange="selectLegend()">
-                <option value="all">전체</option>
-                <optgroup class="patent" label="특허"></optgroup>
-                <optgroup class="article" label="논문"></optgroup>
+            <select id="custom_legend" class="style" onChange="selectLegend('en')">
+                <option value="all">All</option>
+                <optgroup class="patent" label="Patent"></optgroup>
+                <optgroup class="article" label="Articles"></optgroup>
             </select>
         </div>
     </div>
@@ -130,7 +130,7 @@
             var dataCounts = data[type][dataName]['coordinate'].length
             if (dataCounts > 0) {
                 series.push(thisData[type]);
-                var legend_elements = '<option value="' + dataName + '" data-type="' + type + '">' + dataName.substr(1) + '% (' + dataCounts + '개)' + '</option>';
+                var legend_elements = '<option value="' + dataName + '" data-type="' + type + '">' + dataName.substr(1) + '% (' + dataCounts + ')' + '</option>';
                 $('optgroup.' + type).append(legend_elements);
             }
         }

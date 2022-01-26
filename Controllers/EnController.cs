@@ -281,7 +281,7 @@ namespace K2GGTT.Controllers
 			HttpContext.Session.SetString("Id", member.Id.ToString());
 			HttpContext.Session.SetString("MemberId", member.MemberId);
 			HttpContext.Session.SetString("MemberName", member.Name);
-			return Redirect("/Kr/Index");
+			return Redirect("/En/Index");
 		}
 		public IActionResult Password()
 		{
@@ -393,7 +393,7 @@ namespace K2GGTT.Controllers
 			_context.Member.Add(member);
 			_context.SaveChanges();
 
-			return Content(@"<script type='text/javascript'>alert('You have signed up successfully.');location.href='/Kr/Index';</script>", "text/html", System.Text.Encoding.UTF8);
+			return Content(@"<script type='text/javascript'>alert('You have signed up successfully.');location.href='/En/Index';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult MyPage()
@@ -424,7 +424,7 @@ namespace K2GGTT.Controllers
 		{
 			if (model.Id <= 0)
 			{
-				return Content(@"<script type='text/javascript'>alert('The session was terminated for an unknown reason. Please try again.');location.href='/Kr/Login';</script>", "text/html", System.Text.Encoding.UTF8);
+				return Content(@"<script type='text/javascript'>alert('The session was terminated for an unknown reason. Please try again.');location.href='/En/Login';</script>", "text/html", System.Text.Encoding.UTF8);
 			}
 			var member = _context.Member.Where(x => x.Id == model.Id).FirstOrDefault();
 			if (member.Password != SHA256Hash(model.CurrentPassword))
@@ -446,7 +446,7 @@ namespace K2GGTT.Controllers
 			member.Addr2 = model.Addr2;
 			_context.SaveChanges();
 
-			return Content(@"<script type='text/javascript'>alert('You have completed editing your information.');location.href='/Kr/MyPage';</script>", "text/html", System.Text.Encoding.UTF8);
+			return Content(@"<script type='text/javascript'>alert('You have completed editing your information.');location.href='/En/MyPage';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 	}
 }

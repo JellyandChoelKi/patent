@@ -22,6 +22,11 @@ using System.Xml;
 using System.Xml.Linq;
 using System.IO.Compression;
 using System.Threading;
+using Aspose.Pdf;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+
 namespace K2GGTT.Controllers
 {
 	
@@ -83,6 +88,85 @@ namespace K2GGTT.Controllers
 		{
 			_logger = logger;
 			_context = DBContext;
+		}
+
+		public IActionResult TocAllDataPDFDownload(string id)
+		{
+			string html = string.Empty;
+			html += "<!doctype html>";
+			html += "<html>";
+			html += "<head>";
+			html += "	<meta charset=\"utf-8\">";
+			html += "	<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">";
+			html += "	<link href=\"https://localhost:44325/css/style.css\" rel=\"stylesheet\">";
+			html += "</head>";
+			html += "<body style=\"font-size: 1.0em;\">";
+			html += "	<link href=\"https://localhost:44325/css/report.css\" rel=\"stylesheet\">";
+			foreach (var app_no in id.Split('|'))
+			{
+				MongoDBConf db = new MongoDBConf();
+				var info = db.LoadRecordById<BsonDocument>("kipris", "app_no", app_no);
+
+				html += "	<div style=\"width: 1500px;\">";
+				html += "		<h2 class=\"pad30\">Title</h2>";
+				html += "		<table class=\"w100\">";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Publication No.</th>";
+				html += "				<td>{Publication No.}</td>";
+				html += "				<td rowspan=\"8\" style=\"400px;\"><img src=\"{ImgURL}\" alt=\"Image\" style=\"max-width: 100%; max-height: 100%;\"></td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Publication Date</th>";
+				html += "				<td>{Publication Date}</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Application No.</th>";
+				html += "				<td>{Application No.}</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Publication Date</th>";
+				html += "				<td>{Publication Date}</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Category</th>";
+				html += "				<td>{분류명}</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">CPC</th>";
+				html += "				<td>{CPC}</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Appicant</th>";
+				html += "				<td>{Appicant}</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Link</th>";
+				html += "				<td>{Link}</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th colspan=\"3\">Description</th>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<td class=\"abstract\" colspan=\"3\">";
+				html += "				<span class=\"emphasis\">PURPOSE</span> A fuel carbon time correction is provided to improve the fuel ratio of vehicle by changing the fuel outlet part to the small amount. ";
+				html += "				<span class=\"emphasis\">CONSTITUTION</span> A fuel carbon time correction comprises as follows. When 900 of the engine RPM is normal, the engine RPM falls down less than 900 if fuel decreases to small amount. The high speed of engine RPM is matched with the power and smoke confirmation time within two seconds. The smoke carbon is confirmed within three seconds after RPM rises at high speed. The fuel ratio of vehicle is improved and the smoke is reduced.Ò KIPO 2009 ";
+				html += "				</td>";
+				html += "			</tr>";
+				html += "		</table>";
+				html += "	</div>";
+			}
+			html += "</body>";
+			html += "</html>";
+
+			byte[] byteArray = Encoding.UTF8.GetBytes(html);
+			MemoryStream stream = new MemoryStream(byteArray);
+			HtmlLoadOptions options = new HtmlLoadOptions();
+			Document pdfDocument = new Document(stream, options);
+			Stream outputStream = new MemoryStream();
+			pdfDocument.Save(outputStream);
+
+			string fileName = "[K2G]all_toc_pdf_" + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf";
+			return File(outputStream, System.Net.Mime.MediaTypeNames.Application.Pdf, fileName);
 		}
 
 		public IActionResult Index()

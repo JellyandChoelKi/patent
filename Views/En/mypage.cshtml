@@ -22,7 +22,7 @@
 		$("#Save").click(function () {
 			var CurrentPassword = $("input[name='CurrentPassword']").val();
 			if (!CurrentPassword) {
-				alert("정보수정을 위해 계정 비밀번호를 입력해주세요.");
+                alert("Please enter your password to edit your information.");
 				$("input[name='CurrentPassword']").focus();
 				return false;
 			}
@@ -31,33 +31,33 @@
 			var input_password_re = $("#input_password_re").val();
 			if (input_password != "" || input_password_re != "") {
 				if (!input_password) {
-					alert("비밀번호를 입력해주세요.");
+					alert("Please enter the password.");
 					$("#input_password").focus();
 					return false;
 				}
 				if (!input_password_re) {
-					alert("비밀번호 재입력을 입력해주세요.");
+                    alert("Please enter the password again.");
 					$("#input_password_re").focus();
 					return false;
 				}
 				if (!reg.test(input_password)) {
-					alert("비밀번호는 문자+숫자+특수문자 조합 8~20자로 입력해주세요.");
+                    alert("Please enter a password of 8 to 20 characters using a combination of letters + numbers + special characters.");
 					return false;
 				}
 				if (input_password != input_password_re) {
-					alert("비밀번호와 재입력한 비밀번호가 맞지 않습니다.");
+                    alert("The password and the re-entered password do not match.");
 					return false;
 				}
 			}
 			var name = $("input[name='Name']").val();
 			if (!name) {
-				alert("고객명(기업명)을 입력해주세요.");
+                alert("Please enter the customer name (company name).");
 				$("input[name='Name']").focus();
 				return false;
 			}
 			var contact = $("input[name='Contact']").val();
 			if (!contact) {
-				alert("연락처를 입력해주세요.");
+                alert("Please enter the contact number.");
 				$("input[name='Contact']").focus();
 				return false;
 			}
@@ -65,19 +65,19 @@
 			if ($("#gubun2").is(':checked')){
 				var CompanyRegistrationNumber = $("input[name='CompanyRegistrationNumber']").val();
 				if (!CompanyRegistrationNumber) {
-					alert("사업자등록번호를 입력해주세요.");
+                    alert("Please enter the business registration number.");
 					$("input[name='CompanyRegistrationNumber']").focus();
 					return false;
 				}
 				var Representative = $("input[name='Representative']").val();
 				if (!Representative) {
-					alert("대표자명을 입력해주세요.");
+                    alert("Please enter the representative's name.");
 					$("input[name='Representative']").focus();
 					return false;
 				}
 				var TaxInvoiceOfficer = $("input[name='TaxInvoiceOfficer']").val();
 				if (!TaxInvoiceOfficer) {
-					alert("세금계산서 담당자명을 입력해주세요.");
+                    alert("Please enter the name of person in charge of tax invoice.");
 					$("input[name='TaxInvoiceOfficer']").focus();
 					return false;
 				}
@@ -85,17 +85,17 @@
 
 			var zipcode = $("input[name='Zipcode']").val();
 			if (!zipcode) {
-				alert("주소찾기를 이용하여 우편번호를 입력해주세요.");
+                alert("Please enter the zip code.");
 				return false;
 			}
 			var addr1 = $("input[name='Addr1']").val();
 			if (!addr1) {
-				alert("주소찾기를 이용하여 주소를 입력해주세요.");
+                alert("Please enter the address.");
 				return false;
 			}
 			var addr2 = $("input[name='Addr2']").val();
 			if (!addr2) {
-				alert("주소(상세)를 입력해주세요.");
+                alert("Please enter the detailed address.");
 				$("input[name='Addr2']").focus();
 				return false;
 			}
@@ -120,35 +120,35 @@
     <form name="regiform" id="regiform" method="post" action="/En/MyPageProc">
         <input type="hidden" asp-for="@(Model.Id)">
         <div class="flex pad10">
-            <input id="memberid" class="style required" placeholder="아이디" asp-for="@(Model.MemberId)" autocomplete="off" readonly style="background-color: lightgray;">
+            <input id="memberid" class="style required" placeholder="ID" asp-for="@(Model.MemberId)" autocomplete="off" readonly style="background-color: lightgray;">
         </div>
         <div class="flex pad10">
-            <input type="password" class="style required" placeholder="현재 비밀번호" asp-for="@(Model.CurrentPassword)">
+            <input type="password" class="style required" placeholder="Current Passwrod" asp-for="@(Model.CurrentPassword)">
         </div>
         <div class="flex pad10">
-            <input id="input_password" type="password" asp-for="@(Model.Password)" class="style required" placeholder="변경 비밀번호 입력 (문자+숫자+특수문자 조합 8 ~ 20자)" maxlength="20" autocomplete="off"><br>
+            <input id="input_password" type="password" asp-for="@(Model.Password)" class="style required" placeholder="Enter the password (8 to 20 characters and a combination of letters + numbers + special characters)" maxlength="20" autocomplete="off"><br>
         </div>
         <div class="flex pad10">
-            <input id="input_password_re" type="password" class="style required" placeholder="비밀번호 재입력" maxlength="20" autocomplete="off">
+            <input id="input_password_re" type="password" class="style required" placeholder="Enter the password again." maxlength="20" autocomplete="off">
         </div>
         <div class="flex pad10 vcenter">
             <input type="radio" asp-for="@(Model.Gubun)" id="gubun1" value="1" checked="checked"><label for="gubun1">개인</label>
             <input type="radio" asp-for="@(Model.Gubun)" id="gubun2" value="2"><label for="gubun2">기업</label>
         </div>
         <div class="flex pad10">
-            <input id="input_name" class="style required" asp-for="@(Model.Name)" placeholder="고객명(기업명)" autocomplete="off">
+            <input id="input_name" class="style required" asp-for="@(Model.Name)" placeholder="Individual(Company)" autocomplete="off">
         </div>
         @if (Model.Gubun == 2)
         {
             <div id="enterprise_input_area">
                 <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="사업자등록번호" autocomplete="off">
+                    <input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="Business Registration Number" autocomplete="off">
                 </div>
                 <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="대표자명" autocomplete="off">
+                    <input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="Representative's name" autocomplete="off">
                 </div>
                 <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="세금계산서 담당자명" autocomplete="off">
+                    <input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="Name of person in charge of tax invoice" autocomplete="off">
                 </div>
             </div>
         }
@@ -156,34 +156,33 @@
         {
             <div id="enterprise_input_area" style="display: none;">
                 <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="사업자등록번호" autocomplete="off">
+                    <input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="Business Registration Number" autocomplete="off">
                 </div>
                 <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="대표자명" autocomplete="off">
+                    <input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="Representative's name" autocomplete="off">
                 </div>
                 <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="세금계산서 담당자명" autocomplete="off">
+                    <input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="Name of person in charge of tax invoice" autocomplete="off">
                 </div>
             </div>
         }
         <div class="flex pad10">
-            <input id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="연락처(숫자만)" autocomplete="off">
+            <input id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Contact Number(Only Number)" autocomplete="off">
         </div>
         <div class="flex pad10">
-            <input id="input_contact" class="style required" asp-for="@(Model.Zipcode)" placeholder="우편번호" readonly autocomplete="off">
-            <input type="button" class="style" id="postcode" value="주소찾기" />
+            <input id="input_contact" class="style required" asp-for="@(Model.Zipcode)" placeholder="Zip code" readonly autocomplete="off">
         </div>
         <div class="flex pad10">
-            <input id="input_contact" class="style required" asp-for="@(Model.Addr1)" placeholder="주소입력" autocomplete="off">
+            <input id="input_contact" class="style required" asp-for="@(Model.Addr1)" placeholder="Address" autocomplete="off">
         </div>
         <div class="flex pad10">
-            <input id="input_contact" class="style required" asp-for="@(Model.Addr2)" placeholder="주소입력(상세)" autocomplete="off">
+            <input id="input_contact" class="style required" asp-for="@(Model.Addr2)" placeholder="Address(Detail)" autocomplete="off">
         </div>
         <div class="flex pad10">
-            <input id="input_email" class="style required" asp-for="@(Model.Email)" placeholder="이메일" autocomplete="off" readonly style="background-color: lightgray;">
+            <input id="input_email" class="style required" asp-for="@(Model.Email)" placeholder="Email" autocomplete="off" readonly style="background-color: lightgray;">
         </div>
         <div class="tc pad30">
-            <button class="style" id="Save">정보 수정</button>
+            <button class="style" id="Save">Modify</button>
         </div>
     </form>
 </div>

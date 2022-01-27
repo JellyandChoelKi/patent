@@ -1,9 +1,9 @@
 ﻿<div id="slider" class="bgcover" style="width:100%; height:700px; background-color:#EEE; background-image: url('/img/image2.jpg');">
-    <form name="search" method="get" class="flex center w100 h100" action="Kr/Result">
+    <form name="search" method="get" class="flex center w100 h100" action="Kr/Result" onsubmit="return checkKeyword()">
         <div class="pad20">
             <div style="box-sizing: border-box;">
                 <input name="keywords" id="main_search" placeholder="검색어를 입력하세요.">
-                <button type="submit" class="none"></button>
+                <button type="button" id="searchBtn" class="none"></button>
             </div>
         </div>
     </form>
@@ -17,3 +17,15 @@
         헌법재판소의 장은 국회의 동의를 얻어 재판관중에서 대통령이 임명한다. 평화통일정책의 수립에 관한 대통령의 자문에 응하기 위하여 민주평화통일자문회의를 둘 수 있다.
     </p>
 </div>
+
+<script>
+    function checkKeyword() {
+        var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+        var keywords = $("input[name='keywords']").val();
+
+        if (pattern_kor.test(keywords)) {
+            alert("영문으로 입력해 주세요.");
+            return false;
+        }
+    }
+</script>

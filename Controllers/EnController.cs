@@ -30,20 +30,6 @@ namespace K2GGTT.Controllers
         private readonly ILogger<EnController> _logger;
         private readonly DBContext _context;
 
-		//맥주소 입력해주세요.
-		public static string MAC_address = "80-FA-5B-68-EB-43";
-		//발급받은 client_id를 입력해주세요.
-		public static string clientID = "0ade3f2ef692f608addbaeb263fd3356809bdb01007fd09ccfcfcfb76b0895dd";
-		//API Gateway로부터 발급받은 인증키를 입력해주세요.
-		public static string key = "128e05eb22ca4396adbdad82dc369f96";
-
-		//refresh Token을 입력해주세요.(Access Token 재발급시 입력)
-		public static string refreshToken = "Your RefreshToken";
-		//accessToken을 입력해주세요(데이터요청시 이용)
-		public static string accessToken = "Your AccessToken";
-		//iv의 값은 변하지 않습니다.
-		private static string iv = "jvHJ1EFA0IXBrxxz";
-
 		public string SHA256Hash(string password)
 		{
 			SHA256 sha = new SHA256Managed();
@@ -71,7 +57,7 @@ namespace K2GGTT.Controllers
 		public IActionResult Logout()
 		{
 			HttpContext.Session.Clear();
-			return Content(@"<script type='text/javascript'>alert('You have logged out successfully.');location.href='/Kr/Index';</script>", "text/html", System.Text.Encoding.UTF8);
+			return Content(@"<script type='text/javascript'>alert('You have logged out successfully.');location.href='/En/Index';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult Result(string keywords)
@@ -80,184 +66,6 @@ namespace K2GGTT.Controllers
 			ViewBag.ArticleKeyword = keywords;
 
 			return View();
-		}
-
-		public IActionResult PatentReport(string id)
-		{
-			return View();
-		}
-
-		public IActionResult ArticleReport(string id)
-		{
-			ArticleViewModel model = new ArticleViewModel()
-			{
-				TitleList = new List<string>(),
-				ArticleIdList = new List<string>(),
-				AbstractList = new List<string>(),
-				AuthorList = new List<string>(),
-				PubyearList = new List<string>(),
-				JournalNameList = new List<string>(),
-				VolNo1List = new List<string>(),
-				VolNo2List = new List<string>(),
-				PageInfoList = new List<string>(),
-				KeywordList = new List<string>(),
-				ContentURLList = new List<string>()
-			};
-			var tokenResponse = createToken();
-			var id_Arr = id.Split('|');
-
-			foreach (var ids in id_Arr)
-			{
-				string query = HttpUtility.UrlEncode("{\"CN\":\"" + ids + "\"}");
-				string target_URL = "https://apigateway.kisti.re.kr/openapicall.do?" +
-				"client_id=" + clientID + "&token=" + accessToken + "&version=1.0" + "&action=search" +
-				"&target=ARTI" + "&searchQuery=" + query;
-
-				string response = getResponse(target_URL);
-				Console.WriteLine(response);
-
-				XmlDocument xml = new XmlDocument();
-				xml.LoadXml(response);
-
-				XmlNodeList nodeList = xml["MetaData"]["recordList"].GetElementsByTagName("record");
-				foreach (XmlNode record in nodeList)
-				{
-					foreach (XmlNode item in record.ChildNodes)
-					{
-						if (item.Attributes["metaCode"].InnerText.Equals("Title"))
-						{
-							model.TitleList.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("ArticleId"))
-						{
-							model.ArticleIdList.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("Abstract"))
-						{
-							model.AbstractList.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("Author"))
-						{
-							model.AuthorList.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("Pubyear"))
-						{
-							model.PubyearList.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("JournalName"))
-						{
-							model.JournalNameList.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("VolNo1"))
-						{
-							model.VolNo1List.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("VolNo2"))
-						{
-							model.VolNo2List.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("PageInfo"))
-						{
-							model.PageInfoList.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("Keyword"))
-						{
-							model.KeywordList.Add(item.InnerText);
-						}
-						else if (item.Attributes["metaCode"].InnerText.Equals("ContentURL"))
-						{
-							model.ContentURLList.Add(item.InnerText);
-						}
-					}
-				}
-			}
-
-			return View(model);
-		}
-
-
-
-		public static string createToken()
-		{
-			string date = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-			var json = new JObject();
-			json.Add("datetime", date);
-			json.Add("mac_address", MAC_address);
-
-			string encrypted_txt = HttpUtility.UrlEncode(encrypt(json.ToString(), key));
-
-			string target_URL = "https://apigateway.kisti.re.kr/tokenrequest.do?accounts=" + encrypted_txt +
-			"&client_id=" + clientID;
-
-
-			JObject responseJson = JObject.Parse(getResponse(target_URL));
-			refreshToken = responseJson["refresh_token"].ToString();
-			accessToken = responseJson["access_token"].ToString();
-			Console.WriteLine("access_token : " + accessToken);
-			Console.WriteLine("refresh_token : " + refreshToken);
-			return responseJson.ToString();
-		}
-
-		public static string getResponse(string target_URL)
-		{
-			string responseText = string.Empty;
-
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(target_URL);
-			request.Method = "GET";
-
-			try
-			{
-				using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-				{
-					HttpStatusCode statusCode = response.StatusCode;
-					Console.WriteLine(statusCode);
-
-					Stream respStream = response.GetResponseStream();
-					using (StreamReader sr = new StreamReader(respStream))
-					{
-						responseText = sr.ReadToEnd();
-					}
-				}
-			}
-			catch (Exception e)
-			{
-				Console.WriteLine(e.Message);
-			}
-			return responseText;
-		}
-
-		public static string encrypt(string plainText, string key)
-		{
-			{
-				UTF8Encoding ue = new UTF8Encoding();
-
-				using (Aes aesAlg = Aes.Create())
-				{
-					aesAlg.Padding = PaddingMode.PKCS7;
-					aesAlg.Mode = CipherMode.CBC;
-					aesAlg.Key = ue.GetBytes(key);
-					aesAlg.IV = ue.GetBytes(iv);
-
-					byte[] message = ue.GetBytes(plainText.Replace("\r\n", "").Replace(" ", ""));
-					byte[] enc;
-
-					// Create an encryptor to perform the stream transform.
-					ICryptoTransform encryptor = aesAlg.CreateEncryptor();
-
-					using (MemoryStream msEncrypt = new MemoryStream())
-					{
-						using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
-						{
-							csEncrypt.Write(message, 0, message.Length);
-
-						}
-
-						enc = msEncrypt.ToArray();
-					}
-					return Convert.ToBase64String(enc, 0, enc.Length).Replace("/", "_").Replace("+", "-");
-				}
-			}
 		}
 
 		public IActionResult Contact()

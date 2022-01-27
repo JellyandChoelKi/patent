@@ -104,16 +104,31 @@ namespace K2GGTT.Controllers
 			html += "	<link href=\"https://localhost:44325/css/report.css\" rel=\"stylesheet\">";
 			foreach (var app_no in id.Split('|'))
 			{
+				string ImgSrc = string.Empty;
+				try
+				{
+					string url = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaImageAndFullTextService/representationImageInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
+					string imgXml = getResponse(url);
+					XDocument doc = XDocument.Parse(imgXml.Trim()); ;
+					XElement tifPath = (from n in doc.Descendants("tifPath") select n).FirstOrDefault();
+					ImgSrc = tifPath.Value;
+				}
+				catch
+				{
+					ImgSrc = "https://localhost:44325/image/noimage.jpg";
+				}
+
 				MongoDBConf db = new MongoDBConf();
 				var info = db.LoadRecordById<BsonDocument>("kipris", "app_no", app_no);
 
-				html += "	<div style=\"width: 1500px;\">";
+
+				html += "	<div style=\"width: 750px;\">";
 				html += "		<h2 class=\"pad30\">Title</h2>";
 				html += "		<table class=\"w100\">";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication No.</th>";
 				html += "				<td>{Publication No.}</td>";
-				html += "				<td rowspan=\"8\" style=\"400px;\"><img src=\"{ImgURL}\" alt=\"Image\" style=\"max-width: 100%; max-height: 100%;\"></td>";
+				html += "				<td rowspan=\"8\" style=\"text-align: center;\"><img src=\"" + ImgSrc + "\" alt=\"Image\" style=\"margin-left: auto; margin-right: auto; display: block; width: 300px; height: 300px;\"></td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication Date</th>";
@@ -121,7 +136,7 @@ namespace K2GGTT.Controllers
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Application No.</th>";
-				html += "				<td>{Application No.}</td>";
+				html += "				<td>" + app_no + "</td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication Date</th>";

@@ -225,9 +225,8 @@ namespace K2GGTT.Controllers
 					publicationDate = xn["bibliographicSummaryInfo"]["publicationDate"].InnerText;
 					Description = xn["summation"]["astrtCont"].InnerText;
 				}
-
 				html += "	<div style=\"width: 750px;\">";
-				html += "		<h2 class=\"pad30\">" + title + "</h2>";
+				html += "		<h3 class=\"pad10\">" + title + "</h3>";
 				html += "		<table class=\"w100\">";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication No.</th>";
@@ -242,7 +241,7 @@ namespace K2GGTT.Controllers
 				html += "				<th class=\"head\">Application No.</th>";
 				html += "				<td>" + app_no + "</td>";
 				html += "			</tr>";
-				/*html += "			<tr>";
+				html += "			<tr>";
 				html += "				<th class=\"head\">Category</th>";
 				html += "				<td>{분류명}</td>";
 				html += "			</tr>";
@@ -257,11 +256,10 @@ namespace K2GGTT.Controllers
 				html += "			<tr>";
 				html += "				<th class=\"head\">Link</th>";
 				html += "				<td>{Link}</td>";
-				html += "			</tr>";*/
+				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th colspan=\"3\">Description</th>";
 				html += "			</tr>";
-
 				if (Description.IndexOf("PURPOSE") == -1)
 				{
 					html += "			<tr>";
@@ -276,26 +274,18 @@ namespace K2GGTT.Controllers
 					{
 						purpose = Description.Split("CONSTITUTION:", StringSplitOptions.None)[0].Replace("PURPOSE:", "");
 						constitution = Description.Split("CONSTITUTION:", StringSplitOptions.None)[1];
-
-						html += "			<tr>";
-						html += "				<td class=\"abstract\" colspan=\"3\">";
-						html += "				<span class=\"emphasis\">PURPOSE</span>" + purpose;
-						html += "				<span class=\"emphasis\">CONSTITUTION</span>" + constitution;
-						html += "				</td>";
-						html += "			</tr>";
 					}
 					else if (Description.IndexOf("(PURPOSE)") != -1)
 					{
 						purpose = Description.Split("(CONSTITUTION)", StringSplitOptions.None)[0].Replace("(PURPOSE)", "");
 						constitution = Description.Split("(CONSTITUTION)", StringSplitOptions.None)[1];
-						
-						html += "			<tr>";
-						html += "				<td class=\"abstract\" colspan=\"3\">";
-						html += "				<span class=\"emphasis\">PURPOSE</span>" + purpose;
-						html += "				<span class=\"emphasis\">CONSTITUTION</span>" + constitution;
-						html += "				</td>";
-						html += "			</tr>";
 					}
+					html += "			<tr>";
+					html += "				<td class=\"abstract\" colspan=\"3\">";
+					html += "				<span class=\"emphasis\">PURPOSE</span>" + purpose;
+					html += "				<span class=\"emphasis\">CONSTITUTION</span>" + constitution;
+					html += "				</td>";
+					html += "			</tr>";
 				}
 				html += "		</table>";
 				html += "	</div>";

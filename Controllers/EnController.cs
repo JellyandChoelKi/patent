@@ -114,8 +114,8 @@ namespace K2GGTT.Controllers
 			MailMessage mail = new MailMessage();
 			mail.From = new MailAddress("no-reply@yellowknife.io", "K2G", System.Text.Encoding.UTF8);
 			mail.To.Add(email);
-			mail.Subject = "[K2G] 임시 비밀번호가 발급되었습니다.";
-			mail.Body = "임시 비밀번호를 전송해 드립니다. 확인 후 회원정보 수정을 통해 비밀번호를 변경하시기 바랍니다. 비밀번호 : " + code;
+			mail.Subject = "[K2G] A temporary password has been issued.";
+			mail.Body = "We will send you a temporary password. Please change your password by editing member information. password : " + code;
 			mail.IsBodyHtml = true;
 			mail.SubjectEncoding = System.Text.Encoding.UTF8;
 			mail.BodyEncoding = System.Text.Encoding.UTF8;

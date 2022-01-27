@@ -197,7 +197,7 @@ namespace K2GGTT.Controllers
 				{
 					string imgUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaImageAndFullTextService/representationImageInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
 					string imgXml = getResponse(imgUrl);
-					XDocument imgDoc = XDocument.Parse(imgXml.Trim()); ;
+					XDocument imgDoc = XDocument.Parse(imgXml.Trim());
 					XElement tifPath = (from n in imgDoc.Descendants("tifPath") select n).FirstOrDefault();
 					ImgSrc = tifPath.Value;
 				}
@@ -207,25 +207,42 @@ namespace K2GGTT.Controllers
 				}
 
 				string xmlUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
-				
+				string infoXml = getResponse(xmlUrl);
+
+				XmlDocument xml = new XmlDocument();
+				xml.LoadXml(infoXml);
+
+				XmlNodeList xnList = xml.GetElementsByTagName("bibliographicInfo");
+
+				string title = string.Empty;
+				string publicationNumber = string.Empty;
+				string publicationDate = string.Empty;
+				string Description = string.Empty;
+				foreach (XmlNode xn in xnList)
+				{
+					title = xn["bibliographicSummaryInfo"]["inventionTitle"].InnerText;
+					publicationNumber = xn["bibliographicSummaryInfo"]["publicationNumber"].InnerText;
+					publicationDate = xn["bibliographicSummaryInfo"]["publicationDate"].InnerText;
+					Description = xn["summation"]["astrtCont"].InnerText;
+				}
 
 				html += "	<div style=\"width: 750px;\">";
-				html += "		<h2 class=\"pad30\">Title</h2>";
+				html += "		<h2 class=\"pad30\">" + title + "</h2>";
 				html += "		<table class=\"w100\">";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication No.</th>";
-				html += "				<td>{Publication No}</td>";
+				html += "				<td>" + publicationNumber + "</td>";
 				html += "				<td rowspan=\"7\" style=\"text-align: center;\"><img src=\"" + ImgSrc + "\" alt=\"Image\" style=\"margin-left: auto; margin-right: auto; display: block; width: 300px; height: 300px;\"></td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication Date</th>";
-				html += "				<td>{Publication Date}</td>";
+				html += "				<td>" + publicationDate + "</td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Application No.</th>";
 				html += "				<td>" + app_no + "</td>";
 				html += "			</tr>";
-				html += "			<tr>";
+				/*html += "			<tr>";
 				html += "				<th class=\"head\">Category</th>";
 				html += "				<td>{분류명}</td>";
 				html += "			</tr>";
@@ -240,16 +257,46 @@ namespace K2GGTT.Controllers
 				html += "			<tr>";
 				html += "				<th class=\"head\">Link</th>";
 				html += "				<td>{Link}</td>";
-				html += "			</tr>";
+				html += "			</tr>";*/
 				html += "			<tr>";
 				html += "				<th colspan=\"3\">Description</th>";
 				html += "			</tr>";
-				html += "			<tr>";
-				html += "				<td class=\"abstract\" colspan=\"3\">";
-				html += "				<span class=\"emphasis\">PURPOSE</span> A fuel carbon time correction is provided to improve the fuel ratio of vehicle by changing the fuel outlet part to the small amount. ";
-				html += "				<span class=\"emphasis\">CONSTITUTION</span> A fuel carbon time correction comprises as follows. When 900 of the engine RPM is normal, the engine RPM falls down less than 900 if fuel decreases to small amount. The high speed of engine RPM is matched with the power and smoke confirmation time within two seconds. The smoke carbon is confirmed within three seconds after RPM rises at high speed. The fuel ratio of vehicle is improved and the smoke is reduced.Ò KIPO 2009 ";
-				html += "				</td>";
-				html += "			</tr>";
+
+				if (Description.IndexOf("PURPOSE") == -1)
+				{
+					html += "			<tr>";
+					html += "				<td class=\"abstract\" colspan=\"3\">" + Description + "</td>";
+					html += "			</tr>";
+				}
+				else
+				{
+					string purpose = string.Empty;
+					string constitution = string.Empty;
+					if (Description.IndexOf("PURPOSE:") != -1)
+					{
+						purpose = Description.Split("CONSTITUTION:", StringSplitOptions.None)[0].Replace("PURPOSE:", "");
+						constitution = Description.Split("CONSTITUTION:", StringSplitOptions.None)[1];
+
+						html += "			<tr>";
+						html += "				<td class=\"abstract\" colspan=\"3\">";
+						html += "				<span class=\"emphasis\">PURPOSE</span>" + purpose;
+						html += "				<span class=\"emphasis\">CONSTITUTION</span>" + constitution;
+						html += "				</td>";
+						html += "			</tr>";
+					}
+					else if (Description.IndexOf("(PURPOSE)") != -1)
+					{
+						purpose = Description.Split("(CONSTITUTION)", StringSplitOptions.None)[0].Replace("(PURPOSE)", "");
+						constitution = Description.Split("(CONSTITUTION)", StringSplitOptions.None)[1];
+						
+						html += "			<tr>";
+						html += "				<td class=\"abstract\" colspan=\"3\">";
+						html += "				<span class=\"emphasis\">PURPOSE</span>" + purpose;
+						html += "				<span class=\"emphasis\">CONSTITUTION</span>" + constitution;
+						html += "				</td>";
+						html += "			</tr>";
+					}
+				}
 				html += "		</table>";
 				html += "	</div>";
 			}

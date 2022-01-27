@@ -71,28 +71,33 @@
 </script>
 
 <div class="rela">
-    <div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
-        <div class="tc">
-            <img src="/img/loading.gif" alt="loading" style="width:200px;">
-            <h4 class="mb10">Searching... It takes 2-10 minutes depending on keywords.</h4>
-        </div>
-    </div>
+	<div id="pdfloading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000; display: none;">
+		<div class="tc">
+			<img src="/img/loading.gif" alt="loading" style="width:200px;">
+			<h4 class="mb10 wh">A PDF file is being created... <wbr>It takes 2-10 minutes depending on keywords.</h4>
+		</div>
+	</div>
 
-
+	<div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
+		<div class="tc">
+			<img src="/img/loading.gif" alt="loading" style="width:200px;">
+			<h4 class="mb10">Searching... It takes 2-10 minutes depending on keywords.</h4>
+		</div>
+	</div>
     <h3 class="tc">Select a Legend</h3>
-    <div>
-        <div class="flex center">
-            <select id="custom_legend" class="style" onChange="selectLegend('en')">
-                <option value="all">All</option>
-                <optgroup class="patent" label="Patent"></optgroup>
-                <optgroup class="article" label="Articles"></optgroup>
-            </select>
-        </div>
-    </div>
-    <div id="graph_wrap" class="flex center pad10">
-        <div id="graph">
-        </div>
-    </div>
+	<div>
+		<div class="flex center">
+			<select id="custom_legend" class="style" onChange="selectLegend('en')">
+				<option value="all">All</option>
+				<optgroup class="patent" label="Patent"></optgroup>
+				<optgroup class="article" label="Articles"></optgroup>
+			</select>
+		</div>
+	</div>
+	<div id="graph_wrap" class="flex center pad10">
+		<div id="graph">
+		</div>
+	</div>
 </div>
 <div id="table_wrap" class="pad20 w1200">
     <div class="flex between">

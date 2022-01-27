@@ -74,7 +74,7 @@ function loadToc(legendName, type, lang) {
 		if (lang == 'en') {
 			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>Report Selected</button><button class='pad10' onClick='downAll(\"" + type + "\")'>Download All</button>";
 		} else {
-			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll(\"" + type + "\")'>전체 다운로드</button>";
+			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll(\"" + type + "\")'>전체 PDF 다운로드</button>";
 		}
 
 		$('#table_title').html(tableTitle);
@@ -95,21 +95,49 @@ function loadToc(legendName, type, lang) {
 
 function loadAll() {
 }
-
+function setCookie(name, value, expiredays) {
+	var todayDate = new Date();
+	todayDate.setDate(todayDate.getDate() + expiredays);
+	document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + "; domain=" + window.location.hostname;
+}
+function getCookie(name) {
+	var parts = document.cookie.split(name + "=");
+	if (parts.length == 2) {
+		return parts.pop().split(";").shift();
+	}
+}
+var deleteCookie = function (name) {
+	document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
+}
 function downAll(type) {
-
 	let arr = [];
 	$('input[name="checkbox"]').each(function () {
 		arr.push($(this).data('id'));
 	});
+	setCookie("pdfDownload", "false");
+	blockLoadingBar();
 	if (type == "patent") {
 		location.href = "/Kr/TocAllDataPDFDownload?id=" + arr.join('|');
 	} else {
 		location.href = "/Kr/ArticleTocAllDataPDFDownload?id=" + arr.join('|');
 	}
-	
 }
-
+var downloadTimer;
+function blockLoadingBar() {
+	$("#pdfloading").show();
+	downloadTimer = setInterval(function () {
+		var token = getCookie("pdfDownload");
+		if (token == "true") {
+			UnblockLoadingBar();
+		}
+	}, 1000);
+}
+function UnblockLoadingBar() {
+	$('#pdfloading').fadeOut('fast');
+	$('body').css('overflow', 'inherit');
+	clearInterval(downloadTimer);
+	setCookie("pdfDownload", "false");
+}
 function popupReport(type, id) {
 	const url = "/Kr/" + type + "report?id=" + id;
 	const name = "Report";

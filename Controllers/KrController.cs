@@ -173,6 +173,7 @@ namespace K2GGTT.Controllers
 			Stream outputStream = new MemoryStream();
 			pdfDocument.Save(outputStream);
 
+			HttpContext.Response.Cookies.Append("pdfDownload", "true");
 			string fileName = "[K2G]all_toc_pdf_" + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf";
 			return File(outputStream, System.Net.Mime.MediaTypeNames.Application.Pdf, fileName);
 		}
@@ -194,10 +195,10 @@ namespace K2GGTT.Controllers
 				string ImgSrc = string.Empty;
 				try
 				{
-					string url = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaImageAndFullTextService/representationImageInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
-					string imgXml = getResponse(url);
-					XDocument doc = XDocument.Parse(imgXml.Trim()); ;
-					XElement tifPath = (from n in doc.Descendants("tifPath") select n).FirstOrDefault();
+					string imgUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaImageAndFullTextService/representationImageInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
+					string imgXml = getResponse(imgUrl);
+					XDocument imgDoc = XDocument.Parse(imgXml.Trim()); ;
+					XElement tifPath = (from n in imgDoc.Descendants("tifPath") select n).FirstOrDefault();
 					ImgSrc = tifPath.Value;
 				}
 				catch
@@ -205,17 +206,16 @@ namespace K2GGTT.Controllers
 					ImgSrc = "https://localhost:44325/image/noimage.jpg";
 				}
 
-				MongoDBConf db = new MongoDBConf();
-				var info = db.LoadRecordById<BsonDocument>("kipris", "app_no", app_no);
-
+				string xmlUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
+				
 
 				html += "	<div style=\"width: 750px;\">";
 				html += "		<h2 class=\"pad30\">Title</h2>";
 				html += "		<table class=\"w100\">";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication No.</th>";
-				html += "				<td>{Publication No.}</td>";
-				html += "				<td rowspan=\"8\" style=\"text-align: center;\"><img src=\"" + ImgSrc + "\" alt=\"Image\" style=\"margin-left: auto; margin-right: auto; display: block; width: 300px; height: 300px;\"></td>";
+				html += "				<td>{Publication No}</td>";
+				html += "				<td rowspan=\"7\" style=\"text-align: center;\"><img src=\"" + ImgSrc + "\" alt=\"Image\" style=\"margin-left: auto; margin-right: auto; display: block; width: 300px; height: 300px;\"></td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication Date</th>";
@@ -224,10 +224,6 @@ namespace K2GGTT.Controllers
 				html += "			<tr>";
 				html += "				<th class=\"head\">Application No.</th>";
 				html += "				<td>" + app_no + "</td>";
-				html += "			</tr>";
-				html += "			<tr>";
-				html += "				<th class=\"head\">Publication Date</th>";
-				html += "				<td>{Publication Date}</td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Category</th>";
@@ -267,6 +263,7 @@ namespace K2GGTT.Controllers
 			Stream outputStream = new MemoryStream();
 			pdfDocument.Save(outputStream);
 
+			HttpContext.Response.Cookies.Append("pdfDownload", "true");
 			string fileName = "[K2G]all_toc_pdf_" + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf";
 			return File(outputStream, System.Net.Mime.MediaTypeNames.Application.Pdf, fileName);
 		}

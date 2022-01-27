@@ -123,9 +123,21 @@ function getCookie(name) {
 var deleteCookie = function (name) {
 	document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
 }
+
+function checkTop(type) {
+	var position = $(window).scrollTop();
+	console.log(position);
+	$("#pdfloading").css("top", position);
+	$("#pdfloading").css("overflow", "inherit");
+	$("#pdfloadingtc").css("overflow", "inherit");
+	$("#pdfloading").show();
+	
+}
+
 var downloadTimer;
 function blockLoadingBar() {
 	$("#pdfloading").show();
+	$("#table_wrap").hide();
 	downloadTimer = setInterval(function () {
 		var token = getCookie("pdfDownload");
 		if (token == "true") {
@@ -135,6 +147,7 @@ function blockLoadingBar() {
 }
 function UnblockLoadingBar() {
 	$('#pdfloading').fadeOut('fast');
+	$("#table_wrap").show();
 	$('body').css('overflow', 'inherit');
 	clearInterval(downloadTimer);
 	setCookie("pdfDownload", "false");

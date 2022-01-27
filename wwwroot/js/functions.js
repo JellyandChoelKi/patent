@@ -95,6 +95,20 @@ function loadToc(legendName, type, lang) {
 
 function loadAll() {
 }
+function downAll(type) {
+	let arr = [];
+	$('input[name="checkbox"]').each(function () {
+		arr.push($(this).data('id'));
+	});
+	setCookie("pdfDownload", "false");
+	blockLoadingBar();
+	if (type == "patent") {
+		location.href = "/Kr/TocAllDataPDFDownload?id=" + arr.join('|');
+	} else {
+		location.href = "/Kr/ArticleTocAllDataPDFDownload?id=" + arr.join('|');
+	}
+}
+// pdf 다운로드 로딩바 쿠키처리 시작
 function setCookie(name, value, expiredays) {
 	var todayDate = new Date();
 	todayDate.setDate(todayDate.getDate() + expiredays);
@@ -108,19 +122,6 @@ function getCookie(name) {
 }
 var deleteCookie = function (name) {
 	document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
-}
-function downAll(type) {
-	let arr = [];
-	$('input[name="checkbox"]').each(function () {
-		arr.push($(this).data('id'));
-	});
-	setCookie("pdfDownload", "false");
-	blockLoadingBar();
-	if (type == "patent") {
-		location.href = "/Kr/TocAllDataPDFDownload?id=" + arr.join('|');
-	} else {
-		location.href = "/Kr/ArticleTocAllDataPDFDownload?id=" + arr.join('|');
-	}
 }
 var downloadTimer;
 function blockLoadingBar() {
@@ -138,6 +139,8 @@ function UnblockLoadingBar() {
 	clearInterval(downloadTimer);
 	setCookie("pdfDownload", "false");
 }
+// pdf 다운로드 로딩바 쿠키처리 끝
+
 function popupReport(type, id) {
 	const url = "/Kr/" + type + "report?id=" + id;
 	const name = "Report";

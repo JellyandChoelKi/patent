@@ -72,9 +72,9 @@ function loadToc(legendName, type, lang) {
 	if (dataCount > 0) {
 
 		if (lang == 'en') {
-			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>Report Selected</button><button class='pad10' onClick='downAll()'>Download All</button>";
+			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>Report Selected</button><button class='pad10' onClick='downAll(\"" + type + "\")'>Download All</button>";
 		} else {
-			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll()'>전체 다운로드</button>";
+			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll(\"" + type + "\")'>전체 다운로드</button>";
 		}
 
 		$('#table_title').html(tableTitle);
@@ -96,16 +96,22 @@ function loadToc(legendName, type, lang) {
 function loadAll() {
 }
 
-function downAll() {
+function downAll(type) {
+
 	let arr = [];
 	$('input[name="checkbox"]').each(function () {
 		arr.push($(this).data('id'));
 	});
-	location.href = "/Kr/TocAllDataPDFDownload?id=" + arr.join('|');
+	if (type == "patent") {
+		location.href = "/Kr/TocAllDataPDFDownload?id=" + arr.join('|');
+	} else {
+		location.href = "/Kr/ArticleTocAllDataPDFDownload?id=" + arr.join('|');
+	}
+	
 }
 
 function popupReport(type, id) {
-	const url = "./" + type + "report?id=" + id;
+	const url = "/Kr/" + type + "report?id=" + id;
 	const name = "Report";
 	const option = "width = 920, height = 1200, top = 100, left = 200";
 	window.open(url, name, option);
@@ -122,7 +128,7 @@ function popupReportSelected(type) {
 			arr.push($(this).data('id'));
 			id += ($(this).data('id')) + '|';
 		});
-		const url = "./" + type + "report?id=" + arr.join('|');
+		const url = "/Kr/" + type + "report?id=" + arr.join('|');
 		const name = "Report";
 		const option = "width = 920, height = 1200, top = 100, left = 200";
 		window.open(url, name, option);

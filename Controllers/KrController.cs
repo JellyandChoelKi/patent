@@ -90,6 +90,93 @@ namespace K2GGTT.Controllers
 			_context = DBContext;
 		}
 
+		public IActionResult ArticleTocAllDataPDFDownload(string id)
+		{
+			ArticleViewModel model = new ArticleViewModel()
+			{
+				TitleList = new List<string>(),
+				ArticleIdList = new List<string>(),
+				AbstractList = new List<string>(),
+				AuthorList = new List<string>(),
+				PubyearList = new List<string>(),
+				JournalNameList = new List<string>(),
+				VolNo1List = new List<string>(),
+				VolNo2List = new List<string>(),
+				PageInfoList = new List<string>(),
+				KeywordList = new List<string>(),
+				ContentURLList = new List<string>()
+			};
+
+			model = GetArticleViewModel(id, model);
+
+			string html = string.Empty;
+			html += "<!doctype html>";
+			html += "<html>";
+			html += "<head>";
+			html += "	<meta charset=\"utf-8\">";
+			html += "	<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">";
+			html += "	<link href=\"https://localhost:44325/css/style.css\" rel=\"stylesheet\">";
+			html += "</head>";
+			html += "<body style=\"font-size: 1.0em;\">";
+			html += "	<link href=\"https://localhost:44325/css/report.css\" rel=\"stylesheet\">";
+
+			for (var i = 0; i < model.ArticleIdList.Count; i++)
+			{
+				html += "	<div style=\"width: 750px;\">";
+				html += "		<h2 class=\"pad30\">" + model.TitleList[i] + "</h2>";
+				html += "		<table class=\"w100\">";
+				html += "			<tr>";
+				html += "               <th class\"head\">Id</th>";
+				html += "				<td>" + model.ArticleIdList[i] + "</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Publication Year</th>";
+				html += "				<td>" + model.PubyearList[i] + "</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Journal Name</th>";
+				html += "				<td>" + model.JournalNameList[i] + "</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Volume</th>";
+				html += "				<td>v." + model.VolNo1List[i] + ", no." + model.VolNo2List[i] + "</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Page</th>";
+				html += "				<td>" + model.PageInfoList[i] + "</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Keyword</th>";
+				html += "				<td>" + model.KeywordList[i] + "</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Appicant</th>";
+				html += "				<td>" + model.AuthorList[i] + "</td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th class=\"head\">Link</th>";
+				html += "				<td><a href=\"" + model.ContentURLList[i] + "\" target=\"_blank\" class=\"link\"></a></td>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<th colspan=\"3\">Description</th>";
+				html += "			</tr>";
+				html += "			<tr>";
+				html += "				<td class=\"abstract\" colspan=\"2\" class=\"pad30\">" + model.AbstractList[i] + "</td>";
+				html += "			</tr>";
+				html += "		</table>";
+				html += "	</div>";
+			}
+			byte[] byteArray = Encoding.UTF8.GetBytes(html);
+			MemoryStream stream = new MemoryStream(byteArray);
+			HtmlLoadOptions options = new HtmlLoadOptions();
+			Document pdfDocument = new Document(stream, options);
+			Stream outputStream = new MemoryStream();
+			pdfDocument.Save(outputStream);
+
+			string fileName = "[K2G]all_toc_pdf_" + DateTime.Now.ToString("yyyy-MM-dd") + ".pdf";
+			return File(outputStream, System.Net.Mime.MediaTypeNames.Application.Pdf, fileName);
+		}
+
 		public IActionResult TocAllDataPDFDownload(string id)
 		{
 			string html = string.Empty;
@@ -216,6 +303,14 @@ namespace K2GGTT.Controllers
 				KeywordList = new List<string>(),
 				ContentURLList = new List<string>()
 			};
+
+			model = GetArticleViewModel(id, model);
+			
+			return View(model);
+		}
+
+		public ArticleViewModel GetArticleViewModel(string id, ArticleViewModel model)
+		{
 			var tokenResponse = createToken();
 			var id_Arr = id.Split('|');
 
@@ -284,8 +379,8 @@ namespace K2GGTT.Controllers
 					}
 				}
 			}
-			
-			return View(model);
+
+			return model;
 		}
 
 		// 사용자용(압축파일) 나중에

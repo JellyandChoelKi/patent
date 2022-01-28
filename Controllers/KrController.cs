@@ -55,16 +55,7 @@ namespace K2GGTT.Controllers
 	{
 		private readonly ILogger<KrController> _logger;
 		private readonly DBContext _context;
-		public string Domain()
-		{
-			string Host = HttpContext.Request.Host.Host;
-			if (HttpContext.Request.Host.Host.IndexOf("localhost") != -1)
-			{
-				Host = HttpContext.Request.Host.Host + ":44325";
-			}
-			return Host;
-		}
-
+		
 		//맥주소 입력해주세요.
 		public static string MAC_address = "80-FA-5B-68-EB-43";
 		//발급받은 client_id를 입력해주세요.
@@ -122,10 +113,10 @@ namespace K2GGTT.Controllers
 			html += "<head>";
 			html += "	<meta charset=\"utf-8\">";
 			html += "	<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">";
-			html += "	<link href=\"https://" + Domain() + "/css/style.css\" rel=\"stylesheet\">";
+			html += "	<link href=\"https://" + HttpContext.Request.Host.Value + "/css/style.css\" rel=\"stylesheet\">";
 			html += "</head>";
 			html += "<body style=\"font-size: 1.0em;\">";
-			html += "	<link href=\"https://" + Domain() + "/css/report.css\" rel=\"stylesheet\">";
+			html += "	<link href=\"https://" + HttpContext.Request.Host.Value + "/css/report.css\" rel=\"stylesheet\">";
 			for (var i = 0; i < model.ArticleIdList.Count; i++)
 			{
 				html += "	<div style=\"width: 750px;\">";
@@ -192,10 +183,10 @@ namespace K2GGTT.Controllers
 			html += "<head>";
 			html += "	<meta charset=\"utf-8\">";
 			html += "	<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">";
-			html += "	<link href=\"https://" + Domain() + "/css/style.css\" rel=\"stylesheet\">";
+			html += "	<link href=\"https://" + HttpContext.Request.Host.Value + "/css/style.css\" rel=\"stylesheet\">";
 			html += "</head>";
 			html += "<body style=\"font-size: 1.0em;\">";
-			html += "	<link href=\"https://" + Domain() + "/css/report.css\" rel=\"stylesheet\">";
+			html += "	<link href=\"https://" + HttpContext.Request.Host.Value + "/css/report.css\" rel=\"stylesheet\">";
 			foreach (var app_no in id.Split('|'))
 			{
 				string ImgSrc = string.Empty;
@@ -209,7 +200,7 @@ namespace K2GGTT.Controllers
 				}
 				catch
 				{
-					ImgSrc = "https://" + Domain() + "/image/noimage.jpg";
+					ImgSrc = "https://" + HttpContext.Request.Host.Value + "/image/noimage.jpg";
 				}
 
 				string xmlUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
@@ -313,6 +304,7 @@ namespace K2GGTT.Controllers
 
 		public IActionResult Index()
 		{
+			ViewBag.Host = HttpContext.Request.Host.Value;
 			return View();
 		}
 

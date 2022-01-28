@@ -304,7 +304,6 @@ namespace K2GGTT.Controllers
 
 		public IActionResult Index()
 		{
-			ViewBag.Host = HttpContext.Request.Host.Value;
 			return View();
 		}
 

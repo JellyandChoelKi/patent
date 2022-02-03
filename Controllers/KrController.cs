@@ -205,6 +205,20 @@ namespace K2GGTT.Controllers
 
 		public IActionResult TocAllDataPDFDownload(string id)
 		{
+			PatentViewModel model = new PatentViewModel()
+			{
+				TitleList = new List<string>(),
+				ApplicatnNoList = new List<string>(),
+				PublicationNumberList = new List<string>(),
+				PublicationDateList = new List<string>(),
+				ApplicantNameList = new List<string>(),
+				CpcList = new List<string>(),
+				DescriptionList = new List<string>(),
+				ImgSrcList = new List<string>()
+			};
+
+			model = GetPatentViewModel(id, model);
+
 			string html = string.Empty;
 			html += "<!doctype html>";
 			html += "<html>";
@@ -215,95 +229,59 @@ namespace K2GGTT.Controllers
 			html += "</head>";
 			html += "<body style=\"font-size: 1.0em;\">";
 			html += "	<link href=\"https://" + HttpContext.Request.Host.Value + "/css/report.css\" rel=\"stylesheet\">";
-			foreach (var app_no in id.Split('|'))
+			for(var i = 0; i < model.ApplicatnNoList.Count; i++)
 			{
-				string ImgSrc = string.Empty;
-				try
-				{
-					string imgUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaImageAndFullTextService/representationImageInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
-					string imgXml = getResponse(imgUrl);
-					XDocument imgDoc = XDocument.Parse(imgXml.Trim());
-					XElement tifPath = (from n in imgDoc.Descendants("tifPath") select n).FirstOrDefault();
-					ImgSrc = tifPath.Value;
-				}
-				catch
-				{
-					ImgSrc = "https://" + HttpContext.Request.Host.Value + "/image/noimage.jpg";
-				}
-
-				string xmlUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=" + app_no, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
-				string infoXml = getResponse(xmlUrl);
-
-				XmlDocument xml = new XmlDocument();
-				xml.LoadXml(infoXml);
-
-				XmlNodeList xnList = xml.GetElementsByTagName("bibliographicInfo");
-
-				string title = string.Empty;
-				string publicationNumber = string.Empty;
-				string publicationDate = string.Empty;
-				string Description = string.Empty;
-				foreach (XmlNode xn in xnList)
-				{
-					title = xn["bibliographicSummaryInfo"]["inventionTitle"].InnerText;
-					publicationNumber = xn["bibliographicSummaryInfo"]["publicationNumber"].InnerText;
-					publicationDate = xn["bibliographicSummaryInfo"]["publicationDate"].InnerText;
-					Description = xn["summation"]["astrtCont"].InnerText;
-				}
 				html += "	<div style=\"width: 750px;\">";
-				html += "		<h3 class=\"pad10\">" + title + "</h3>";
+				html += "		<h3 class=\"pad10\">" + model.TitleList[i] + "</h3>";
 				html += "		<table class=\"w100\">";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication No.</th>";
-				html += "				<td>" + publicationNumber + "</td>";
-				html += "				<td rowspan=\"7\" style=\"text-align: center;\"><img src=\"" + ImgSrc + "\" alt=\"Image\" style=\"margin-left: auto; margin-right: auto; display: block; width: 300px; height: 300px;\"></td>";
+				html += "				<td>" + model.PublicationNumberList[i] + "</td>";
+				html += "				<td rowspan=\"5\" style=\"text-align: center;\"><img src=\"" + model.ImgSrcList[i] + "\" alt=\"Image\" style=\"margin-left: auto; margin-right: auto; display: block; width: 300px; height: 300px;\"></td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Publication Date</th>";
-				html += "				<td>" + publicationDate + "</td>";
+				html += "				<td>" + model.PublicationDateList[i] + "</td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th class=\"head\">Application No.</th>";
-				html += "				<td>" + app_no + "</td>";
+				html += "				<td>" + model.ApplicatnNoList[i] + "</td>";
 				html += "			</tr>";
 				html += "			<tr>";
-				html += "				<th class=\"head\">Category</th>";
-				html += "				<td>{분류명}</td>";
+				html += "				<th class=\"head\">CPC</th>"; //ipcInfo > ipcCd
+				html += "				<td>" + string.Join("<br/>", model.CpcList[i]) + "</td>";
 				html += "			</tr>";
 				html += "			<tr>";
-				html += "				<th class=\"head\">CPC</th>";
-				html += "				<td>{CPC}</td>";
-				html += "			</tr>";
-				html += "			<tr>";
-				html += "				<th class=\"head\">Appicant</th>";
-				html += "				<td>{Appicant}</td>";
-				html += "			</tr>";
-				html += "			<tr>";
-				html += "				<th class=\"head\">Link</th>";
-				html += "				<td>{Link}</td>";
+				html += "				<th class=\"head\">Appicant</th>"; //applicantInfo > applicantName
+				html += "				<td>" + model.ApplicantNameList[i] + "</td>";
 				html += "			</tr>";
 				html += "			<tr>";
 				html += "				<th colspan=\"3\">Description</th>";
 				html += "			</tr>";
-				if (Description.IndexOf("PURPOSE") == -1)
+				if (model.DescriptionList[i].IndexOf("PURPOSE") == -1)
 				{
 					html += "			<tr>";
-					html += "				<td class=\"abstract\" colspan=\"3\">" + Description + "</td>";
+					html += "				<td class=\"abstract\" colspan=\"3\">" + model.DescriptionList[i] + "</td>";
 					html += "			</tr>";
 				}
 				else
 				{
 					string purpose = string.Empty;
 					string constitution = string.Empty;
-					if (Description.IndexOf("PURPOSE:") != -1)
+					if (model.DescriptionList[i].IndexOf("PURPOSE:") != -1)
 					{
-						purpose = Description.Split("CONSTITUTION:", StringSplitOptions.None)[0].Replace("PURPOSE:", "");
-						constitution = Description.Split("CONSTITUTION:", StringSplitOptions.None)[1];
+						purpose = model.DescriptionList[i].Split("CONSTITUTION:", StringSplitOptions.None)[0].Replace("PURPOSE:", "");
+						constitution = model.DescriptionList[i].Split("CONSTITUTION:", StringSplitOptions.None)[1];
 					}
-					else if (Description.IndexOf("(PURPOSE)") != -1)
+					else if (model.DescriptionList[i].IndexOf("(PURPOSE)") != -1)
 					{
-						purpose = Description.Split("(CONSTITUTION)", StringSplitOptions.None)[0].Replace("(PURPOSE)", "");
-						constitution = Description.Split("(CONSTITUTION)", StringSplitOptions.None)[1];
+						purpose = model.DescriptionList[i].Split("(CONSTITUTION)", StringSplitOptions.None)[0].Replace("(PURPOSE)", "");
+						constitution = model.DescriptionList[i].Split("(CONSTITUTION)", StringSplitOptions.None)[1];
+					}
+					else if (model.DescriptionList[i].IndexOf("PURPOSE") != -1)
+					{
+						purpose = model.DescriptionList[i].Split("CONSTITUTION", StringSplitOptions.None)[0].Replace("(PURPOSE)", "");
+						constitution = model.DescriptionList[i].Split("CONSTITUTION", StringSplitOptions.None)[1];
 					}
 					html += "			<tr>";
 					html += "				<td class=\"abstract\" colspan=\"3\">";
@@ -350,15 +328,29 @@ namespace K2GGTT.Controllers
 
 		public IActionResult Result(string keywords)
 		{
-			ViewBag.PatentKeyword = keywords.Replace(' ', '*');
-			ViewBag.ArticleKeyword = keywords.Replace('*', ' ');
+			ViewBag.PatentKeyword = keywords.Replace(" ", "");
+			ViewBag.ArticleKeyword = keywords.Replace(" ", "").Replace('*', ' ');
 
 			return View();
 		}
 
 		public IActionResult PatentReport(string id)
 		{
-			return View();
+			PatentViewModel model = new PatentViewModel()
+			{
+				TitleList = new List<string>(),
+				ApplicatnNoList = new List<string>(),
+				PublicationNumberList = new List<string>(),
+				PublicationDateList = new List<string>(),
+				ApplicantNameList = new List<string>(),
+				CpcList = new List<string>(),
+				DescriptionList = new List<string>(),
+				ImgSrcList = new List<string>()
+			};
+
+			model = GetPatentViewModel(id, model);
+
+			return View(model);
 		}
 
 		public IActionResult ArticleReport(string id)
@@ -383,6 +375,55 @@ namespace K2GGTT.Controllers
 			return View(model);
 		}
 
+		public PatentViewModel GetPatentViewModel(string id, PatentViewModel model)
+		{
+			var id_Arr = id.Split('|');
+
+			foreach (var ids in id_Arr)
+			{
+				string ImgSrc = string.Empty;
+				try
+				{
+					string imgUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaImageAndFullTextService/representationImageInfo?applicationNumber=" + ids, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
+					string imgXml = getResponse(imgUrl);
+					XDocument imgDoc = XDocument.Parse(imgXml.Trim());
+					XElement tifPath = (from n in imgDoc.Descendants("tifPath") select n).FirstOrDefault();
+					model.ImgSrcList.Add(tifPath.Value ?? "");
+				}
+				catch
+				{
+					model.ImgSrcList.Add("https://" + HttpContext.Request.Host.Value + "/image/noimage.jpg");
+				}
+
+				string xmlUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=" + ids, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
+				string infoXml = getResponse(xmlUrl);
+
+				XmlDocument xml = new XmlDocument();
+				xml.LoadXml(infoXml);
+
+				XmlNodeList xnList = xml.GetElementsByTagName("bibliographicInfo");
+				XmlNodeList cpcxnList = xml.GetElementsByTagName("ipcInfo");
+				List<string> ipcList = new List<string>();
+
+				model.ApplicatnNoList.Add(ids);
+				foreach (XmlNode cpc in cpcxnList)
+				{
+					ipcList.Add(cpc["ipcCd"].InnerText);
+				}
+				model.CpcList.Add(string.Join("<br/>", ipcList));
+				foreach (XmlNode xn in xnList)
+				{
+					model.TitleList.Add(xn["bibliographicSummaryInfo"]["inventionTitle"].InnerText ?? "");
+					model.PublicationNumberList.Add(xn["bibliographicSummaryInfo"]["publicationNumber"].InnerText ?? "");
+					model.PublicationDateList.Add(xn["bibliographicSummaryInfo"]["publicationDate"].InnerText ?? "");
+					model.ApplicantNameList.Add(xn["applicantInfo"]["applicantName"].InnerText ?? "");
+					model.DescriptionList.Add(xn["summation"]["astrtCont"].InnerText ?? "");
+				}
+			}
+
+			return model;
+		}
+
 		public ArticleViewModel GetArticleViewModel(string id, ArticleViewModel model)
 		{
 			var tokenResponse = createToken();
@@ -396,7 +437,6 @@ namespace K2GGTT.Controllers
 				"&target=ARTI" + "&searchQuery=" + query;
 
 				string response = getResponse(target_URL);
-				Console.WriteLine(response);
 
 				XmlDocument xml = new XmlDocument();
 				xml.LoadXml(response);

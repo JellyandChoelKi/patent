@@ -1,6 +1,7 @@
 ﻿@{
     Layout = null;
 }
+@model K2GGTT.ViewModels.PatentViewModel
 
 <!doctype html>
 <html>
@@ -18,88 +19,102 @@
     <div class="w100 h100">
 
         <!-- for문 시작 -->
+        @for (var i = 0; i < Model.ApplicatnNoList.Count; i++)
+        {
+            <h2 class="pad30">@Model.TitleList[i]</h2>
+            <!-- Type == Patent { -->
+            <table class="w100">
+                <tr>
+                    <th class="head">
+                        Publication No.
+                    </th>
+                    <td>
+                        @Model.PublicationNumberList[i]
+                    </td>
+                    <td rowspan="5" style="width:400px;">
+                        <img src="@Model.ImgSrcList[i]" alt="Image" style="max-width: 100%; max-height: 100%;">
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Publication Date
+                    </th>
+                    <td>
+                        @Model.PublicationDateList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Application No.
+                    </th>
+                    <td>
+                        @Model.ApplicatnNoList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        CPC
+                    </th>
+                    <td>
+                        @Html.Raw(Model.CpcList[i])
+                    </td>
+                </tr>
+                <tr>
+                    <th class="head">
+                        Appicant
+                    </th>
+                    <td>
+                        @Model.ApplicantNameList[i]
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="3">
+                        Description
+                    </th>
+                </tr>
+                @if (Model.DescriptionList[i].IndexOf("PURPOSE") == -1)
+                {
+                    <tr>
+                        <td class="abstract" colspan="3" class="pad30">
+                            @Model.DescriptionList[i]
+                        </td>
+                    </tr>
 
-        <h2 class="pad30">{Title}</h2>
-        <!-- Type == Patent { -->
-        <table class="w100">
-            <tr>
-                <th class="head">
-                    Publication No.
-                </th>
-                <td>
-                    {Publication No.}
-                </td>
-                <td rowspan="8" style="width:400px;">
-                    <img src="{ImgURL}" alt="Image" style="max-width: 100%; max-height: 100%;">
-                </td>
-            </tr>
-            <tr>
-                <th class="head">
-                    Publication Date
-                </th>
-                <td>
-                    {Publication Date}
-                </td>
-            </tr>
-            <tr>
-                <th class="head">
-                    Application No.
-                </th>
-                <td>
-                    {Application No.}
-                </td>
-            </tr>
-            <tr>
-                <th class="head">
-                    Publication Date
-                </th>
-                <td>
-                    {Publication Date}
-                </td>
-            </tr>
-            <tr>
-                <th class="head">
-                    Category
-                </th>
-                <td>
-                    {분류명}
-                </td>
-            </tr>
-            <tr>
-                <th class="head">
-                    CPC
-                </th>
-                <td>
-                    {CPC}
-                </td>
-            </tr>
-            <tr>
-                <th class="head">
-                    Appicant
-                </th>
-                <td>
-                    {Author}
-                </td>
-            </tr>
-            <tr>
-                <th>
-                    Link
-                </th>
-                <td>
-                    <a href="{Link}" target="_blank" class="link">Link</a>
-                </td>
-            </tr>
-            <tr>
-                <th colspan="3">
-                    Description
-                </th>
-            </tr>
-            <tr>
-                <td class="abstract" colspan="3" class="pad30">
-                    PURPOSE: A fuel carbon time correction is provided to improve the fuel ratio of vehicle by changing the fuel outlet part to the small amount.CONSTITUTION: A fuel carbon time correction comprises as follows. When 900 of the engine RPM is normal, the engine RPM falls down less than 900 if fuel decreases to small amount. The high speed of engine RPM is matched with the power and smoke confirmation time within two seconds. The smoke carbon is confirmed within three seconds after RPM rises at high speed. The fuel ratio of vehicle is improved and the smoke is reduced.Ò KIPO 2009
-                </td>
-            </tr>
-        </table>
+                }
+                else
+                {
+                    if (Model.DescriptionList[i].IndexOf("PURPOSE:") != -1)
+                    {
+                        <tr>
+                            <td class="abstract" colspan="3">
+                                <span class="emphasis">PURPOSE</span> @Model.DescriptionList[i].Split("CONSTITUTION:", StringSplitOptions.None)[0].Replace("PURPOSE:", "");
+                                <span class="emphasis">CONSTITUTION</span> @Model.DescriptionList[i].Split("CONSTITUTION:", StringSplitOptions.None)[1];
+                            </td>
+                        </tr>
+                    }
+                    else if (Model.DescriptionList[i].IndexOf("(PURPOSE)") != -1)
+                    {
+                        <tr>
+                            <td class="abstract" colspan="3">
+                                <span class="emphasis">PURPOSE</span>@Model.DescriptionList[i].Split("(CONSTITUTION)", StringSplitOptions.None)[0].Replace("PURPOSE:", "");
+                                <span class="emphasis">CONSTITUTION</span>@Model.DescriptionList[i].Split("(CONSTITUTION)", StringSplitOptions.None)[1];
+                            </td>
+                        </tr>
+                    }
+                    else if (Model.DescriptionList[i].IndexOf("PURPOSE") != -1)
+                    {
+                        <tr>
+                            <td class="abstract" colspan="3">
+                                <span class="emphasis">PURPOSE</span>@Model.DescriptionList[i].Split("CONSTITUTION", StringSplitOptions.None)[0].Replace("PURPOSE:", "");
+                                <span class="emphasis">CONSTITUTION</span>@Model.DescriptionList[i].Split("CONSTITUTION", StringSplitOptions.None)[1];
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </table>
+        }
+
         <!-- Type == Patent } -->
         <!-- for문 끝 -->
     </div>

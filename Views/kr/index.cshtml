@@ -27,7 +27,6 @@
             return false;
         }
     }
-
     $(document).ready(function () {
         $("#translate").click(function () {
             var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
@@ -47,7 +46,11 @@
 				async: false,
 				data: { keywords: keywords },
 				success: function (data) {
-					var res = JSON.parse(data);
+                    var res = JSON.parse(data);
+                    if (res == "N") {
+                        alert("알 수 없는 이유로 번역되지 않았습니다. 키워드를 다시 입력 바랍니다.");
+                        return false;
+					}
 					$("input[name='keywords']").val(res);
 				}
 			});

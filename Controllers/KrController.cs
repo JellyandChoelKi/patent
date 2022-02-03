@@ -106,9 +106,9 @@ namespace K2GGTT.Controllers
 				TranslationsListResponse response = service.Translations.List(keywords, "en").Execute();
 				TranslateResponse = response.Translations[0].TranslatedText;
 			}
-			catch (Exception ex)
+			catch
 			{
-
+				return Ok(JsonConvert.SerializeObject("N"));
 			}
 			return Ok(JsonConvert.SerializeObject(TranslateResponse));
 		}

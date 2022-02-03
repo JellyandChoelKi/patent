@@ -20,7 +20,7 @@
 
 <script>
     function checkKeyword() {
-        var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+        var pattern_kor = /[ㄱ-ㅎㅏ-ㅣ가-힣]/;
         var keywords = $("input[name='keywords']").val();
         if (pattern_kor.test(keywords)) {
             alert("영문으로 입력해 주세요.");

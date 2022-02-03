@@ -5,6 +5,10 @@
         patent: ['A90', 'A80', 'A70', 'A60', 'A50', 'A40', 'A30', 'A20', 'A10', 'A00'],
         article: ['B90', 'B80', 'B70', 'B60', 'B50', 'B40', 'B30', 'B20', 'B10', 'B00'],
     };
+    const color = {
+        patent: '#CD1F48',
+        article: '#0064FF'
+    }
     const shapes = {
         patent: 'circle',
         article: 'rect',
@@ -130,7 +134,7 @@
                     coordinateSystem: 'polar',
                     symbol: shapes[type],
                     data: data[type][dataName]['coordinate'],
-                    //color:legends["color"][i],
+                    color: color[type],
                     animationDelay: function (idx) { return idx * 5; }
                 },
             };

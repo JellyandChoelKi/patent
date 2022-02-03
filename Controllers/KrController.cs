@@ -348,7 +348,7 @@ namespace K2GGTT.Controllers
 		public IActionResult Result(string keywords)
 		{
 			ViewBag.PatentKeyword = keywords.Replace(' ', '*');
-			ViewBag.ArticleKeyword = keywords;
+			ViewBag.ArticleKeyword = keywords.Replace('*', ' ');
 
 			return View();
 		}

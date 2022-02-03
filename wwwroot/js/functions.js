@@ -73,7 +73,7 @@ function loadToc(legendName, type, lang) {
 
 		if (lang == 'en') {
 			//buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>Report Selected</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>Download All</button>";
-			buttons = "<button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>Download All</button>";
+			buttons = "<button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF Download</button>";
 		} else {
 			//buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF 다운로드</button>";
 			buttons = "</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF 다운로드</button>";

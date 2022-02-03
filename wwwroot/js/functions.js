@@ -42,10 +42,10 @@ function loadToc(legendName, type, lang) {
 	if (type == 'patent') {
 		if (lang == 'en') {
 			var tableTitle = "Patent";
-			var tableHead = "<tr><th class='no'></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Date</th><th class='report'></th></tr>";
+			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkbox' value='selectall' onclick='selectAll(this)' /></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Date</th><th class='report'></th></tr>";
 		} else {
 			var tableTitle = "특허";
-			var tableHead = "<tr><th class='no'></th><th class='title'>발명제목</th><th class='author'>출원인</th><th class='year'>출원일</th><th class='report'></th></tr>";
+			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkbox' value='selectall' onclick='selectAll(this)' /></th><th class='title'>발명제목</th><th class='author'>출원인</th><th class='year'>출원일</th><th class='report'></th></tr>";
 		}
 		var subject = "inventionname";
 		var author = "inventors";
@@ -54,10 +54,10 @@ function loadToc(legendName, type, lang) {
 	} else if (type == 'article') {
 		if (lang == 'en') {
 			var tableTitle = "Articles";
-			var tableHead = "<tr><th class='no'></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Year</th><th class='report'></th></tr>";
+			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkbox' value='selectall' onclick='selectAll(this)' /></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Year</th><th class='report'></th></tr>";
 		} else {
 			var tableTitle = "논문";
-			var tableHead = "<tr><th class='no'></th><th class='title'>제목</th><th class='author'>저자</th><th class='year'>연도</th><th class='report'></th></tr>";
+			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkbox' value='selectall' onclick='selectAll(this)' /></th><th class='title'>제목</th><th class='author'>저자</th><th class='year'>연도</th><th class='report'></th></tr>";
 		}
 		var subject = "title";
 		var author = "author";
@@ -72,9 +72,11 @@ function loadToc(legendName, type, lang) {
 	if (dataCount > 0) {
 
 		if (lang == 'en') {
-			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>Report Selected</button><button class='pad10' onClick='downAll(\"" + type + "\")'>Download All</button>";
+			//buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>Report Selected</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>Download All</button>";
+			buttons = "<button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF Download</button>";
 		} else {
-			buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll(\"" + type + "\")'>전체 PDF 다운로드</button>";
+			//buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF 다운로드</button>";
+			buttons = "</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF 다운로드</button>";
 		}
 
 		$('#table_title').html(tableTitle);
@@ -95,11 +97,25 @@ function loadToc(legendName, type, lang) {
 
 function loadAll() {
 }
-function downAll(type) {
+function selectAll(selectAll) {
+	const checkboxes = document.getElementsByName('checkbox');
+	checkboxes.forEach((checkbox) => {
+		checkbox.checked = selectAll.checked;
+	})
+}
+function downAll(type, lang) {
 	let arr = [];
-	$('input[name="checkbox"]').each(function () {
+	$('input[name="checkbox"]:checked').each(function () {
 		arr.push($(this).data('id'));
 	});
+	if (arr.length <= 0) {
+		if (lang == 'en') {
+			alert("Please check the items you want to download as PDF.");
+		} else {
+			alert("PDF 다운로드 하실 항목을 체크해주세요.");
+		}
+		return false;
+	}
 	setCookie("pdfDownload", "false");
 	blockLoadingBar();
 	if (type == "patent") {
@@ -108,7 +124,6 @@ function downAll(type) {
 		location.href = "/Kr/ArticleTocAllDataPDFDownload?id=" + arr.join('|');
 	}
 }
-// pdf 다운로드 로딩바 쿠키처리 시작
 function setCookie(name, value, expiredays) {
 	var todayDate = new Date();
 	todayDate.setDate(todayDate.getDate() + expiredays);
@@ -120,20 +135,6 @@ function getCookie(name) {
 		return parts.pop().split(";").shift();
 	}
 }
-var deleteCookie = function (name) {
-	document.cookie = name + '=; expires=Thu, 01 Jan 1999 00:00:10 GMT;';
-}
-
-function checkTop(type) {
-	var position = $(window).scrollTop();
-	console.log(position);
-	$("#pdfloading").css("top", position);
-	$("#pdfloading").css("overflow", "inherit");
-	$("#pdfloadingtc").css("overflow", "inherit");
-	$("#pdfloading").show();
-	
-}
-
 var downloadTimer;
 function blockLoadingBar() {
 	$("#pdfloading").show();
@@ -152,8 +153,6 @@ function UnblockLoadingBar() {
 	clearInterval(downloadTimer);
 	setCookie("pdfDownload", "false");
 }
-// pdf 다운로드 로딩바 쿠키처리 끝
-
 function popupReport(type, id) {
 	const url = "/Kr/" + type + "report?id=" + id;
 	const name = "Report";

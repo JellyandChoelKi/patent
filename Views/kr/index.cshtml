@@ -3,7 +3,7 @@
         <div class="pad20">
             <div style="box-sizing: border-box;">
                 <input name="keywords" id="main_search" placeholder="검색어를 입력하세요.">
-                <button type="button" id="searchBtn" class="none"></button>
+                <button type="button" id="translate">번역</button>
             </div>
         </div>
     </form>
@@ -22,10 +22,35 @@
     function checkKeyword() {
         var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
         var keywords = $("input[name='keywords']").val();
-
         if (pattern_kor.test(keywords)) {
             alert("영문으로 입력해 주세요.");
             return false;
         }
     }
+
+    $(document).ready(function () {
+        $("#translate").click(function () {
+            var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+            var keywords = $("input[name='keywords']").val();
+            if (!keywords) {
+                alert("번역하실 키워드를 입력해주세요.");
+				$("input[name='keywords']").focus();
+                return false;
+			}
+            if (pattern_kor.test(keywords) == false) {
+				alert("이미 영문입니다.");
+				return false;
+            }
+			$.ajax({
+				url: "/Kr/GoogleTranslate",
+				type: "POST",
+				async: false,
+				data: { keywords: keywords },
+				success: function (data) {
+					var res = JSON.parse(data);
+					$("input[name='keywords']").val(res);
+				}
+			});
+        });
+    });
 </script>

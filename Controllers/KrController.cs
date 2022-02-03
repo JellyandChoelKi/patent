@@ -26,6 +26,9 @@ using Aspose.Pdf;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
+using Google.Apis.Translate.v2;
+using Google.Apis.Translate.v2.Data;
+using Google.Apis.Services;
 
 namespace K2GGTT.Controllers
 {
@@ -81,11 +84,33 @@ namespace K2GGTT.Controllers
 			}
 			return stringBuilder.ToString();
 		}
-
+		
 		public KrController(ILogger<KrController> logger, DBContext DBContext)
 		{
 			_logger = logger;
 			_context = DBContext;
+		}
+
+		[HttpPost]
+		public IActionResult GoogleTranslate(string keywords)
+		{
+			TranslateService service = new TranslateService(new BaseClientService.Initializer()
+			{
+				ApiKey = "AIzaSyDd6iOwb63072biPNCofGbjb3HeR2i8bDw",
+				ApplicationName = " "
+			});
+
+			string TranslateResponse = string.Empty;
+			try
+			{
+				TranslationsListResponse response = service.Translations.List(keywords, "en").Execute();
+				TranslateResponse = response.Translations[0].TranslatedText;
+			}
+			catch (Exception ex)
+			{
+
+			}
+			return Ok(JsonConvert.SerializeObject(TranslateResponse));
 		}
 
 		public IActionResult ArticleTocAllDataPDFDownload(string id)

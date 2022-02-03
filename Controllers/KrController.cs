@@ -780,8 +780,7 @@ namespace K2GGTT.Controllers
 
 			string target_URL = "https://apigateway.kisti.re.kr/tokenrequest.do?accounts=" + encrypted_txt +
 			"&client_id=" + clientID;
-
-
+			
 			JObject responseJson = JObject.Parse(getResponse(target_URL));
 			refreshToken = responseJson["refresh_token"].ToString();
 			accessToken = responseJson["access_token"].ToString();
@@ -841,9 +840,7 @@ namespace K2GGTT.Controllers
 						using (CryptoStream csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
 						{
 							csEncrypt.Write(message, 0, message.Length);
-							
 						}
-
 						enc = msEncrypt.ToArray();
 					}
 					return Convert.ToBase64String(enc, 0, enc.Length).Replace("/", "_").Replace("+", "-");

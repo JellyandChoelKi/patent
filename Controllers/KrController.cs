@@ -94,6 +94,9 @@ namespace K2GGTT.Controllers
 		[HttpPost]
 		public IActionResult GoogleTranslate(string keywords)
 		{
+			//https://cloud.google.com/?hl=ko
+			//id: k2gmkt1 @gmail.com
+			//pw: jjkim@1213
 			TranslateService service = new TranslateService(new BaseClientService.Initializer()
 			{
 				ApiKey = "AIzaSyDd6iOwb63072biPNCofGbjb3HeR2i8bDw",

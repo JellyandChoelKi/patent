@@ -12,43 +12,72 @@
 	<script src="/js/echarts.min.js" language="javascript"></script>
 	<script src="/js/jquery-1.8.3.min.js" language="javascript"></script>
 	<script src="/js/common.js" language="javascript"></script>
-	<div>
-		<header class="flex between">
-			<span class="pad30">
-				<a href="/kr">
-					<h2><strong id="logo"><span style="color:#C00;">K2G</span><span>GTT</span></strong></h2>
-				</a>
-			</span>
-			<nav id="nav" class="flex center mhide">
-				<a href="/kr/about/" class="pad20">About K2G</a>
-				<a href="/kr" class="pad20 active">TechFinder</a>
-				<a onClick="javascript:underconstruction()" class="pad20">HotTech</a>
-				@{
-					if (Context.Session.GetString("MemberId") != null)
-					{
-						<a href="/kr/mypage/" class="pad20">MyPage</a>
-						<a href="/kr/logout/" class="pad20">Log Out</a>
-					}
-					else
-					{
-						<a href="/kr/login/" class="pad20">Log in</a>
-					}
-				}
-				<a href="/en" class="pad20">English</a>
-			</nav>
-		</header>
-	</div>
+    <div>
+        <header class="flex between">
+            <span class="pad30">
+                <a href="/kr">
+                    <h2><strong id="logo"><span style="color:#C00;">K2G</span> <span>GTT</span></strong></h2>
+                </a>
+            </span>
+            <div id="hamburger" onClick="hamburger()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="nav">
+                <a href="/kr/about/" class="pad20">About K2G</a>
+                <a href="/kr" class="pad20">Tech Finder</a>
+                <a onClick="javascript:underconstruction()" class="pad20">Hot Tech</a>
+                @{
+                    if (Context.Session.GetString("MemberId") != null)
+                    {
+                        <a href="/kr/mypage/" class="pad20">My Page</a>
+                        <a href="/kr/logout/" class="pad20">Log Out</a>
+                    }
+                    else
+                    {
+                        <a href="/kr/login/" class="pad20">Log in</a>
+                    }
+                }
+                <a href="/en" class="pad20">English</a>
+            </nav>
+        </header>
+        <div>
+            <nav id="mnav" class="tc">
+                <a href="/kr/about/" class="pad20">About K2G</a>
+                <a href="/kr" class="pad20">Tech Finder</a>
+                <a onClick="javascript:underconstruction()" class="pad20">Hot Tech</a>
+                @{
+                    if (Context.Session.GetString("MemberId") != null)
+                    {
+                        <a href="/kr/mypage/" class="pad20">My Page</a>
+                        <a href="/kr/logout/" class="pad20">Log Out</a>
+                    }
+                    else
+                    {
+                        <a href="/kr/login/" class="pad20">Log in</a>
+                    }
+                }
+                <a href="/en" class="pad20">English</a>
+                <hr>
+                <a href="" class="pad20">회원약관</a>
+                <a href="" class="pad20">개인정보보호방침</a>
+            </nav>
+        </div>
+    </div>
 	@RenderBody()
-	<div>
-		<footer class="flex between">
-			<span class="pad30" style="white-space: nowrap;">
-				Copyright &copy; <strong><a href="http://k2g.co.kr">K2GPartners</a></strong> 2019.<wbr> All rights Reserved.
-			</span>
-			<nav class="flex center mhide">
-				<a href="" class="pad20">개인정보보호방침</a>
-			</nav>
-		</footer>
-	</div>
+    <div>
+        <footer class="flex between">
+            <span class="pad30" style="white-space: nowrap;">
+                Copyright &copy; <strong><a href="http://k2g.co.kr" target="_blank">K2GPartners</a></strong> 2019.<wbr> All rights Reserved.
+            </span>
+            <nav class="flex center pad20 mhide">
+                <a href="" class="pad10">회원약관</a>
+                <span class="pad10">&nbsp;|&nbsp;</span>
+                <a href="" class="pad10">개인정보보호방침</a>
+            </nav>
+        </footer>
+    </div>
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	@RenderSection("Scripts", required: false)

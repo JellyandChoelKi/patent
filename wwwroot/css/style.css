@@ -100,6 +100,9 @@ input.vertical {
 	margin: 5px auto;
 }
 
+input.required {
+}
+
 select option {
 	padding: 10px 15px;
 }
@@ -120,6 +123,10 @@ select option {
 
 .tc {
 	text-align: center;
+}
+
+.wh {
+	white-space: nowrap;
 }
 
 .bgcover {
@@ -155,6 +162,11 @@ select option {
 
 	.flex.vcenter {
 		align-items: center;
+	}
+
+	.flex.end {
+		align-items: center;
+		justify-content: flex-end;
 	}
 
 .w100 {
@@ -199,17 +211,31 @@ select option {
 	font-size: 1.4em;
 }
 
-#nav a {
-	font-weight: 300;
+#nav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-	#nav a:hover {
-		color: #C00;
+	#nav a, #mnav a {
+		font-weight: 300;
 	}
 
-	#nav a.active {
-		font-weight: 500;
-		color: #C00;
+		#nav a:hover, #mnav a:hover {
+			color: #C00;
+		}
+
+		#nav a.active, #mnav a.active {
+			font-weight: 500;
+			color: #C00;
+		}
+
+#mnav {
+	display: none;
+}
+
+	#mnav a {
+		display: block;
 	}
 /* Search */
 
@@ -299,6 +325,28 @@ select option {
 	width: 50px;
 }
 
+#table_wrap .link {
+	filter: grayscale(1.0);
+}
+
+	#table_wrap .link:hover {
+		filter: grayscale(0);
+	}
+
+#btn_wrap button {
+	margin: 5px;
+	background-color: #111;
+	outline: none;
+	border: #111 2px solid;
+	color: #FFF;
+	cursor: pointer;
+}
+
+	#btn_wrap button:hover {
+		color: #000;
+		background-color: transparent;
+	}
+
 span.paging {
 	color: #999;
 	cursor: pointer;
@@ -312,6 +360,22 @@ span.paging {
 	margin-bottom: 10px;
 }
 
+.mb20 {
+	margin-bottom: 20px;
+}
+
+.mb30 {
+	margin-bottom: 30px;
+}
+
+.mb40 {
+	margin-bottom: 40px;
+}
+
+.mb50 {
+	margin-bottom: 50px;
+}
+
 .mt10 {
 	margin-top: 10px;
 }
@@ -320,4 +384,63 @@ span.paging {
 	.mhide {
 		display: none;
 	}
+
+	#hamburger {
+		display: flex;
+		align-items: stretch;
+		justify-content: center;
+		flex-direction: column;
+		padding: 30px;
+		width: 30px;
+		height: 30px;
+	}
+
+		#hamburger span {
+			width: 30px;
+			height: 2px;
+			display: inline-block;
+			margin: 3px;
+			background-color: #000;
+			transition: all 0.3s;
+		}
+
+		#hamburger.active span:first-child {
+			opacity: 0;
+		}
+
+		#hamburger.active span:last-child {
+			opacity: 0;
+		}
+
+	#nav {
+		display: none;
+	}
+
+	#table_wrap table {
+		font-size: 0.8em;
+		text-align: left;
+	}
+
+		#table_wrap table, #table_wrap table > tbody {
+			display: block;
+		}
+
+			#table_wrap table > tbody > tr {
+				display: flex;
+				flex-direction: column;
+				border-bottom: #CCC 1px solid;
+			}
+
+				#table_wrap table > tbody > tr.none {
+					display: none;
+				}
+
+				#table_wrap table > tbody > tr > th {
+					display: none;
+				}
+
+				#table_wrap table > tbody > tr > td {
+					display: block;
+					border: none;
+				}
 }

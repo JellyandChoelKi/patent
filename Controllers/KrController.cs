@@ -403,25 +403,62 @@ namespace K2GGTT.Controllers
 
 				XmlNodeList xnList = xml.GetElementsByTagName("bibliographicInfo");
 				XmlNodeList cpcxnList = xml.GetElementsByTagName("ipcInfo");
+				XmlNodeList appNameList = xml.GetElementsByTagName("applicantInfo");
+				XmlNodeList DescList = xml.GetElementsByTagName("summation");
+
+				model.TitleList.Add(GetValue(xnList, "inventionTitle"));
+				model.PublicationNumberList.Add(GetValue(xnList, "publicationNumber"));
+				model.PublicationDateList.Add(GetValue(xnList, "publicationDate"));
+				model.ApplicantNameList.Add(GetValue(appNameList, "applicantName"));
+				model.DescriptionList.Add(GetValue(DescList, "astrtCont"));
+
 				List<string> ipcList = new List<string>();
 
 				model.ApplicatnNoList.Add(ids);
 				foreach (XmlNode cpc in cpcxnList)
 				{
-					ipcList.Add(cpc["ipcCd"].InnerText);
+					ipcList.Add(cpc["ipcCd"].InnerText.NullExceptions());
 				}
 				model.CpcList.Add(string.Join("<br/>", ipcList));
+
+				/*
 				foreach (XmlNode xn in xnList)
 				{
-					model.TitleList.Add(xn["bibliographicSummaryInfo"]["inventionTitle"].InnerText ?? "");
-					model.PublicationNumberList.Add(xn["bibliographicSummaryInfo"]["publicationNumber"].InnerText ?? "");
-					model.PublicationDateList.Add(xn["bibliographicSummaryInfo"]["publicationDate"].InnerText ?? "");
-					model.ApplicantNameList.Add(xn["applicantInfo"]["applicantName"].InnerText ?? "");
-					model.DescriptionList.Add(xn["summation"]["astrtCont"].InnerText ?? "");
+					model.TitleList.Add(xn["bibliographicSummaryInfo"]["inventionTitle"].InnerText.NullExceptions());
+					model.PublicationNumberList.Add(xn["bibliographicSummaryInfo"]["publicationNumber"].InnerText.NullExceptions());
+					model.PublicationDateList.Add(xn["bibliographicSummaryInfo"]["publicationDate"].InnerText.NullExceptions());
+					model.ApplicantNameList.Add(xn["applicantInfo"]["applicantName"].InnerText.NullExceptions());
+					model.DescriptionList.Add(xn["summation"]["astrtCont"].InnerText.NullExceptions());
 				}
+				*/
 			}
 
 			return model;
+		}
+
+		public string GetValue(XmlNodeList xmlList, string node)
+		{
+			string result = string.Empty;
+			if (xmlList.Count <= 0)
+			{
+				result = "None";
+			}
+			else
+			{
+				foreach (XmlNode xn in xmlList)
+				{
+					if (node == "applicantName" || node == "astrtCont")
+					{
+						result = xn[node].InnerText;
+					}
+					else
+					{
+						result = xn["bibliographicSummaryInfo"][node].InnerText;
+					}
+				}
+			}
+
+			return result;
 		}
 
 		public ArticleViewModel GetArticleViewModel(string id, ArticleViewModel model)

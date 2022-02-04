@@ -116,8 +116,8 @@ function downAll(type, lang) {
 		}
 		return false;
 	}
-	setCookie("pdfDownload", "false");
-	blockLoadingBar();
+	//setCookie("pdfDownload", "false");
+	//blockLoadingBar();
 	if (type == "patent") {
 		location.href = "/Kr/TocAllDataPDFDownload?id=" + arr.join('|');
 	} else {
@@ -128,19 +128,33 @@ function setCookie(name, value, expiredays) {
 	var todayDate = new Date();
 	todayDate.setDate(todayDate.getDate() + expiredays);
 	document.cookie = name + "=" + escape(value) + "; path=/; expires=" + todayDate.toGMTString() + "; domain=" + window.location.hostname;
+	console.log(document.cookie);
+	
 }
 function getCookie(name) {
-	var parts = document.cookie.split(name + "=");
+	//var parts = document.cookie.split(name + "=");
+	var parts = document.cookie.split(";");
+	console.log("parts:"+parts)
 	if (parts.length == 2) {
+		
 		return parts.pop().split(";").shift();
 	}
 }
+
+const getCookie2 = function getCookie_by_name(name) {
+	let cookies = document.cookie.split(';');
+	let value = document.cookie.match(`(^|;) ?${name}=([^;]*)(;|$)`);
+	console.log("value:"+value);
+	return value ? value[2] : null;
+}
+
 var downloadTimer;
 function blockLoadingBar() {
 	$("#pdfloading").show();
 	$("#table_wrap").hide();
 	downloadTimer = setInterval(function () {
-		var token = getCookie("pdfDownload");
+		//var token = getCookie("pdfDownload");
+		var token = getCookie2("pdfDownload");
 		if (token == "true") {
 			UnblockLoadingBar();
 		}

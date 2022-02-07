@@ -349,7 +349,6 @@ namespace K2GGTT.Controllers
 			};
 
 			model = GetPatentViewModel(id, model);
-
 			return View(model);
 		}
 

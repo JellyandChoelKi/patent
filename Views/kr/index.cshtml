@@ -1,12 +1,55 @@
 ﻿<style>
-   
+    .tooltip {
+        position: relative;
+        display: block;
+    }
+
+    .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 120px;
+        background-color: black;
+        color: #fff;
+        text-align: left;
+        border-radius: 6px;
+        padding: 10px;
+        position: absolute;
+        z-index: 999;
+        font-size: 15px;
+        opacity: 0.7;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+    }
+
+    .tooltip .tooltiptext::after {
+        content: " ";
+        position: absolute;
+        border-style: solid;
+        border-width: 5px;
+    }
+
+    .tooltip .tooltip-bottom {
+        width: 200px;
+        top: 150%;
+        left: 50%;
+        margin-left: -60px;
+    }
+
+    .tooltip .tooltip-bottom::after {
+        bottom: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-color: transparent transparent black transparent;
+    }
 </style>
 
 <div id="slider" class="bgcover" style="width:100%; height:700px; background-color:#EEE; background-image: url('/img/image2.jpg');">
     <form name="search" method="get" class="flex center w100 h100" action="Kr/Result" onsubmit="return checkKeyword()">
-        <div class="pad20">
-			<div style="box-sizing: border-box;">
-				<input name="keywords" id="main_search" title="*검색방법&#13; and 검색 : * ex) car*black*box &#13; or 검색 : | ex) car|black|box" placeholder="검색어를 입력해 주세요.">
+        <div class="pad20" style="overflow: visible;">
+			<div class="tooltip" style="box-sizing: border-box;overflow:visible;">
+				<input name="keywords" id="main_search" placeholder="검색어를 입력해 주세요.">
+                <span class="tooltiptext tooltip-bottom">* AND, OR 검색방법<br/> 1. AND 검색 : * <br />ex) car*black*box<br />2. OR 검색 : | <br />ex) car|black|box</span>
 				<button type="button" id="translate" style="background-color: #555555;border: none;color: white;padding: 24px 34px;text-align: center;text-decoration: none;display: inline-block;font-size: 16px;border-radius: 6px;">
 					번역
 				</button>

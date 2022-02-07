@@ -317,7 +317,7 @@ namespace K2GGTT.Controllers
 		public IActionResult Logout()
 		{
 			HttpContext.Session.Clear();
-			return Content(@"<script type='text/javascript'>alert('정상적으로 로그아웃 되었습니다.');location.href='/Kr/Index';</script>", "text/html", System.Text.Encoding.UTF8);
+			return Content(@"<script type='text/javascript'>alert('정상적으로 로그아웃 되었습니다.');location.href='/Kr';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult Action(string keywords)
@@ -382,13 +382,16 @@ namespace K2GGTT.Controllers
 			foreach (var ids in id_Arr)
 			{
 				string ImgSrc = string.Empty;
+				string ImgValue = string.Empty;
 				try
 				{
 					string imgUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaImageAndFullTextService/representationImageInfo?applicationNumber=" + ids, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
 					string imgXml = getResponse(imgUrl);
 					XDocument imgDoc = XDocument.Parse(imgXml.Trim());
 					XElement tifPath = (from n in imgDoc.Descendants("tifPath") select n).FirstOrDefault();
-					model.ImgSrcList.Add(tifPath.Value ?? "");
+					if (tifPath == null) ImgValue = "https://" + HttpContext.Request.Host.Value + "/image/noimage.jpg";
+					else ImgValue = tifPath.Value;
+					model.ImgSrcList.Add(ImgValue);
 				}
 				catch
 				{
@@ -700,7 +703,7 @@ namespace K2GGTT.Controllers
 			HttpContext.Session.SetString("Id", member.Id.ToString());
 			HttpContext.Session.SetString("MemberId", member.MemberId);
 			HttpContext.Session.SetString("MemberName", member.Name);
-			return Redirect("/Kr/Index");
+			return Redirect("/Kr");
 		}
 		public IActionResult Password()
 		{
@@ -737,7 +740,7 @@ namespace K2GGTT.Controllers
 			SmtpServer.Send(mail);
 			mail.Dispose();
 
-			return Content(@"<script type='text/javascript'>alert('입력하신 이메일 주소로 새로운 비밀번호가 전송되었습니다.');location.href='/Kr/Login';</script>", "text/html", System.Text.Encoding.UTF8);
+			return Content(@"<script type='text/javascript'>alert('입력하신 이메일 주소로 새로운 비밀번호가 전송되었습니다.');location.href='/Kr';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult About()
@@ -812,7 +815,7 @@ namespace K2GGTT.Controllers
 			_context.Member.Add(member);
 			_context.SaveChanges();
 
-			return Content(@"<script type='text/javascript'>alert('회원가입이 완료되었습니다.');location.href='/Kr/Index';</script>", "text/html", System.Text.Encoding.UTF8);
+			return Content(@"<script type='text/javascript'>alert('회원가입이 완료되었습니다.');location.href='/Kr';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult MyPage()

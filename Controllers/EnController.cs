@@ -57,7 +57,7 @@ namespace K2GGTT.Controllers
 		public IActionResult Logout()
 		{
 			HttpContext.Session.Clear();
-			return Content(@"<script type='text/javascript'>alert('You have logged out successfully.');location.href='/En/Index';</script>", "text/html", System.Text.Encoding.UTF8);
+			return Content(@"<script type='text/javascript'>alert('You have logged out successfully.');location.href='/En';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult Result(string keywords)
@@ -89,7 +89,7 @@ namespace K2GGTT.Controllers
 			HttpContext.Session.SetString("Id", member.Id.ToString());
 			HttpContext.Session.SetString("MemberId", member.MemberId);
 			HttpContext.Session.SetString("MemberName", member.Name);
-			return Redirect("/En/Index");
+			return Redirect("/En");
 		}
 		public IActionResult Password()
 		{
@@ -201,7 +201,7 @@ namespace K2GGTT.Controllers
 			_context.Member.Add(member);
 			_context.SaveChanges();
 
-			return Content(@"<script type='text/javascript'>alert('You have signed up successfully.');location.href='/En/Index';</script>", "text/html", System.Text.Encoding.UTF8);
+			return Content(@"<script type='text/javascript'>alert('You have signed up successfully.');location.href='/En';</script>", "text/html", System.Text.Encoding.UTF8);
 		}
 
 		public IActionResult MyPage()

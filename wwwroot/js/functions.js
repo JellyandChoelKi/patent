@@ -42,10 +42,10 @@ function loadToc(legendName, type, lang) {
 	if (type == 'patent') {
 		if (lang == 'en') {
 			var tableTitle = "Patent";
-			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkbox' value='selectall' onclick='selectAll(this)' /></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Date</th><th class='report'></th></tr>";
+			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkboxAll' value='selectall' onclick='selectAll(this)' /></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Date</th><th class='report'></th></tr>";
 		} else {
 			var tableTitle = "특허";
-			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkbox' value='selectall' onclick='selectAll(this)' /></th><th class='title'>발명제목</th><th class='author'>출원인</th><th class='year'>출원일</th><th class='report'></th></tr>";
+			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkboxAll' value='selectall' onclick='selectAll(this)' /></th><th class='title'>발명제목</th><th class='author'>출원인</th><th class='year'>출원일</th><th class='report'></th></tr>";
 		}
 		var subject = "inventionname";
 		var author = "inventors";
@@ -54,10 +54,10 @@ function loadToc(legendName, type, lang) {
 	} else if (type == 'article') {
 		if (lang == 'en') {
 			var tableTitle = "Articles";
-			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkbox' value='selectall' onclick='selectAll(this)' /></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Year</th><th class='report'></th></tr>";
+			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkboxAll' value='selectall' onclick='selectAll(this)' /></th><th class='title'>Title</th><th class='author'>Author</th><th class='year'>Year</th><th class='report'></th></tr>";
 		} else {
 			var tableTitle = "논문";
-			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkbox' value='selectall' onclick='selectAll(this)' /></th><th class='title'>제목</th><th class='author'>저자</th><th class='year'>연도</th><th class='report'></th></tr>";
+			var tableHead = "<tr><th class='no'><input type='checkbox' name='checkboxAll' value='selectall' onclick='selectAll(this)' /></th><th class='title'>제목</th><th class='author'>저자</th><th class='year'>연도</th><th class='report'></th></tr>";
 		}
 		var subject = "title";
 		var author = "author";
@@ -119,6 +119,7 @@ function downAll(type, lang) {
 	//setCookie("pdfDownload", "false");
 	//blockLoadingBar();
 	if (type == "patent") {
+		console.log(arr.join('|'));
 		location.href = "/Kr/TocAllDataPDFDownload?id=" + arr.join('|');
 	} else {
 		location.href = "/Kr/ArticleTocAllDataPDFDownload?id=" + arr.join('|');
@@ -141,20 +142,12 @@ function getCookie(name) {
 	}
 }
 
-const getCookie2 = function getCookie_by_name(name) {
-	let cookies = document.cookie.split(';');
-	let value = document.cookie.match(`(^|;) ?${name}=([^;]*)(;|$)`);
-	console.log("value:"+value);
-	return value ? value[2] : null;
-}
-
 var downloadTimer;
 function blockLoadingBar() {
 	$("#pdfloading").show();
 	$("#table_wrap").hide();
 	downloadTimer = setInterval(function () {
-		//var token = getCookie("pdfDownload");
-		var token = getCookie2("pdfDownload");
+		var token = getCookie("pdfDownload");
 		if (token == "true") {
 			UnblockLoadingBar();
 		}

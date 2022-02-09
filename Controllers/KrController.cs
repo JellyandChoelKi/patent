@@ -449,14 +449,22 @@ namespace K2GGTT.Controllers
 			{
 				foreach (XmlNode xn in xmlList)
 				{
-					if (node == "applicantName" || node == "astrtCont")
+					try
 					{
-						result = xn[node].InnerText;
+						if (node == "applicantName" || node == "astrtCont")
+						{
+							result = xn[node].InnerText;
+						}
+						else
+						{
+							result = xn["bibliographicSummaryInfo"][node].InnerText;
+						}
 					}
-					else
+					catch
 					{
-						result = xn["bibliographicSummaryInfo"][node].InnerText;
+						result = "None";
 					}
+					
 				}
 			}
 

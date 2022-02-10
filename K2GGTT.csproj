@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+		<PackageReference Include="ClosedXML" Version="0.95.4" />
 		<PackageReference Include="Google.Apis.Translate.v2" Version="1.55.0.875" />
 		<PackageReference Include="MongoDB.Bson" Version="2.13.2" />
 		<PackageReference Include="MongoDB.Driver" Version="2.13.2" />

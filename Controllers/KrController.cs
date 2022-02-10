@@ -29,6 +29,7 @@ using MongoDB.Driver;
 using Google.Apis.Translate.v2;
 using Google.Apis.Translate.v2.Data;
 using Google.Apis.Services;
+using ClosedXML.Excel;
 
 namespace K2GGTT.Controllers
 {
@@ -203,12 +204,120 @@ namespace K2GGTT.Controllers
 			return File(outputStream, System.Net.Mime.MediaTypeNames.Application.Pdf, fileName);
 		}
 
+		/*
+		특허 : No., Applicant, Application Date, Title, Purpose, Constitution
+		논문 : No., Pub Year, Title, Abstract
+		*/
+		public IActionResult PatentExcelDownload(string id)
+		{
+			PatentViewModel model = new PatentViewModel()
+			{
+				TitleList = new List<string>(),
+				ApplicatnNoList = new List<string>(),
+				ApplicatnDateList = new List<string>(),
+				PublicationNumberList = new List<string>(),
+				PublicationDateList = new List<string>(),
+				ApplicantNameList = new List<string>(),
+				CpcList = new List<string>(),
+				DescriptionList = new List<string>(),
+				ImgSrcList = new List<string>()
+			};
+			model = GetPatentViewModel(id, model);
+			using (var workbook = new XLWorkbook())
+			{
+				var title = "K2G_PatentList_Excel_" + Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+				var worksheet = workbook.Worksheets.Add(title);
+				worksheet.Range(1, 1, 10, 10).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+				string[] HeadColumnArray = new string[] { "No.", "Applicant", "Application Date", "Title", "Purpose", "Constitution" };
+				for (int i = 0, j = HeadColumnArray.Length; i < j; i++)
+				{
+					int col = (i + 1);
+					worksheet.Cell(1, col).Value = HeadColumnArray[i];
+					worksheet.Cell(1, col).Style.Font.Bold = true;
+					worksheet.Cell(1, col).Style.Font.FontColor = XLColor.White;
+					worksheet.Cell(1, col).Style.Fill.BackgroundColor = XLColor.Black;
+				}
+				for (int index = 1; index <= model.ApplicatnNoList.Count; index++)
+				{
+					int n = model.ApplicatnNoList.Count;
+					if (index > 1)
+					{
+						n = (model.ApplicatnNoList.Count - (index - 1));
+					}
+					worksheet.Cell(index + 1, 1).Value = n;
+					worksheet.Cell(index + 1, 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 1).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 1).Style.Border.BottomBorderColor = XLColor.Black;
+
+					worksheet.Cell(index + 1, 2).Value = model.ApplicantNameList[index - 1];
+					worksheet.Cell(index + 1, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 2).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 2).Style.Border.BottomBorderColor = XLColor.Black;
+
+					worksheet.Cell(index + 1, 3).Value = model.ApplicatnDateList[index - 1];
+					worksheet.Cell(index + 1, 3).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 3).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 3).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 3).Style.Border.BottomBorderColor = XLColor.Black;
+
+					worksheet.Cell(index + 1, 4).Value = model.TitleList[index - 1];
+					worksheet.Cell(index + 1, 4).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 4).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 4).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 4).Style.Border.BottomBorderColor = XLColor.Black;
+
+					string purpose = string.Empty;
+					string constitution = string.Empty;
+					if (model.DescriptionList[index - 1].IndexOf("PURPOSE") == -1)
+					{
+						purpose = model.DescriptionList[index - 1];
+					}
+					else
+					{
+						if (model.DescriptionList[index - 1].IndexOf("PURPOSE:") != -1)
+						{
+							purpose = model.DescriptionList[index - 1].Split("CONSTITUTION:", StringSplitOptions.None)[0].Replace("PURPOSE:", "");
+							constitution = model.DescriptionList[index - 1].Split("CONSTITUTION:", StringSplitOptions.None)[1];
+						}
+						else if (model.DescriptionList[index - 1].IndexOf("(PURPOSE)") != -1)
+						{
+							purpose = model.DescriptionList[index - 1].Split("(CONSTITUTION)", StringSplitOptions.None)[0].Replace("(PURPOSE)", "");
+							constitution = model.DescriptionList[index - 1].Split("(CONSTITUTION)", StringSplitOptions.None)[1];
+						}
+					}
+
+					worksheet.Cell(index + 1, 5).Value = purpose;
+					worksheet.Cell(index + 1, 5).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 5).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 5).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 5).Style.Border.BottomBorderColor = XLColor.Black;
+
+					worksheet.Cell(index + 1, 6).Value = constitution;
+					worksheet.Cell(index + 1, 6).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 6).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 6).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 6).Style.Border.BottomBorderColor = XLColor.Black;
+				}
+				using (var stream = new MemoryStream())
+				{
+					workbook.SaveAs(stream);
+					var content = stream.ToArray();
+					return File(
+							content,
+							"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+							title + ".xlsx");
+				}
+			}
+		}
 		public IActionResult TocAllDataPDFDownload(string id)
 		{
 			PatentViewModel model = new PatentViewModel()
 			{
 				TitleList = new List<string>(),
 				ApplicatnNoList = new List<string>(),
+				ApplicatnDateList = new List<string>(),
 				PublicationNumberList = new List<string>(),
 				PublicationDateList = new List<string>(),
 				ApplicantNameList = new List<string>(),
@@ -340,6 +449,7 @@ namespace K2GGTT.Controllers
 			{
 				TitleList = new List<string>(),
 				ApplicatnNoList = new List<string>(),
+				ApplicatnDateList = new List<string>(),
 				PublicationNumberList = new List<string>(),
 				PublicationDateList = new List<string>(),
 				ApplicantNameList = new List<string>(),
@@ -396,7 +506,7 @@ namespace K2GGTT.Controllers
 				{
 					model.ImgSrcList.Add("https://" + HttpContext.Request.Host.Value + "/image/noimage.jpg");
 				}
-
+				// http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=1019690001359&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=
 				string xmlUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=" + ids, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
 				string infoXml = getResponse(xmlUrl);
 
@@ -408,6 +518,7 @@ namespace K2GGTT.Controllers
 				XmlNodeList appNameList = xml.GetElementsByTagName("applicantInfo");
 				XmlNodeList DescList = xml.GetElementsByTagName("summation");
 
+				model.ApplicatnDateList.Add(GetValue(xnList, "applicationDate"));
 				model.TitleList.Add(GetValue(xnList, "inventionTitle"));
 				model.PublicationNumberList.Add(GetValue(xnList, "publicationNumber"));
 				model.PublicationDateList.Add(GetValue(xnList, "publicationDate"));

@@ -73,10 +73,10 @@ function loadToc(legendName, type, lang) {
 
 		if (lang == 'en') {
 			//buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>Report Selected</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>Download All</button>";
-			buttons = "<button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF Download</button>";
+			buttons = "<button class='pad10' onclick='ExcelDownload(\"" + type + "\", \"" + lang + "\")'>List Download (Excel)</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF Download</button>";
 		} else {
 			//buttons = "<button class='pad10' onClick='popupReportSelected(\"" + type + "\")'>선택항목 리포트</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF 다운로드</button>";
-			buttons = "</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF 다운로드</button>";
+			buttons = "<button class='pad10' onclick='ExcelDownload(\"" + type + "\", \"" + lang + "\")'>목록 다운로드 (엑셀)</button><button class='pad10' onClick='downAll(\"" + type + "\", \"" + lang + "\")'>PDF 다운로드</button>";
 		}
 
 		$('#table_title').html(tableTitle);
@@ -102,6 +102,21 @@ function selectAll(selectAll) {
 	checkboxes.forEach((checkbox) => {
 		checkbox.checked = selectAll.checked;
 	})
+}
+function ExcelDownload(type, lang) {
+	let arr = [];
+	$('input[name="checkbox"]:checked').each(function () {
+		arr.push($(this).data('id'));
+	});
+	if (arr.length <= 0) {
+		if (lang == 'en') {
+			alert("Please check the items you want to download as Excel.");
+		} else {
+			alert("엑셀 다운로드 하실 항목을 체크해주세요.");
+		}
+		return false;
+	}
+	location.href = "/Kr/" + type + "ExcelDownload?id=" + arr.join('|');
 }
 function downAll(type, lang) {
 	let arr = [];

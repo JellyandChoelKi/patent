@@ -11,6 +11,8 @@ namespace K2GGTT.ViewModels
 
         public List<string> ApplicatnNoList { get; set; }
 
+        public List<string> ApplicatnDateList { get; set; }
+
         public List<string> PublicationNumberList { get; set; }
 
         public List<string> PublicationDateList { get; set; }

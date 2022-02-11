@@ -1,4 +1,19 @@
-﻿<script type="text/javascript">
+﻿<style>
+	header {
+		position: absolute;
+		top: 0;
+		width: 100%;
+		background: linear-gradient(#FFF, transparent);
+	}
+
+	footer {
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+		background: linear-gradient(transparent, #FFF);
+	}
+</style>
+<script type="text/javascript">
 	$(document).ready(function () {
 		$("#Save").click(function () {
 			var memberid = $("input[name='memberid']").val();
@@ -18,19 +33,21 @@
 		});
     });
 </script>
-<div class="pad30">
-    <h3 class="tc">Log In</h3>
+<div class="pad30" style="height:100vh; box-sizing: border-box">
     <div class="flex center w100 h100 rela" style="overflow: hidden;">
-        <form name="loginform" id="loginform" method="post" action="/En/LoginProc">
-            <div>
-                <input type="text" placeholder="ID" name="memberid" class="style vertical">
-                <input type="password" placeholder="PW" name="password" class="style vertical">
-                <input type="submit" value="Log In" class="vertical style w100" id="Save">
-                <div class="flex between mt10">
-                    <a href="/En/password" class="link">Forgot my password.</a>
-                    <a href="/En/register" class="link">Be a member.</a>
-                </div>
-            </div>
-        </form>
+		<div>
+			<h3 class="tc">Log In</h3>
+			<form name="loginform" id="loginform" method="post" action="/En/LoginProc">
+				<div>
+					<input type="text" placeholder="ID" name="memberid" class="style vertical">
+					<input type="password" placeholder="PW" name="password" class="style vertical">
+					<input type="submit" value="Log In" class="vertical style w100" id="Save">
+					<div class="flex between mt10">
+						<a href="/En/password" class="link">Forgot my password.</a>
+						<a href="/En/register" class="link">Be a member.</a>
+					</div>
+				</div>
+			</form>
+		</div>
     </div>
 </div>

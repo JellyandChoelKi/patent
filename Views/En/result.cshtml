@@ -5,6 +5,10 @@
         patent: ['A90', 'A80', 'A70', 'A60', 'A50', 'A40', 'A30', 'A20', 'A10', 'A00'],
         article: ['B90', 'B80', 'B70', 'B60', 'B50', 'B40', 'B30', 'B20', 'B10', 'B00'],
     };
+	const color = {
+		patent: '#CD1F48',
+		article: '#0064FF'
+	}
     const shapes = {
         patent: 'circle',
         article: 'rect',
@@ -12,6 +16,60 @@
     var series = [];
     var currentPage = 1;
     var pagePosts = 30;
+
+    function totalAjax() {
+        console.log(new Date());
+        $.when(
+            $.ajax({ // 특허 API
+            //url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
+            url: 'https://k2gdoc2vecthesis.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
+            type: "GET",
+            dataType: "JSON",
+            beforeSend: function () {
+                console.log("patent 비포");
+				$('#loading>div').append('<p>Analyzing Patent Data...</p>');
+            },
+            success: function (result) {
+                console.log('Patent Success');
+				$('#loading>div').append('<p>Patent data Analysis Completed.</p>');
+                data["patent"] = result;
+                pushSeries("patent");
+            },
+            error: function () {
+				$('#loading>div').append('<p style="color:#C00;">Failed to searching Patent data.</p>');
+            },
+            complete: function () {
+                console.log('Patent End');
+                //searchArticles();
+            }
+        }),
+            $.ajax({ // 논문 API
+            url: 'https://k2gdoc2vec.azurewebsites.net/thesisData?searchWord=' + '@ViewBag.ArticleKeyword',
+            type: "GET",
+            dataType: "JSON",
+            beforeSend: function () {
+                console.log("Article 비포");
+				$('#loading>div').append('<p>Analyzing Article Data...</p>')
+            },
+            success: function (result) {
+                console.log('Article Success');
+				$('#loading>div').append('<p>Article data Analysis Completed.</p>')
+                data["article"] = result;
+                pushSeries("article");
+            },
+            error: function () {
+				$('#loading>div').append('<p style="color:#C00;">Failed to searching Article data.</p>');
+            },
+            complete: function () {
+                console.log('Article Ended');
+                //initiateChart();
+            }
+        })
+        ).done(function () {
+            console.log(new Date());
+            initiateChart();
+        })
+    }
 
     function searchPatent() {
         $.ajax({ // 특허 API
@@ -84,7 +142,7 @@
 			<h4 class="mb10">Searching... It takes 2-10 minutes depending on keywords.</h4>
 		</div>
 	</div>
-    <h3 class="tc">Select a Legend</h3>
+	<h3 class="tc">Select a Legend</h3>
 	<div>
 		<div class="flex center">
 			<select id="custom_legend" class="style" onChange="selectLegend('en')">
@@ -92,6 +150,14 @@
 				<optgroup class="patent" label="Patent"></optgroup>
 				<optgroup class="article" label="Articles"></optgroup>
 			</select>
+		</div>
+	</div>
+	<div id="color_guide" class="w400 pad30 flex between">
+		<div class="flex vcenter">
+			<span style="width:15px; height:15px; background-color:#CD1F48; border-radius: 20px;"></span><span style="margin-left:10px;">Patent</span>
+		</div>
+		<div class="flex vcenter">
+			<span style="width:15px; height:15px; background-color:#0064FF;"></span><span style="margin-left:10px;">Article</span>
 		</div>
 	</div>
 	<div id="graph_wrap" class="flex center pad10">
@@ -106,13 +172,24 @@
     </div>
     <table class="w100 tc">
     </table>
-
     <div class="flex center">
         <div id="pagination" class="pagination flex between pad20">
         </div>
     </div>
 </div>
-
+<div id="load_all" class="pad20 w1400">
+	<div class="flex between" id="patent_all_title" style="display: none;">
+		<h3 class="pad20">Patent</h3>
+	</div>
+	<table id="patent_all" class="w100 tc">
+	</table>
+	<div class="mb50"></div>
+	<div class="flex between" id="article_all_title" style="display: none;">
+		<h3 class="pad20">Article</h3>
+	</div>
+	<table id="article_all" class="w100 tc">
+	</table>
+</div>
 <script src="/js/functions.js" language="javascript"></script>
 <script src="/js/chart.js" language="javascript"></script>
 <script src="/js/resize.js" language="javascript"></script>
@@ -128,7 +205,7 @@
                     coordinateSystem: 'polar',
                     symbol: shapes[type],
                     data: data[type][dataName]['coordinate'],
-                    //color:legends["color"][i],
+					color: color[type],
                     animationDelay: function (idx) { return idx * 5; }
                 },
             };
@@ -142,10 +219,7 @@
     }
 
 </script>
-
-
 <script>
-
-    searchPatent();
-
+	totalAjax();
+    //searchPatent();
 </script>

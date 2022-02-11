@@ -57,7 +57,7 @@ radiusAxis: {
 		type:'slider',
 		radiusAxisIndex: [0],
 		handleSize: '100%',
-		height: 15,
+		height: 30,
 		borderColor: "#999",
 		backgroundColor:"#EEE",
 		fillerColor:"#CCC",

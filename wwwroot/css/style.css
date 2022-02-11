@@ -13,7 +13,7 @@ html, input, textarea, select {
 
 body {
 	margin: 0;
-	font-size: 1.2em;
+	font-size: 1.1em;
 	min-width: 100%;
 }
 
@@ -278,29 +278,30 @@ select option {
 			margin-right: 5px;
 		}
 
-#table_wrap table {
+#table_wrap table, #load_all table {
 	border-spacing: 0;
 	vertical-align: middle;
 }
-
-#table_wrap td {
+/*20220210 전체목록 테이블 추가 */
+#table_wrap td, #load_all td {
 	padding: 5px 7px;
 	border-bottom: #CCC 1px solid;
 }
 
-#table_wrap th {
-	font-size: 1.1em;
+#table_wrap th, #load_all th {
+	font-size: 0.9em;
 	background-color: #333;
 	color: #FFF;
 	font-weight: 400;
 	padding: 5px 7px;
+	white-space: nowrap;
 }
-
-#table_wrap a.href {
+/*20220210 글자크기 수정 */
+#table_wrap a.href, #load_all a.href {
 	text-decoration: underline;
 }
 
-#table_wrap a.report {
+#table_wrap a.report, #load_all a.report {
 	padding: 5px;
 	background-color: #EEE;
 	border: #CCC 1px solid;
@@ -309,43 +310,57 @@ select option {
 	border-radius: 5px;
 }
 
-#table_wrap .no {
+#table_wrap .no, #load_all .no {
 	width: 20px;
 }
 
-#table_wrap .author {
+#table_wrap .author, #load_all .author {
 	width: 250px;
 }
 
-#table_wrap .year {
+#table_wrap .similarity, #load_all .similarity {
+	width: 120px;
+}
+
+#table_wrap .report, #load_all .report {
+	width: 60px;
+}
+
+#table_wrap .year, #load_all .year {
 	width: 50px;
 }
 
-#table_wrap .href {
+#table_wrap .href, #load_all .href {
 	width: 50px;
 }
 
-#table_wrap .link {
+#table_wrap .link, #load_all .link {
 	filter: grayscale(1.0);
 }
 
-	#table_wrap .link:hover {
+	#table_wrap .link:hover, #load_all .link:hover {
 		filter: grayscale(0);
 	}
 
-#btn_wrap button {
-	margin: 5px;
-	background-color: #111;
-	outline: none;
-	border: #111 2px solid;
-	color: #FFF;
-	cursor: pointer;
+#btn_wrap {
+	display: flex;
 }
-
-	#btn_wrap button:hover {
-		color: #000;
-		background-color: transparent;
+	/*20220210 추가 */
+	#btn_wrap button, .download {
+		margin: 5px;
+		background-color: #111;
+		outline: none;
+		border: #111 2px solid;
+		color: #FFF;
+		cursor: pointer;
+		font-size: 0.8em;
 	}
+		/*20220210 클래스 추가, 글자크기 수정 */
+		#btn_wrap button:hover, .download:hover {
+			color: #000;
+			background-color: transparent;
+		}
+/*20220210 클래스 추가, 글자크기 수정 */
 
 span.paging {
 	color: #999;
@@ -380,7 +395,35 @@ span.paging {
 	margin-top: 10px;
 }
 
+/*20220210 추가 {*/
+.w1400 {
+	max-width: 1400px;
+	margin: auto;
+}
+
+.btn {
+	box-sizing: border-box;
+	border-radius: 5px;
+	font-size: 0.8em;
+	display: inline-flex;
+	align-items: center;
+}
+
+	.btn.blue {
+		background-color: #00B0EC;
+		color: #FFF;
+	}
+
+		.btn.blue:hover {
+			background-color: #00A0DC;
+		}
+/*20220210 추가 }*/
+
 @media screen and (max-width:600px) {
+	html {
+		font-size: 0.8em;
+	}
+
 	.mhide {
 		display: none;
 	}

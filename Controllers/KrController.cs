@@ -206,7 +206,6 @@ namespace K2GGTT.Controllers
 
 		/*
 		특허 : No., Applicant, Application Date, Title, Purpose, Constitution
-		논문 : No., Pub Year, Title, Abstract
 		*/
 		public IActionResult PatentExcelDownload(string id)
 		{
@@ -311,6 +310,83 @@ namespace K2GGTT.Controllers
 				}
 			}
 		}
+
+		// 논문 : No., Pub Year, Title, Abstract
+		public IActionResult ArticleExcelDownload(string id)
+		{
+			ArticleViewModel model = new ArticleViewModel()
+			{
+				TitleList = new List<string>(),
+				ArticleIdList = new List<string>(),
+				AbstractList = new List<string>(),
+				AuthorList = new List<string>(),
+				PubyearList = new List<string>(),
+				JournalNameList = new List<string>(),
+				VolNo1List = new List<string>(),
+				VolNo2List = new List<string>(),
+				PageInfoList = new List<string>(),
+				KeywordList = new List<string>(),
+				ContentURLList = new List<string>()
+			};
+
+			model = GetArticleViewModel(id, model);
+			using (var workbook = new XLWorkbook())
+			{
+				var title = "K2G_ArticleList_" + Convert.ToDateTime(DateTime.Now).ToString("yyyy-MM-dd");
+				var worksheet = workbook.Worksheets.Add(title);
+				worksheet.Range(1, 1, 10, 10).Style.Alignment.Horizontal = XLAlignmentHorizontalValues.Center;
+				string[] HeadColumnArray = new string[] { "No.", "Pub Year", "Title", "Abstract" };
+				for (int i = 0, j = HeadColumnArray.Length; i < j; i++)
+				{
+					int col = (i + 1);
+					worksheet.Cell(1, col).Value = HeadColumnArray[i];
+					worksheet.Cell(1, col).Style.Font.Bold = true;
+					worksheet.Cell(1, col).Style.Font.FontColor = XLColor.White;
+					worksheet.Cell(1, col).Style.Fill.BackgroundColor = XLColor.Black;
+				}
+				for (int index = 1; index <= model.TitleList.Count; index++)
+				{
+					int n = model.TitleList.Count;
+					if (index > 1)
+					{
+						n = (model.TitleList.Count - (index - 1));
+					}
+					worksheet.Cell(index + 1, 1).Value = n;
+					worksheet.Cell(index + 1, 1).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 1).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 1).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 1).Style.Border.BottomBorderColor = XLColor.Black;
+
+					worksheet.Cell(index + 1, 2).Value = model.PubyearList[index - 1];
+					worksheet.Cell(index + 1, 2).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 2).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 2).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 2).Style.Border.BottomBorderColor = XLColor.Black;
+
+					worksheet.Cell(index + 1, 3).Value = model.TitleList[index - 1];
+					worksheet.Cell(index + 1, 3).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 3).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 3).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 3).Style.Border.BottomBorderColor = XLColor.Black;
+
+					worksheet.Cell(index + 1, 4).Value = model.AbstractList[index - 1];
+					worksheet.Cell(index + 1, 4).Style.Border.RightBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 4).Style.Border.RightBorderColor = XLColor.Black;
+					worksheet.Cell(index + 1, 4).Style.Border.BottomBorder = XLBorderStyleValues.Thin;
+					worksheet.Cell(index + 1, 4).Style.Border.BottomBorderColor = XLColor.Black;
+				}
+				using (var stream = new MemoryStream())
+				{
+					workbook.SaveAs(stream);
+					var content = stream.ToArray();
+					return File(
+							content,
+							"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+							title + ".xlsx");
+				}
+			}
+		}
+
 		public IActionResult TocAllDataPDFDownload(string id)
 		{
 			PatentViewModel model = new PatentViewModel()

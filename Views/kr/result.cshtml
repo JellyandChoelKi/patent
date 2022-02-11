@@ -138,14 +138,14 @@
 	<div id="pdfloading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000; display: none;">
 		<div class="tc">
 			<img src="/img/loading.gif" alt="loading" style="width:200px;">
-			<h4 class="mb10 wh">PDF 파일을 생성중입니다. <wbr>검색결과에 따라 2~10분 정도 소요됩니다.</h4>
+			<h4 class="mb10 wh">PDF 파일을 생성중입니다. <wbr>검색결과에 따라 2~3분 정도 소요됩니다.</h4>
 		</div>
 	</div>
 
-	<div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
+	<div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000; height: 100vh;">
 		<div class="tc">
 			<img src="/img/loading.gif" alt="loading" style="width:200px;">
-			<h4 class="mb10 wh">검색 중입니다. <wbr>검색어에 따라 2~10분 정도 소요됩니다.</h4>
+			<h4 class="mb10 wh">검색 중입니다. <wbr>검색어에 따라 2~3분 정도 소요됩니다.</h4>
 		</div>
 	</div>
 
@@ -158,6 +158,14 @@
 				<optgroup class="patent" label="특허"></optgroup>
 				<optgroup class="article" label="논문"></optgroup>
 			</select>
+		</div>
+	</div>
+	<div id="color_guide" class="w400 pad30 flex between">
+		<div class="flex vcenter">
+			<span style="width:15px; height:15px; background-color:#CD1F48; border-radius: 20px;"></span><span style="margin-left:10px;">특허</span>
+		</div>
+		<div class="flex vcenter">
+			<span style="width:15px; height:15px; background-color:#0064FF;"></span><span style="margin-left:10px;">논문</span>
 		</div>
 	</div>
 	<div id="graph_wrap" class="flex center pad10">
@@ -178,7 +186,19 @@
         </div>
     </div>
 </div>
-
+<div id="load_all" class="pad20 w1400">
+	<div class="flex between" id="patent_all_title" style="display: none;">
+		<h3 class="pad20">특허</h3>
+	</div>
+	<table id="patent_all" class="w100 tc">
+	</table>
+	<div class="mb50"></div>
+	<div class="flex between" id="article_all_title" style="display: none;">
+		<h3 class="pad20">논문</h3>
+	</div>
+	<table id="article_all" class="w100 tc">
+	</table>
+</div>
 <script src="/js/functions.js" language="javascript"></script>
 <script src="/js/chart.js" language="javascript"></script>
 <script src="/js/resize.js" language="javascript"></script>
@@ -213,5 +233,4 @@
 <script>
     totalAjax();
     //searchPatent();
-
 </script>

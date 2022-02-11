@@ -7,17 +7,17 @@
     <link href="/css/style.css" rel="stylesheet">
     <title>GTT-Global Technology Trading</title>
 </head>
-
 <body>
 	<script src="/js/echarts.min.js" language="javascript"></script>
 	<script src="/js/jquery-1.8.3.min.js" language="javascript"></script>
 	<script src="/js/common.js" language="javascript"></script>
-    <div>
+	<div>
         <header class="flex between">
             <span class="pad30">
-                <a href="/kr">
-                    <h2><strong id="logo"><span style="color:#C00;">K2G</span> <span>GTT</span></strong></h2>
-                </a>
+				<a href="/kr">
+					<h2><strong id="logo"><span style="color:#00B0EC">K</span><span style="color:#898989">2</span><span style="color:#3EB134">G</span>&nbsp;<span>GTT</span></strong></h2>
+					<p style="font-size:12pt; margin-top:-10px;">GLOBAL TECH TRADING</p>
+				</a>
             </span>
             <div id="hamburger" onClick="hamburger()">
                 <span></span>
@@ -81,20 +81,5 @@
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	@RenderSection("Scripts", required: false)
-	<script>
-
-		function clipresize() {
-			var windowWidth = window.innerWidth;
-			var windowHeight = windowWidth / 1.7777
-			$('#mainSection').css('height', windowHeight);
-		}
-
-		clipresize();
-
-		$(function () {
-			$(window).resize(clipresize);
-		});
-
-	</script>
 </body>
 </html>

@@ -513,8 +513,8 @@ namespace K2GGTT.Controllers
 
 		public IActionResult Result(string keywords)
 		{
-			ViewBag.PatentKeyword = keywords.Replace(" ", "");
-			ViewBag.ArticleKeyword = keywords.Replace(" ", "").Replace('*', ' ');
+			ViewBag.PatentKeyword = keywords.Replace(" ", "").Replace("+", "|");
+			ViewBag.ArticleKeyword = keywords.Replace(" ", "").Replace('*', ' ').Replace("+", "|");
 
 			return View();
 		}

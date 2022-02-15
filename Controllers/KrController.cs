@@ -682,7 +682,8 @@ namespace K2GGTT.Controllers
 					{
 						if (item.Attributes["metaCode"].InnerText.Equals("Title"))
 						{
-							model.TitleList.Add(item.InnerText);
+							//model.TitleList.Add(item.InnerText);
+							model.TitleList.Add(CheckTitleIsHan(item.InnerText));
 						}
 						else if (item.Attributes["metaCode"].InnerText.Equals("ArticleId"))
 						{
@@ -729,6 +730,36 @@ namespace K2GGTT.Controllers
 			}
 
 			return model;
+		}
+
+		public string CheckTitleIsHan(string title)
+		{
+			TranslateService service = new TranslateService(new BaseClientService.Initializer()
+			{
+				ApiKey = "AIzaSyDd6iOwb63072biPNCofGbjb3HeR2i8bDw",
+				ApplicationName = " "
+			});
+
+			string TranslateResponse = string.Empty;
+			try
+			{
+				foreach (char ch in title)
+				{
+					if ((0xAC00 <= ch && ch <= 0xD7A3) || (0x3131 <= ch && ch <= 0x318E))
+					{
+						TranslationsListResponse response = service.Translations.List(title, "en").Execute();
+						return response.Translations[0].TranslatedText;
+						//TranslateResponse = response.Translations[0].TranslatedText;
+					}
+				}
+
+			}
+			catch
+			{
+				return title;
+			}
+
+			return title;
 		}
 
 		// 사용자용(압축파일) 나중에

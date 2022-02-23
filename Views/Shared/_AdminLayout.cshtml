@@ -57,12 +57,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 						<a href="#" class="d-block">K2G GTT Admin</a>
 					</div>
 				</div>
-
-				<!-- Sidebar Menu -->
 				<nav class="mt-2">
 					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-						<!-- Add icons to the links using the .nav-icon class
-							 with font-awesome or any other icon font library -->
 						<li class="nav-item menu-open">
 							<a href="#" class="nav-link ">
 								<p>
@@ -72,8 +68,23 @@ scratch. This page gets rid of all links and provides the needed markup only.
 							</a>
 							<ul class="nav nav-treeview">
 								<li class="nav-item">
-									<a href="/Admin/Member" class="nav-link active">
+									<a href="/Admin/Member" class="nav-link @(ViewContext.HttpContext.Request.Path.Value.IndexOf("Member") != -1 ? "active" : "")">
 										<p style="margin-left: 15px;">회원목록</p>
+									</a>
+								</li>
+							</ul>
+						</li>
+						<li class="nav-item menu-open">
+							<a href="#" class="nav-link ">
+								<p>
+									HotTech
+									<i class="right fas fa-angle-left"></i>
+								</p>
+							</a>
+							<ul class="nav nav-treeview">
+								<li class="nav-item">
+									<a href="/Admin/HotTech" class="nav-link @(ViewContext.HttpContext.Request.Path.Value.IndexOf("HotTech") != -1 ? "active" : "")">
+										<p style="margin-left: 15px;">HotTech</p>
 									</a>
 								</li>
 							</ul>

@@ -60,38 +60,53 @@ scratch. This page gets rid of all links and provides the needed markup only.
 					</div>
 				</div>
 				<nav class="mt-2">
-					<ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-						<li class="nav-item menu-open">
-							<a href="#" class="nav-link ">
-								<p>
-									회원관리
-									<i class="right fas fa-angle-left"></i>
-								</p>
-							</a>
-							<ul class="nav nav-treeview">
-								<li class="nav-item">
-									<a href="/Admin/Member" class="nav-link @(ViewContext.HttpContext.Request.Path.Value.IndexOf("Member") != -1 ? "active" : "")">
-										<p style="margin-left: 15px;">회원목록</p>
-									</a>
-								</li>
-							</ul>
-						</li>
-						<li class="nav-item menu-open">
-							<a href="#" class="nav-link ">
-								<p>
-									HotTech
-									<i class="right fas fa-angle-left"></i>
-								</p>
-							</a>
-							<ul class="nav nav-treeview">
-								<li class="nav-item">
-									<a href="/Admin/HotTech" class="nav-link @(ViewContext.HttpContext.Request.Path.Value.IndexOf("HotTech") != -1 ? "active" : "")">
-										<p style="margin-left: 15px;">HotTech</p>
-									</a>
-								</li>
-							</ul>
-						</li>
-					</ul>
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item menu-open">
+                            <a href="#" class="nav-link ">
+                                <p>
+                                    회원관리
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Admin/Member" class="nav-link @(ViewContext.HttpContext.Request.Path.Value.IndexOf("Member") != -1 ? "active" : "")">
+                                        <p style="margin-left: 15px;">회원목록</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item menu-open">
+                            <a href="#" class="nav-link ">
+                                <p>
+                                    HotTech
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Admin/HotTech" class="nav-link @(ViewContext.HttpContext.Request.Path.Value.IndexOf("HotTech") != -1 ? "active" : "")">
+                                        <p style="margin-left: 15px;">HotTech</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item menu-open">
+                            <a href="#" class="nav-link ">
+                                <p>
+                                    관리자관리
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/Admin/AdminList" class="nav-link @(ViewContext.HttpContext.Request.Path.Value.IndexOf("AdminList") != -1 ? "active" : "")">
+                                        <p style="margin-left: 15px;">관리자관리</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
 				</nav>
 				<!-- /.sidebar-menu -->
 			</div>

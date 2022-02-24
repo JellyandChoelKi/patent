@@ -1,0 +1,86 @@
+﻿@model Member
+
+<div class="content" style="padding: 15px 0.5rem">
+    <div class="container-fluid">
+        <!-- Main content -->
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-6">
+
+                    <!-- Horizontal Form -->
+                    <div class="card card-info">
+                        <div class="card-header">
+                            <h3 class="card-title">회원 상세</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form class="form-horizontal">
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <label for="inputEmail3" class="col-sm-2 col-form-label">아이디</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="" placeholder="" value="@Model.MemberId" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">이름</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="" placeholder="" value="@Model.Name" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">이메일</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="" placeholder="" value="@Model.Email" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">주소</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="" placeholder="" value="@Model.Addr1" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">주소상세</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="" placeholder="" value="@Model.Addr2" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">우편번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="" placeholder="" value="@Model.Zipcode" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">사업자번호</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="" placeholder="" value="@Model.CompanyRegistrationNumber" readonly="readonly">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="inputPassword3" class="col-sm-2 col-form-label">연락처</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control" id="" placeholder="" value="@Model.Contact" readonly="readonly">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer">
+                                <a href="./member" class="btn btn-default float-right">목록</a>
+                            </div>
+                            <!-- /.card-footer -->
+                        </form>
+                    </div>
+                    <!-- /.card -->
+
+                </div>
+                <!--/.col (left) -->
+            </div>
+            <!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+</div>
+
+

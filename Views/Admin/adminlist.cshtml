@@ -13,7 +13,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">회원목록</h3>
+                        <h3 class="card-title">관리자목록</h3>
                         <div class="card-tools">
                             <div class="input-group input-group-sm" style="width: 150px;">
                                 <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
@@ -36,11 +36,10 @@
                                     <th>성명</th>
                                     <th>이메일</th>
                                     <th>연락처</th>
-                                    <th>구분</th>
                                 </tr>
                             </thead>
                             <tbody style="text-align: center;">
-                                @{ 
+                                @{
                                     int startNumber = (Model.PageNumber - 1) * Model.PageSize;
                                     int Num = ViewBag.CurrentCount - startNumber;
                                 }
@@ -48,11 +47,10 @@
                                 {
                                     <tr>
                                         <td>@(Num--)</td>
-                                        <td><a href="./MemberDetail?memberId=@member.MemberId">@member.MemberId</a></td>
+                                        <td>@member.MemberId</td>
                                         <td>@member.Name</td>
                                         <td>@member.Email</td>
                                         <td>@member.Contact</td>
-                                        <td>@(member.Gubun == 1 ? "개인" : "기업")</td>
                                     </tr>
                                 }
 
@@ -61,8 +59,11 @@
                     </div>
                     <!-- /.card-body -->
                 </div>
+                <div>
+                    <a href="./AdminRegist" class="btn btn-primary float-right">관리자 등록</a>
+                </div>
                 <!-- /.card -->
-                @Html.PagedListPager(Model, pageNumber => Url.Action("member", "Admin",
+                @Html.PagedListPager(Model, pageNumber => Url.Action("adminlist", "Admin",
                         new
                         {
                         pageNumber
@@ -72,6 +73,7 @@
                         LiElementClasses = new string[] { "page-item" },
                         PageClasses = new string[] { "page-link" }
                     })
+
             </div>
         </div>
     </div>

@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using K2GGTT.Data;
 using System.Security.Cryptography;
 using System.Text;
+using X.PagedList;
 
 namespace K2GGTT.Controllers
 {
@@ -53,7 +54,7 @@ namespace K2GGTT.Controllers
 		[HttpPost]
 		public IActionResult LoginProc(string MemberId, string Password)
 		{
-			var member = _context.Member.Where(x => x.MemberId == MemberId && x.Password == SHA256Hash(Password)).FirstOrDefault();
+			var member = _context.Member.Where(x => x.MemberId == MemberId && x.Password == SHA256Hash(Password) && x.Gubun == 3).FirstOrDefault();
 			if (member == null)
 			{
 				return Content(@"<script type='text/javascript'>alert('로그인 정보가 없습니다.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
@@ -71,7 +72,39 @@ namespace K2GGTT.Controllers
 			return Redirect("/Admin/login");
 		}
 
-		public IActionResult Member()
+		[HttpGet]
+		public IActionResult Member(int? pageNumber = 1)
+		{
+			var session = HttpContext.Session.GetString("MemberId");
+			if (session == null)
+			{
+				return Redirect("/Admin/login");
+			}
+
+			List<Member> lists = _context.Member.Where(x => x.Gubun != 3).ToList();
+			ViewBag.CurrentCount = lists.Count();
+			return View(lists.ToPagedList(pageNumber ?? 1, 20));
+		}
+
+		[HttpGet]
+		public IActionResult MemberDetail(string memberId)
+		{
+			var member = _context.Member.Where(x => x.MemberId == memberId).FirstOrDefault();
+
+			return View(member);
+		}
+
+		public IActionResult HotTech()
+		{
+			var session = HttpContext.Session.GetString("MemberId");
+			if (session == null)
+			{
+				return Redirect("/Admin/login");
+			}
+			return View();
+		}
+
+		public IActionResult HotTech()
 		{
 			var session = HttpContext.Session.GetString("MemberId");
 			if (session == null)

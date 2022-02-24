@@ -94,14 +94,16 @@ namespace K2GGTT.Controllers
 			return View(member);
 		}
 
-		public IActionResult HotTech()
+		public IActionResult HotTech(int? pageNumber = 1)
 		{
 			var session = HttpContext.Session.GetString("MemberId");
 			if (session == null)
 			{
 				return Redirect("/Admin/login");
 			}
-			return View();
+			List<HotTech> lists = _context.HotTech.ToList();
+			ViewBag.CurrentCount = lists.Count();
+			return View(lists.ToPagedList(pageNumber ?? 1, 20));
 		}
 
 		public IActionResult HotTechRegister()

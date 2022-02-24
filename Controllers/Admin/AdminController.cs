@@ -104,14 +104,43 @@ namespace K2GGTT.Controllers
 			return View();
 		}
 
-		public IActionResult HotTech()
+		[HttpGet]
+		public IActionResult AdminList(int? pageNumber = 1)
 		{
 			var session = HttpContext.Session.GetString("MemberId");
 			if (session == null)
 			{
 				return Redirect("/Admin/login");
 			}
+
+			List<Member> lists = _context.Member.Where(x => x.Gubun == 3).ToList();
+			ViewBag.CurrentCount = lists.Count();
+			return View(lists.ToPagedList(pageNumber ?? 1, 20));
+		}
+
+		[HttpGet]
+		public IActionResult AdminRegist()
+		{
 			return View();
+		}
+
+		[HttpPost]
+		public IActionResult Invitations(Member model)
+		{
+			var member = new Member
+			{
+				MemberId = model.MemberId,
+				Password = SHA256Hash(model.Password),
+				Name = model.Name,
+				Email = model.Email,
+				Contact = model.Contact,
+				Gubun = 3
+			};
+
+			_context.Member.Add(member);
+			_context.SaveChanges();
+
+			return Redirect("/Admin/AdminList");
 		}
 	}
 }

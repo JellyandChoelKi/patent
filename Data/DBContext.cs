@@ -12,6 +12,7 @@ namespace K2GGTT.Data
 		}
 
 		public virtual DbSet<Member> Member { get; set; }
+		public virtual DbSet<HotTech> HotTech { get; set; }
 
 		protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 		{

@@ -1,20 +1,25 @@
 ﻿@{
-    var controller = ViewContext.RouteData.Values["controller"].ToString();
-    if (controller == "Admin")
-    {
-        string page = ViewContext.HttpContext.Request.Path.Value;
-        if (page.IndexOf("/Admin/login") == -1)
-        {
-            Layout = "~/Views/Shared/_AdminLayout.cshtml";
-        }
+	var controller = ViewContext.RouteData.Values["controller"].ToString();
+	if (controller == "Admin")
+	{
+		string page = ViewContext.HttpContext.Request.Path.Value;
+		if (page.IndexOf("/Admin/login") == -1)
+		{
+			Layout = "~/Views/Shared/_AdminLayout.cshtml";
+		}
 
-    }
-    else if (controller == "En")
-    {
-        Layout = "~/Views/Shared/_EnLayout.cshtml";
-    }
-    else
-    {
-        Layout = "~/Views/Shared/_Layout.cshtml";
-    }
+	}
+	else if (controller == "En")
+	{
+		Layout = "~/Views/Shared/_EnLayout.cshtml";
+	}
+	else
+	{
+		Layout = "~/Views/Shared/_Layout.cshtml";
+		/*string page = ViewContext.HttpContext.Request.Path.Value;
+		if (page.IndexOf("/kr/about") == -1)
+		{
+			Layout = "~/Views/Shared/_Layout.cshtml";
+		}*/
+	}
 }  

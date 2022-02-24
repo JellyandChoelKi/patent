@@ -96,7 +96,7 @@ namespace K2GGTT.Controllers
 		public IActionResult GoogleTranslate(string keywords)
 		{
 			//https://cloud.google.com/?hl=ko
-			//id: k2gmkt1 @gmail.com
+			//id: k2gmkt1@gmail.com
 			//pw: jjkim@1213
 			TranslateService service = new TranslateService(new BaseClientService.Initializer()
 			{

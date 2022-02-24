@@ -90,5 +90,15 @@ namespace K2GGTT.Controllers
 			}
 			return View();
 		}
+
+		public IActionResult HottechRegister()
+		{
+			var session = HttpContext.Session.GetString("MemberId");
+			if (session == null)
+			{
+				return Redirect("/Admin/login");
+			}
+			return View();
+		}
 	}
 }

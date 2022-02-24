@@ -63,6 +63,8 @@ div {
 	overflow: hidden;
 }
 
+#map div {overflow:initial;}
+
 input {
 	box-sizing: border-box;
 }

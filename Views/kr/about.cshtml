@@ -1,12 +1,4 @@
-﻿<style>
-	/* Set the size of the div element that contains the map */
-	#map {
-		height: 400px;
-		/* The height is 400 pixels */
-		width: 100%;
-		/* The width is the width of the web page */
-	}
-</style>
+﻿<style>#map {height: 400px;width: 100%;}</style>
 <div id="map"></div>
 <script>
 	function initMap() {
@@ -16,16 +8,29 @@
 			center: centerPosition,
 		});
 		const markerPosition = [
-			[-22.90003800350002, -43.17892937337119],
-			[35.66734864075945, 139.74597626133033],
-			[19.39392378563433, -99.17461040181227],
-			[37.29106531111345, 127.01163319802778],
+			["Brazil", -22.90003800350002, -43.17892937337119],
+			["Japan", 35.66734864075945, 139.74597626133033],
+			["Mexico", 19.39392378563433, -99.17461040181227],
+			["Korea", 37.29106531111345, 127.01163319802778],
 		];
+		const infowindow = new google.maps.InfoWindow();
 		for (let i = 0; i < markerPosition.length; i++) {
 			const marker = new google.maps.Marker({
-				position: new google.maps.LatLng(markerPosition[i][0], markerPosition[i][1]),
+				position: new google.maps.LatLng(markerPosition[i][1], markerPosition[i][2]),
 				map: map,
 			});
+			google.maps.event.addListener(marker, 'click', (function (marker, i) {
+				return function () {
+					infowindow.setContent(markerPosition[i][0]);
+					infowindow.open(map, marker);
+				}
+			})(marker, i));
+
+			if (marker) {
+				marker.addListener('click', function () {
+					map.setCenter(this.getPosition());
+				});
+			}
 		}
 	}
 </script>

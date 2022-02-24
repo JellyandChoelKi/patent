@@ -104,6 +104,16 @@ namespace K2GGTT.Controllers
 			return View();
 		}
 
+		public IActionResult HotTechRegister()
+		{
+			var session = HttpContext.Session.GetString("MemberId");
+			if (session == null)
+			{
+				return Redirect("/Admin/login");
+			}
+			return View();
+		}
+
 		[HttpGet]
 		public IActionResult AdminList(int? pageNumber = 1)
 		{

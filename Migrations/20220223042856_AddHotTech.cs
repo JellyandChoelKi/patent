@@ -11,8 +11,7 @@ namespace K2GGTT.Migrations
                 name: "HotTech",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false).Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Overview = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     BackgroundAndUnmetNeed = table.Column<string>(type: "nvarchar(max)", nullable: true),

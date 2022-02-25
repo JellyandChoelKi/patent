@@ -25,7 +25,6 @@
 					infowindow.open(map, marker);
 				}
 			})(marker, i));
-
 			if (marker) {
 				marker.addListener('click', function () {
 					map.setCenter(this.getPosition());

@@ -11,6 +11,7 @@ using K2GGTT.Data;
 using System.Security.Cryptography;
 using System.Text;
 using X.PagedList;
+using System.IO;
 
 namespace K2GGTT.Controllers
 {
@@ -114,6 +115,32 @@ namespace K2GGTT.Controllers
 				return Redirect("/Admin/login");
 			}
 			return View();
+		}
+
+		public IActionResult HotTechRegisterProc(HotTech model)
+		{
+			string imgSrc = string.Empty;
+			if (model.ApplicantImg != null && model.ApplicantImg.Length > 0)
+			{
+				var filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", model.ApplicantImg.FileName);
+				using (var uploadFile = System.IO.File.Create(filepath))
+				{
+					model.ApplicantImg.CopyTo(uploadFile);
+				}
+				imgSrc = HttpContext.Request.Host.Value + "/" + "ufile" + "/" + model.ApplicantImg.FileName;
+			}
+			var hottech = new HotTech
+			{
+				Title = model.Title,
+				Content = model.Content,
+				ApplicantImgSrc = imgSrc,
+				ApplicantName = model.ApplicantName,
+				ApplicantMajor = model.ApplicantMajor,
+				RegDate = DateTime.Now
+			};
+			_context.HotTech.Add(hottech);
+			_context.SaveChanges();
+			return Redirect("/Admin/HotTech");
 		}
 
 		[HttpGet]

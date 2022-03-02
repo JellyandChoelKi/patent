@@ -108,7 +108,7 @@ namespace K2GGTT.Controllers
 			try
 			{
 				TranslationsListResponse response = service.Translations.List(keywords, "en").Execute();
-				TranslateResponse = response.Translations[0].TranslatedText;
+				TranslateResponse = response.Translations[0].TranslatedText.Replace(" ", "*");
 			}
 			catch
 			{

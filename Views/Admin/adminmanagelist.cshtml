@@ -60,10 +60,10 @@
                     <!-- /.card-body -->
                 </div>
                 <div>
-                    <a href="./AdminRegist" class="btn btn-primary float-right">관리자 등록</a>
+                    <a href="./AdminManageRegist" class="btn btn-primary float-right">관리자 등록</a>
                 </div>
                 <!-- /.card -->
-                @Html.PagedListPager(Model, pageNumber => Url.Action("adminlist", "Admin",
+                @Html.PagedListPager(Model, pageNumber => Url.Action("adminmanagelist", "Admin",
                         new
                         {
                         pageNumber

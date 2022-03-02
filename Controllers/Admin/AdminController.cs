@@ -144,7 +144,7 @@ namespace K2GGTT.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult AdminList(int? pageNumber = 1)
+		public IActionResult AdminManageList(int? pageNumber = 1)
 		{
 			var session = HttpContext.Session.GetString("MemberId");
 			if (session == null)
@@ -158,7 +158,7 @@ namespace K2GGTT.Controllers
 		}
 
 		[HttpGet]
-		public IActionResult AdminRegist()
+		public IActionResult AdminManageRegist()
 		{
 			return View();
 		}

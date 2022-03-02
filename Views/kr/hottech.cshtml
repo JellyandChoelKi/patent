@@ -10,9 +10,9 @@
 				<li style="border: #CCC 1px solid;" class="pad30">
 					<h3><a href="/Kr/hottechdetail?id=@(m.Id)">@(m.Title)</a></h3>
 					<hr>
-					<div class="flex w100" style="box-sizing: border-box;">
-						<p style="width:85%;">@(Extension.HtmlIncode(m.Content))</p>
-						<div class="flex">
+					<div class="w100" style="box-sizing: border-box;">
+						<p>@(Extension.HtmlIncode(m.Content))</p>
+						<div style="white-space: nowrap; ">
 							<img style="width: 100px;" src="~/ufile/@(m.ApplicantImgSrc)" alt="Image">
 							<div class="pad10">
 								<h5>@(m.ApplicantName)</h5>

@@ -65,10 +65,9 @@ namespace K2GGTT.Controllers
 			foreach (string line in text)
 			{
 				output.AppendLine(line);
-				output.AppendLine("\n");
 			}
 			string textOnly = HttpUtility.HtmlDecode(output.ToString());
-			return textOnly;
+			return textOnly.CutString(250);
 		}
 
 		public static string CutString(this string str, int loc)
@@ -527,10 +526,20 @@ namespace K2GGTT.Controllers
 			return View();
 		}
 		
-		public IActionResult HotTech(int? pageNumber = 1)
+		public IActionResult HotTech()
 		{
-			List<HotTech> lists = _context.HotTech.ToList();
-			return View(lists.ToPagedList(pageNumber ?? 1, 20));
+			var list = from n in _context.HotTech
+					   select new HotTech
+					   {
+						   Id = n.Id,
+						   Title = n.Title,
+						   Content = n.Content,
+						   ApplicantImgSrc = n.ApplicantImgSrc,
+						   ApplicantName = n.ApplicantName,
+						   ApplicantMajor = n.ApplicantMajor
+					   };
+			ViewBag.List = list.ToList().OrderByDescending(x => x.Id);
+			return View();
 		}
 
 		public IActionResult HotTechDetail(int Id)

@@ -30,10 +30,12 @@ using Google.Apis.Translate.v2;
 using Google.Apis.Translate.v2.Data;
 using Google.Apis.Services;
 using ClosedXML.Excel;
+using X.PagedList;
+using HtmlAgilityPack;
 
 namespace K2GGTT.Controllers
 {
-	public static class XMLExtension
+	public static class Extension
 	{
 		public static string ReplaceAt(this string str, int index, int length, string replace)
 		{
@@ -52,6 +54,33 @@ namespace K2GGTT.Controllers
 				.Replace("&deg;", "")
 				.Replace("&le;", "")
 				.Replace("&lsqb;", "");
+		}
+
+		public static string HtmlIncode(string content)
+		{
+			HtmlDocument doc = new HtmlDocument();
+			doc.LoadHtml(content);
+			var text = doc.DocumentNode.SelectNodes("//div").Select(node => node.InnerText);
+			StringBuilder output = new StringBuilder();
+			foreach (string line in text)
+			{
+				output.AppendLine(line);
+				output.AppendLine("\n");
+			}
+			string textOnly = HttpUtility.HtmlDecode(output.ToString());
+			return textOnly;
+		}
+
+		public static string CutString(this string str, int loc)
+		{
+			string cut_str = string.Empty;
+
+			if (str.Length > loc)
+				cut_str = str.Substring(0, loc);
+			else
+				cut_str = str;
+			
+			return cut_str + "...";
 		}
 	}
 
@@ -401,7 +430,7 @@ namespace K2GGTT.Controllers
 				DescriptionList = new List<string>(),
 				ImgSrcList = new List<string>()
 			};
-
+			
 			model = GetPatentViewModel(id, model);
 
 			string html = string.Empty;
@@ -496,6 +525,27 @@ namespace K2GGTT.Controllers
 		public IActionResult Index()
 		{
 			return View();
+		}
+		
+		public IActionResult HotTech(int? pageNumber = 1)
+		{
+			List<HotTech> lists = _context.HotTech.ToList();
+			return View(lists.ToPagedList(pageNumber ?? 1, 20));
+		}
+
+		public IActionResult HotTechDetail(int Id)
+		{
+			var p = _context.HotTech.Where(x => x.Id == Id).FirstOrDefault();
+			HotTechViewModel model = new HotTechViewModel()
+			{
+				Id = p.Id,
+				Title = p.Title,
+				Content = p.Content,
+				ApplicantImgSrc = p.ApplicantImgSrc,
+				ApplicantName = p.ApplicantName,
+				ApplicantMajor = p.ApplicantMajor
+			};
+			return View(model);
 		}
 
 		[HttpGet]

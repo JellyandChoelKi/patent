@@ -1,0 +1,26 @@
+﻿@using X.PagedList;
+@using X.PagedList.Mvc.Core
+@model IPagedList<HotTech>
+@using K2GGTT.Controllers
+<div class="pad30 w1400" style="max-width: 1500px;">
+	<div>
+		@foreach (var m in Model)
+		{
+			<div class="mb30">
+				<li style="border: #CCC 1px solid;" class="pad30">
+					<h3><a href="/Kr/hottechdetail?id=@(m.Id)">@(m.Title)</a></h3>
+					<hr>
+					<div class="flex w100" style="box-sizing: border-box;">
+						<p style="width:85%;">@(Extension.HtmlIncode(m.Content).CutString(250))</p>
+						<div class="flex">
+							<img style="width: 100px;" src="~/ufile/@(m.ApplicantImgSrc)" alt="Image">
+							<div class="pad10">
+								<h5>@(m.ApplicantName)</h5><p>@(m.ApplicantMajor)</p>
+							</div>
+						</div>
+					</div>
+				</li>
+			</div>
+		}
+	</div>
+</div>

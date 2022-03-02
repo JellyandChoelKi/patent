@@ -127,7 +127,7 @@ namespace K2GGTT.Controllers
 				{
 					model.ApplicantImg.CopyTo(uploadFile);
 				}
-				imgSrc = HttpContext.Request.Host.Value + "/" + "ufile" + "/" + model.ApplicantImg.FileName;
+				imgSrc = model.ApplicantImg.FileName;
 			}
 			var hottech = new HotTech
 			{

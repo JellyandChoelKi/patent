@@ -107,39 +107,104 @@ namespace K2GGTT.Controllers
 			return View(lists.ToPagedList(pageNumber ?? 1, 20));
 		}
 
-		public IActionResult HotTechRegister()
+		public IActionResult HotTechRegister(int? Id)
 		{
 			var session = HttpContext.Session.GetString("MemberId");
 			if (session == null)
 			{
 				return Redirect("/Admin/login");
 			}
+
+			if (Id > 0 || Id != null)
+			{
+				var p = _context.HotTech.Where(x => x.Id == Id).FirstOrDefault();
+				HotTech model = new HotTech()
+				{
+					Id = p.Id,
+					Title = p.Title,
+					Content = p.Content,
+					ApplicantImgSrc = p.ApplicantImgSrc,
+					ApplicantName = p.ApplicantName,
+					ApplicantMajor = p.ApplicantMajor
+				};
+
+				ViewBag.Id = Id;
+				return View(model);
+			}
+
 			return View();
+		}
+
+		public IActionResult HotTechDelete(int? Id)
+		{
+			if (Id > 0 || Id != null)
+			{
+				var p = _context.HotTech.Where(x => x.Id == Id).FirstOrDefault();
+				var filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", p.ApplicantImg.FileName);
+				if(System.IO.File.Exists(filepath)) {
+					System.IO.File.Delete(filepath);
+				}
+				_context.HotTech.RemoveRange(_context.HotTech.Where(x => x.Id == Id));
+				_context.SaveChanges();
+			}
+
+			return Redirect("/Admin/HotTech");
 		}
 
 		public IActionResult HotTechRegisterProc(HotTech model)
 		{
-			string imgSrc = string.Empty;
-			if (model.ApplicantImg != null && model.ApplicantImg.Length > 0)
+			if (model.Id > 0)
 			{
-				var filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", model.ApplicantImg.FileName);
-				using (var uploadFile = System.IO.File.Create(filepath))
+				var p = _context.HotTech.Where(x => x.Id == model.Id).FirstOrDefault();
+				p.Title = model.Title;
+				p.Content = model.Content;
+
+				if (model.ApplicantImg != null && model.ApplicantImg.Length > 0)
 				{
-					model.ApplicantImg.CopyTo(uploadFile);
+					var f = _context.HotTech.Where(x => x.Id == model.Id).FirstOrDefault();
+					var origin_filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", f.ApplicantImg.FileName);
+					if (System.IO.File.Exists(origin_filepath))
+					{
+						System.IO.File.Delete(origin_filepath);
+					}
+
+					var filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", model.ApplicantImg.FileName);
+					using (var uploadFile = System.IO.File.Create(filepath))
+					{
+						model.ApplicantImg.CopyTo(uploadFile);
+					}
+					p.ApplicantImgSrc = model.ApplicantImg.FileName;
 				}
-				imgSrc = model.ApplicantImg.FileName;
+
+				p.ApplicantName = model.ApplicantName;
+				p.ApplicantMajor = model.ApplicantMajor;
+				p.UpdDate = DateTime.Now;
+				_context.SaveChanges();
 			}
-			var hottech = new HotTech
+			else
 			{
-				Title = model.Title,
-				Content = model.Content,
-				ApplicantImgSrc = imgSrc,
-				ApplicantName = model.ApplicantName,
-				ApplicantMajor = model.ApplicantMajor,
-				RegDate = DateTime.Now
-			};
-			_context.HotTech.Add(hottech);
-			_context.SaveChanges();
+				string FileName = string.Empty;
+				if (model.ApplicantImg != null && model.ApplicantImg.Length > 0)
+				{
+					var filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", model.ApplicantImg.FileName);
+					using (var uploadFile = System.IO.File.Create(filepath))
+					{
+						model.ApplicantImg.CopyTo(uploadFile);
+					}
+					FileName = model.ApplicantImg.FileName;
+				}
+				var hottech = new HotTech
+				{
+					Title = model.Title,
+					Content = model.Content,
+					ApplicantImgSrc = FileName,
+					ApplicantName = model.ApplicantName,
+					ApplicantMajor = model.ApplicantMajor,
+					RegDate = DateTime.Now
+				};
+				_context.HotTech.Add(hottech);
+				_context.SaveChanges();
+			}
 			return Redirect("/Admin/HotTech");
 		}
 

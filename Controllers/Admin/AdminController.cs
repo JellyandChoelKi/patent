@@ -104,7 +104,7 @@ namespace K2GGTT.Controllers
 			}
 			List<HotTech> lists = _context.HotTech.ToList();
 			ViewBag.CurrentCount = lists.Count();
-			return View(lists.ToPagedList(pageNumber ?? 1, 20));
+			return View(lists.OrderByDescending(x => x.Id).ToPagedList(pageNumber ?? 1, 20));
 		}
 
 		public IActionResult HotTechRegister(int? Id)
@@ -123,15 +123,14 @@ namespace K2GGTT.Controllers
 					Id = p.Id,
 					Title = p.Title,
 					Content = p.Content,
+					ApplicantImg = p.ApplicantImg,
 					ApplicantImgSrc = p.ApplicantImgSrc,
 					ApplicantName = p.ApplicantName,
 					ApplicantMajor = p.ApplicantMajor
 				};
-
 				ViewBag.Id = Id;
 				return View(model);
 			}
-
 			return View();
 		}
 
@@ -162,7 +161,7 @@ namespace K2GGTT.Controllers
 				if (model.ApplicantImg != null && model.ApplicantImg.Length > 0)
 				{
 					var f = _context.HotTech.Where(x => x.Id == model.Id).FirstOrDefault();
-					var origin_filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", f.ApplicantImg.FileName);
+					var origin_filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", f.ApplicantImgSrc);
 					if (System.IO.File.Exists(origin_filepath))
 					{
 						System.IO.File.Delete(origin_filepath);

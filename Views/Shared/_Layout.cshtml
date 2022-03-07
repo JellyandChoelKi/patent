@@ -13,6 +13,21 @@
 	<script src="/js/common.js" language="javascript"></script>
 	<div>
 		<header class="flex between">
+			<div id="tnb" class="flex between mhide" style="background-color: #000; color:#FFF; padding:5px 0; font-size:0.8em;">
+				@{
+					if (Context.Session.GetString("MemberId") != null)
+					{
+						<a href="/kr/mypage/" class="pad20">My Page</a>
+						<a href="/kr/logout/" class="pad20">Log Out</a>
+					}
+					else
+					{
+						<a href="/kr/login/" class="pad20">Log in</a>
+					}
+				}
+				<a href="/en" class="pad20">English &#x1F1FA;&#x1F1F8;</a>
+			</div>
+			<div class="flex between">
 			<span class="pad30">
 				<a href="/kr">
 					<h2><strong id="logo"><span style="color:#00B0EC">K</span><span style="color:#898989">2</span><span style="color:#3EB134">G</span>&nbsp;<span>GTT</span></strong></h2>
@@ -27,25 +42,17 @@
 			<nav id="nav">
 				<a href="/kr/about/" class="pad20">About K2G</a>
 				<a href="/kr" class="pad20">Tech Finder</a>
+				<a href="/kr/networks/" class="pad20">Networks</a>
 				<a href="/kr/hottech/" class="pad20">Hot Tech</a>
-				@{
-					if (Context.Session.GetString("MemberId") != null)
-					{
-						<a href="/kr/mypage/" class="pad20">My Page</a>
-						<a href="/kr/logout/" class="pad20">Log Out</a>
-					}
-					else
-					{
-						<a href="/kr/login/" class="pad20">Log in</a>
-					}
-				}
-				<a href="/en" class="pad20">English</a>
+				
 			</nav>
+			</div>
 		</header>
 		<div>
-			<nav id="mnav" class="tc">
+			<nav id="mnav" class="tc" style="padding-top:100px;">
 				<a href="/kr/about/" class="pad20">About K2G</a>
 				<a href="/kr" class="pad20">Tech Finder</a>
+				<a href="/kr/networks/" class="pad20">Networks</a>
 				<a href="/kr/hottech/" class="pad20">Hot Tech</a>
 				@{
 					if (Context.Session.GetString("MemberId") != null)

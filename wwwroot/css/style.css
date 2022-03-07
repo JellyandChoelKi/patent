@@ -219,7 +219,7 @@ select option {
 	justify-content: center;
 }
 
-	#nav a, #mnav a {
+	#mnav a {
 		font-weight: 300;
 	}
 

@@ -9,6 +9,7 @@
 			<div class="card card-outline card-info">
 				<div class="card-body">
 					<form action="/Admin/HotTechRegisterProc" method="post" enctype="multipart/form-data">
+						<input type="hidden" asp-for="@(Model.Id)" />
 						<h4>&#183; 제목</h4>
 						<input class="form-control" required type="text" asp-for="@(Model.Title)">
 						<br />
@@ -17,14 +18,26 @@
 							<textarea id="summernote" required asp-for="@(Model.Content)"></textarea>
 						</div>
 						<h4>&#183; 출원자사진</h4>
-						<input class="form-control" required type="file" asp-for="@(Model.ApplicantImg)" />
+						@{
+							if (ViewBag.Id > 0)
+							{
+								<div style="margin-bottom: 10px;">※ 현재 [<span style="color: red;">@(Model.ApplicantImgSrc)</span>] 파일이 업로드 되어있습니다.</div>
+							}
+						}
+						<input class="form-control" type="file" asp-for="@(Model.ApplicantImg)" />
 						<br />
 						<h4>&#183; 출원자</h4>
-						<input class="form-control" required type="text" asp-for="@(Model.ApplicantName)">
+						<input class="form-control" required type="text" asp-for="@(Model.ApplicantName)" />
 						<br />
 						<h4>&#183; 경력</h4>
-						<input class="form-control" required type="text" asp-for="@(Model.ApplicantMajor)">
+						<input class="form-control" required type="text" asp-for="@(Model.ApplicantMajor)" />
 						<div style="margin-top: 20px;">
+							@{
+								if (ViewBag.Id > 0)
+								{
+									<a href="/Admin/HotTechDelete?Id=@(ViewBag.Id)" class="btn btn-danger float-right" style="font-size: 2rem; margin-left: 10px;">삭제</a>
+								}
+							}
 							<button class="btn btn-primary float-right" style="font-size: 2rem; margin-left: 10px;">등록</button>
 							<a href="/Admin/HotTech" class="btn btn-default float-right" style="font-size: 2rem;">목록</a>
 						</div>

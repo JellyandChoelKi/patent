@@ -13,7 +13,7 @@
 	<script src="/js/common.js" language="javascript"></script>
 	<div>
 		<header class="flex between">
-			<div id="tnb" class="flex between mhide" style="background-color: #000; color:#FFF; padding:5px 0; font-size:0.8em;">
+			<div id="tnb" class="flex between mhide" style="background-color: #333; color:#FFF; padding:2px; font-size:0.8em;">
 				@{
 					if (Context.Session.GetString("MemberId") != null)
 					{
@@ -25,7 +25,7 @@
 						<a href="/kr/login/" class="pad20">Log in</a>
 					}
 				}
-				<a href="/en" class="pad20">English &#x1F1FA;&#x1F1F8;</a>
+				<a href="/en" class="pad20"><img src="/img/eng.png" style="width:25px; border-radius: 30px;" alt="English" title="English"></a>
 			</div>
 			<div class="flex between">
 			<span class="pad30">

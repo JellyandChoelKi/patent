@@ -239,6 +239,8 @@ select option {
 	#mnav a {
 		display: block;
 	}
+
+#tnb a {margin:1px 10px; padding:1px;}
 /* Search */
 
 #main_search {

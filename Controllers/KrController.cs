@@ -642,16 +642,23 @@ namespace K2GGTT.Controllers
 					model.ImgSrcList.Add("https://" + HttpContext.Request.Host.Value + "/image/noimage.jpg");
 				}
 				// http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=1019690001359&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=
+
+				//일반정보
 				string xmlUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/bibliographicInfo?applicationNumber=" + ids, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
 				string infoXml = getResponse(xmlUrl);
-
 				XmlDocument xml = new XmlDocument();
 				xml.LoadXml(infoXml);
+
+				//초록
+				string summationXmlUrl = String.Concat("http://plus.kipris.or.kr/openapi/rest/KpaBibliographicService/summation?applicationNumber=" + ids, "&accessKey=ayT0CuK47oBcaK3JEde6z3RYM8MERvwIe645tu43bmQ=");
+				string summationInfoXml = getResponse(summationXmlUrl);
+				XmlDocument summationXml = new XmlDocument();
+				summationXml.LoadXml(summationInfoXml);
 
 				XmlNodeList xnList = xml.GetElementsByTagName("bibliographicInfo");
 				XmlNodeList cpcxnList = xml.GetElementsByTagName("ipcInfo");
 				XmlNodeList appNameList = xml.GetElementsByTagName("applicantInfo");
-				XmlNodeList DescList = xml.GetElementsByTagName("summation");
+				XmlNodeList DescList = summationXml.GetElementsByTagName("summation");
 
 				model.ApplicatnDateList.Add(GetValue(xnList, "applicationDate"));
 				model.TitleList.Add(GetValue(xnList, "inventionTitle"));
@@ -700,6 +707,11 @@ namespace K2GGTT.Controllers
 						if (node == "applicantName" || node == "astrtCont")
 						{
 							result = xn[node].InnerText;
+
+							if (node == "astrtCont")
+							{
+								result = result.Replace("<p>", "").Replace("</p>", "").Replace("<P>", "").Replace("</P>", "");
+							}
 						}
 						else
 						{

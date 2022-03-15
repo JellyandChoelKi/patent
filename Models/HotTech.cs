@@ -7,6 +7,7 @@ namespace K2GGTT.Models
 	public class HotTech
 	{
 		public int Id { get; set; }
+		public string Gubun { get; set; }
 		public string Title { get; set; }
 		public string Content { get; set; }
 		[NotMapped]

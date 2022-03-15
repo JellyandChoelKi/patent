@@ -10,6 +10,15 @@
 				<div class="card-body">
 					<form action="/Admin/HotTechRegisterProc" method="post" enctype="multipart/form-data">
 						<input type="hidden" asp-for="@(Model.Id)" />
+						<h4>&#183; 카테고리</h4>
+						<select class="form-control" name="gubun" required>
+							<option value="">선택</option>
+							<option value="HealthCare" selected="@(Model.Gubun == "HealthCare")">HealthCare</option>
+							<option value="BIO" selected="@(Model.Gubun == "BIO")">BIO</option>
+							<option value="IT" selected="@(Model.Gubun == "IT")">IT</option>
+							<option value="ET" selected="@(Model.Gubun == "ET")">ET</option>
+						</select>
+						<br />
 						<h4>&#183; 제목</h4>
 						<input class="form-control" required type="text" asp-for="@(Model.Title)">
 						<br />

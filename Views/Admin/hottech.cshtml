@@ -21,6 +21,7 @@
 							<thead style="text-align: center;">
 								<tr>
 									<th>번호</th>
+									<th>카테고리</th>
 									<th>제목</th>
 									<th>출원자</th>
 									<th>등록일</th>
@@ -35,7 +36,8 @@
 								{
 									<tr>
 										<td>@(Num--)</td>
-										<td style="text-align: left;">
+										<td>@hottech.Gubun</td>
+										<td>
 											<a href="/Admin/HotTechRegister?id=@(hottech.Id)">@hottech.Title</a>
 										</td>
 										<td>@hottech.ApplicantName</td>

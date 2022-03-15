@@ -102,7 +102,7 @@ namespace K2GGTT.Controllers
 			{
 				return Redirect("/Admin/login");
 			}
-			List<HotTech> lists = _context.HotTech.ToList();
+			List<HotTech> lists = _context.HotTech.Where(x => x.Title != "ExampleTarget").ToList();
 			ViewBag.CurrentCount = lists.Count();
 			return View(lists.OrderByDescending(x => x.Id).ToPagedList(pageNumber ?? 1, 20));
 		}
@@ -115,12 +115,17 @@ namespace K2GGTT.Controllers
 				return Redirect("/Admin/login");
 			}
 
+			HotTech model = new HotTech();
+
+			// 등록일경우 작성 예시내용을 보여주기 위함(ExampleTarget 제목 데이터는 지우지마세요.)
+			model.Content = _context.HotTech.Where(x => x.Title == "ExampleTarget").Select(x => x.Content).FirstOrDefault();
 			if (Id > 0 || Id != null)
 			{
 				var p = _context.HotTech.Where(x => x.Id == Id).FirstOrDefault();
-				HotTech model = new HotTech()
+				model = new HotTech()
 				{
 					Id = p.Id,
+					Gubun = p.Gubun,
 					Title = p.Title,
 					Content = p.Content,
 					ApplicantImg = p.ApplicantImg,
@@ -131,7 +136,7 @@ namespace K2GGTT.Controllers
 				ViewBag.Id = Id;
 				return View(model);
 			}
-			return View();
+			return View(model);
 		}
 
 		public IActionResult HotTechDelete(int? Id)
@@ -139,7 +144,7 @@ namespace K2GGTT.Controllers
 			if (Id > 0 || Id != null)
 			{
 				var p = _context.HotTech.Where(x => x.Id == Id).FirstOrDefault();
-				var filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", p.ApplicantImg.FileName);
+				var filepath = System.IO.Path.Combine(Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + "wwwroot" + Path.DirectorySeparatorChar + "ufile", p.ApplicantImgSrc);
 				if(System.IO.File.Exists(filepath)) {
 					System.IO.File.Delete(filepath);
 				}
@@ -155,9 +160,9 @@ namespace K2GGTT.Controllers
 			if (model.Id > 0)
 			{
 				var p = _context.HotTech.Where(x => x.Id == model.Id).FirstOrDefault();
+				p.Gubun = model.Gubun;
 				p.Title = model.Title;
 				p.Content = model.Content;
-
 				if (model.ApplicantImg != null && model.ApplicantImg.Length > 0)
 				{
 					var f = _context.HotTech.Where(x => x.Id == model.Id).FirstOrDefault();
@@ -194,6 +199,7 @@ namespace K2GGTT.Controllers
 				}
 				var hottech = new HotTech
 				{
+					Gubun = model.Gubun,
 					Title = model.Title,
 					Content = model.Content,
 					ApplicantImgSrc = FileName,

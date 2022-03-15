@@ -528,7 +528,7 @@ namespace K2GGTT.Controllers
 		
 		public IActionResult HotTech()
 		{
-			var list = from n in _context.HotTech
+			var list = from n in _context.HotTech.Where(x => x.Title != "ExampleTarget")
 					   select new HotTech
 					   {
 						   Id = n.Id,

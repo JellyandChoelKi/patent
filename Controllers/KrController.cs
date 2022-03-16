@@ -1055,6 +1055,11 @@ namespace K2GGTT.Controllers
 			return View(model);
 		}
 
+		public IActionResult Networks()
+		{
+			return View();
+		}
+
 		[HttpPost]
 		public IActionResult MemberIdCheck(string memberid)
 		{

@@ -1,34 +1,5 @@
-function selectLegend(e) {
-	var legendName = $('#custom_legend').val();
-	var type = $('#custom_legend').find("option:selected").data("type");
-	var legendRange = (((legendName.substr(1) * 1) - 5) * 0.01);
-	if (legendName != '') {
-		if (legendName == 'all') {
-			legendAll();
-		} else {
-			for (i = 0; i < series.length; i++) {
-				myChart.dispatchAction({
-					type: 'legendUnSelect',
-					name: series[i]['name'],
-				});
-			}
-			myChart.dispatchAction({
-				type: 'legendSelect',
-				name: legendName,
-			});
-			if (e == 'en') { loadToc(legendName, type, 'en') } else { loadToc(legendName, type); }
-			focusRange(legendRange);
-		}
-	}
-}
-
-function legendAll() {
-	myChart.dispatchAction({
-		type: 'legendAllSelect',
-	});
-	focusRange(0);
-	loadAll();
-}
+let currentPage = 1;
+const pagePosts = 30;
 
 function loadToc(legendName, type, lang) {
 	$("#table_wrap").show();
@@ -269,12 +240,32 @@ function movingPage(e, type) {
 	pagination(e, type);
 }
 
-function focusRange(a) {
-	myChart.dispatchAction({
-		type: 'dataZoom',
-		startValue: 1.0,
-		endValue: a,
-	});
+function pushSeries (type) {
+	for(i=0; i<legends[type].length; i++) {
+		const dataName = legends[type][i];
+		const thisData = {
+			[type] : {
+				name: dataName,
+				type:'scatter',
+				coordinateSystem: 'polar',
+				symbol:shapes[type],
+				data:data[type][dataName]['coordinate'],
+				color:color[type],
+				animationDelay: function (idx) {return idx * 5;}
+			},
+		};
+		var dataCounts = data[type][dataName]['coordinate'].length
+		if(dataCounts > 0) {
+			scatterData.push(thisData[type]);
+			var legend_elements = '<option value="'+dataName+'" data-type="'+type+'">'+dataName.substr(1)+'% ('+dataCounts+'개)'+'</option>';
+			$('#legend_'+type).append(legend_elements);
+		}
+	}
+}
+
+function showChart () {
+	$('#loading').fadeOut('fast');
+	$('body').css('overflow','inherit');
 }
 
 function testRun() {

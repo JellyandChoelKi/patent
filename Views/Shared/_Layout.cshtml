@@ -12,21 +12,22 @@
 	<script src="/js/jquery-1.8.3.min.js" language="javascript"></script>
 	<script src="/js/common.js" language="javascript"></script>
 	<div>
-		<header class="flex between">
-			<div id="tnb" class="flex between mhide" style="background-color: #333; color:#FFF; padding:2px; font-size:0.8em;">
-				@{
-					if (Context.Session.GetString("MemberId") != null)
-					{
-						<a href="/kr/mypage/" class="pad20">My Page</a>
-						<a href="/kr/logout/" class="pad20">Log Out</a>
-					}
-					else
-					{
-						<a href="/kr/login/" class="pad20">Log in</a>
-					}
+		<div id="tnb" class="flex between mhide" style="background-color: #333; color:#FFF; padding:2px; font-size:0.8em;">
+			@{
+				if (Context.Session.GetString("MemberId") != null)
+				{
+					<a href="/kr/mypage/" class="pad20">My Page</a>
+					<a href="/kr/logout/" class="pad20">Log Out</a>
 				}
-				<a href="/en" class="pad20"><img src="/img/eng.png" style="width:25px; border-radius: 30px;" alt="English" title="English"></a>
-			</div>
+				else
+				{
+					<a href="/kr/login/" class="pad20">Log in</a>
+				}
+			}
+			<a href="/en" class="pad20"><img src="/img/eng.png" style="width:25px; border-radius: 30px;" alt="English" title="English"></a>
+		</div>
+		<header class="flex between">
+			
 			<div class="flex between">
 			<span class="pad30">
 				<a href="/kr">
@@ -42,9 +43,8 @@
 			<nav id="nav">
 				<a href="/kr/about/" class="pad20">About K2G</a>
 				<a href="/kr" class="pad20">Tech Finder</a>
-				<a href="/kr/networks/" class="pad20">Networks</a>
 				<a href="/kr/hottech/" class="pad20">Hot Tech</a>
-				
+				<a href="/kr/networks/" class="pad20">Networks</a>				
 			</nav>
 			</div>
 		</header>
@@ -52,8 +52,8 @@
 			<nav id="mnav" class="tc" style="padding-top:100px;">
 				<a href="/kr/about/" class="pad20">About K2G</a>
 				<a href="/kr" class="pad20">Tech Finder</a>
-				<a href="/kr/networks/" class="pad20">Networks</a>
 				<a href="/kr/hottech/" class="pad20">Hot Tech</a>
+				<a href="/kr/networks/" class="pad20">Networks</a>
 				@{
 					if (Context.Session.GetString("MemberId") != null)
 					{

@@ -9,13 +9,6 @@
 		patent: '#CD1F48',
 		article: '#0064FF'
 	}
-    const shapes = {
-        patent: 'circle',
-        article: 'rect',
-    }
-    var series = [];
-    var currentPage = 1;
-    var pagePosts = 30;
 
     function totalAjax() {
         console.log(new Date());
@@ -128,36 +121,51 @@
     }
 </script>
 
-<div class="rela">
-	<div id="pdfloading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000; display: none;">
-		<div class="tc">
-			<img src="/img/loading.gif" alt="loading" style="width:200px;">
-			<h4 class="mb10 wh">A PDF file is being created... <wbr>It takes 2-3 minutes depending on keywords.</h4>
-		</div>
-	</div>
+<style>
+		
+	.ball {
+		position: absolute;
+		border-radius: 100%;
+		opacity: 0.7;
+	}
 
-	<div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
-		<div class="tc">
-			<img src="/img/loading.gif" alt="loading" style="width:200px;">
-			<h4 class="mb10">Searching... It takes 2-3 minutes depending on keywords.</h4>
-		</div>
+	body {overflow: hidden;}
+	#loading {top:0;}
+
+</style>
+<div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
+	<div class="tc">
+		<h4 class="mb10">Searching... It takes 2-3 minutes depending on keywords.</h4>
 	</div>
+</div>
+<div id="pdfloading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000; display: none;">
+	<div class="tc">
+		<img src="/img/loading.gif" alt="loading" style="width:200px;">
+		<h4 class="mb10 wh">A PDF file is being created... <wbr>It takes 2-3 minutes depending on keywords.</h4>
+	</div>
+</div>
+<div class="rela">
 	<h3 class="tc">Select a Legend</h3>
-	<div>
-		<div class="flex center">
-			<select id="custom_legend" class="style" onChange="selectLegend('en')">
-				<option value="all">All</option>
-				<optgroup class="patent" label="Patent"></optgroup>
-				<optgroup class="article" label="Articles"></optgroup>
+	<div class="pad20">
+		<div class="flex center">			
+			<select id="legend_all" class="style legendSelect" style="margin:5px;" onChange="selectLegend('all')">
+				<option value="E00">All</option>
+				<option value="E90">90%</option>
+				<option value="E80">80%</option>
+				<option value="E70">70%</option>
+				<option value="E60">60%</option>
+				<option value="E50">50%</option>
+				<option value="E40">40%</option>
+				<option value="E30">30%</option>
+				<option value="E20">20%</option>
+				<option value="E10">10%</option>
 			</select>
-		</div>
-	</div>
-	<div id="color_guide" class="w400 pad30 flex between">
-		<div class="flex vcenter">
-			<span style="width:15px; height:15px; background-color:#CD1F48; border-radius: 20px;"></span><span style="margin-left:10px;">Patent</span>
-		</div>
-		<div class="flex vcenter">
-			<span style="width:15px; height:15px; background-color:#0064FF;"></span><span style="margin-left:10px;">Article</span>
+			<select id="legend_patent" class="style legendSelect" style="margin:5px;" onChange="selectLegend('patent')">
+				<option value="">Patents</option>
+			</select>
+			<select id="legend_article" class="style legendSelect" style="margin:5px;" onChange="selectLegend('article')">
+				<option value="">Articles</option>
+			</select>
 		</div>
 	</div>
 	<div id="graph_wrap" class="flex center pad10">
@@ -191,34 +199,11 @@
 	</table>
 </div>
 <script src="/js/functions.js" language="javascript"></script>
+<script src="/js/functions_scatter.js" language="javascript"></script>
 <script src="/js/chart.js" language="javascript"></script>
 <script src="/js/resize.js" language="javascript"></script>
-<script>
+<script src="/js/animation.js" language="javascript"></script>
 
-    function pushSeries(type) {
-        for (i = 0; i < legends[type].length; i++) {
-            var dataName = legends[type][i]
-            const thisData = {
-                [type]: {
-                    name: dataName,
-                    type: 'scatter',
-                    coordinateSystem: 'polar',
-                    symbol: shapes[type],
-                    data: data[type][dataName]['coordinate'],
-					color: color[type],
-                    animationDelay: function (idx) { return idx * 5; }
-                },
-            };
-            var dataCounts = data[type][dataName]['coordinate'].length
-            if (dataCounts > 0) {
-                series.push(thisData[type]);
-                var legend_elements = '<option value="' + dataName + '" data-type="' + type + '">' + dataName.substr(1) + '% (' + dataCounts + ')' + '</option>';
-                $('optgroup.' + type).append(legend_elements);
-            }
-        }
-    }
-
-</script>
 <script>
 	totalAjax();
     //searchPatent();

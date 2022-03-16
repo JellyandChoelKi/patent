@@ -9,10 +9,6 @@
         patent: '#CD1F48',
         article: '#0064FF'
     }
-    const shapes = {
-        patent: 'circle',
-        article: 'rect',
-    }    
 
     function totalAjax() {
         console.log(new Date());
@@ -46,7 +42,7 @@
             dataType: "JSON",
             beforeSend: function () {
                 console.log("Article 비포");
-                $('#loading>div').append('<p>논문 데이터를 분석 중입니다.</p>')
+                $('#loading>div').append('<p>논문데이터를 분석 중입니다.</p>')
             },
             success: function (result) {
                 console.log('Article Success');

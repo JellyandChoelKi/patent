@@ -421,7 +421,26 @@ span.paging {
 		.btn.blue:hover {
 			background-color: #00A0DC;
 		}
-/*20220210 Ãß°¡ }*/
+
+.tabBtn {
+  background: #CCC;
+  outline: none;
+  border: #CCC 1px solid;
+  border-bottom: none;
+  padding: 10px 20px 5px;
+  font-size: 1.1em;
+  margin-right: 10px;
+  cursor: pointer;
+  border-radius: 10px 10px 0 0
+}
+	.tabBtn.active {
+	  font-weight: bold;
+	}
+
+	.tabBtn.active, .tabBtn:hover {
+	  background-color: #FFF;
+	}
+
 
 @media screen and (max-width:600px) {
 	html {

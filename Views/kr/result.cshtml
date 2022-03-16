@@ -12,10 +12,7 @@
     const shapes = {
         patent: 'circle',
         article: 'rect',
-    }
-    var series = [];
-    var currentPage = 1;
-    var pagePosts = 30;
+    }    
 
     function totalAjax() {
         console.log(new Date());
@@ -159,21 +156,26 @@
 </div>
 <div class="rela">
 	<h3 class="tc">범주를 선택하세요.</h3>
-	<div>
-		<div class="flex center">
-			<select id="custom_legend" class="style" onChange="selectLegend()">
-				<option value="all">전체</option>
-				<optgroup class="patent" label="특허"></optgroup>
-				<optgroup class="article" label="논문"></optgroup>
+	<div class="pad20">
+		<div class="flex center">			
+			<select id="legend_all" class="style legendSelect" style="margin:5px;" onChange="selectLegend('all')">
+				<option value="E00">전체</option>
+				<option value="E90">90%</option>
+				<option value="E80">80%</option>
+				<option value="E70">70%</option>
+				<option value="E60">60%</option>
+				<option value="E50">50%</option>
+				<option value="E40">40%</option>
+				<option value="E30">30%</option>
+				<option value="E20">20%</option>
+				<option value="E10">10%</option>
 			</select>
-		</div>
-	</div>
-	<div id="color_guide" class="w400 pad30 flex between">
-		<div class="flex vcenter">
-			<span style="width:15px; height:15px; background-color:#CD1F48; border-radius: 20px;"></span><span style="margin-left:10px;">특허</span>
-		</div>
-		<div class="flex vcenter">
-			<span style="width:15px; height:15px; background-color:#0064FF;"></span><span style="margin-left:10px;">논문</span>
+			<select id="legend_patent" class="style legendSelect" style="margin:5px;" onChange="selectLegend('patent')">
+				<option value="">특허</option>
+			</select>
+			<select id="legend_article" class="style legendSelect" style="margin:5px;" onChange="selectLegend('article')">
+				<option value="">논문</option>
+			</select>
 		</div>
 	</div>
 	<div id="graph_wrap" class="flex center pad10">
@@ -208,34 +210,9 @@
 	</table>
 </div>
 <script src="/js/functions.js" language="javascript"></script>
+<script src="/js/functions_scatter.js" language="javascript"></script>
 <script src="/js/chart.js" language="javascript"></script>
 <script src="/js/resize.js" language="javascript"></script>
-<script>
-
-    function pushSeries(type) {
-        for (i = 0; i < legends[type].length; i++) {
-            var dataName = legends[type][i]
-            const thisData = {
-                [type]: {
-                    name: dataName,
-                    type: 'scatter',
-                    coordinateSystem: 'polar',
-                    symbol: shapes[type],
-                    data: data[type][dataName]['coordinate'],
-                    color: color[type],
-                    animationDelay: function (idx) { return idx * 5; }
-                },
-            };
-            var dataCounts = data[type][dataName]['coordinate'].length
-            if (dataCounts > 0) {
-                series.push(thisData[type]);
-                var legend_elements = '<option value="' + dataName + '" data-type="' + type + '">' + dataName.substr(1) + '% (' + dataCounts + '개)' + '</option>';
-                $('optgroup.' + type).append(legend_elements);
-            }
-        }
-    }
-
-</script>
 <script src="/js/animation.js" language="javascript"></script>
 
 

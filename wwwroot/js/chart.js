@@ -63,5 +63,5 @@ radiusAxis: {
 		fillerColor:"#CCC",
 	}
   ],
-  series: series,
+  series: scatterData,
 };

@@ -526,7 +526,7 @@ namespace K2GGTT.Controllers
 			return View();
 		}
 		
-		public IActionResult HotTech()
+		public IActionResult HotTech(string Gubun)
 		{
 			var list = from n in _context.HotTech.Where(x => x.Title != "ExampleTarget")
 					   select new HotTech
@@ -534,11 +534,20 @@ namespace K2GGTT.Controllers
 						   Id = n.Id,
 						   Title = n.Title,
 						   Content = n.Content,
+						   Gubun = n.Gubun,
 						   ApplicantImgSrc = n.ApplicantImgSrc,
 						   ApplicantName = n.ApplicantName,
 						   ApplicantMajor = n.ApplicantMajor
 					   };
+
+			ViewBag.Gubun = Gubun;
 			ViewBag.List = list.ToList().OrderByDescending(x => x.Id);
+
+			if (!string.IsNullOrEmpty(Gubun))
+			{
+				ViewBag.List = list.ToList().Where(x => x.Gubun == Gubun).OrderByDescending(x => x.Id);
+			}
+
 			return View();
 		}
 

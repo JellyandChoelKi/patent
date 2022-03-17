@@ -4,11 +4,11 @@
 @using K2GGTT.Controllers
 <div class="pad30 w1400" style="max-width: 1500px;">
 	<div style="border-bottom:#CCC 1px solid; margin:30px auto;">
-		<button class="tabBtn active">All</button>
-		<button class="tabBtn">Healthcare</button>
-		<button class="tabBtn">BIO</button>
-		<button class="tabBtn">IT</button>
-		<button class="tabBtn">ET</button>
+		<button class="tabBtn@(string.IsNullOrEmpty(ViewBag.Gubun) ? " active" : "")" onclick="GubunLink('')">All</button>
+		<button class="tabBtn@(ViewBag.Gubun == "HealthCare" ? " active" : "")" onclick="GubunLink('HealthCare')">Healthcare</button>
+		<button class="tabBtn@(ViewBag.Gubun == "BIO" ? " active" : "")" onclick="GubunLink('BIO')">BIO</button>
+		<button class="tabBtn@(ViewBag.Gubun == "IT" ? " active" : "")" onclick="GubunLink('IT')">IT</button>
+		<button class="tabBtn@(ViewBag.Gubun == "ET" ? " active" : "")" onclick="GubunLink('ET')">ET</button>
 	</div>
 	<div>
 		@foreach (var m in ViewBag.List)
@@ -34,3 +34,10 @@
 		}
 	</div>
 </div>
+<script>
+	function GubunLink(gubun) {
+		let link = '';
+		if (gubun != '') link = "?Gubun=" + gubun;
+		location.href = "./hottech" + link;
+	}
+</script>

@@ -150,6 +150,46 @@ namespace K2GGTT.Controllers
 			return View();
 		}
 
+		public IActionResult HotTech(string Gubun)
+		{
+			var list = from n in _context.HotTech.Where(x => x.Title != "ExampleTarget")
+					   select new HotTech
+					   {
+						   Id = n.Id,
+						   Title = n.Title,
+						   Content = n.Content,
+						   Gubun = n.Gubun,
+						   ApplicantImgSrc = n.ApplicantImgSrc,
+						   ApplicantName = n.ApplicantName,
+						   ApplicantMajor = n.ApplicantMajor
+					   };
+
+			ViewBag.Gubun = Gubun;
+			ViewBag.List = list.ToList().OrderByDescending(x => x.Id);
+
+			if (!string.IsNullOrEmpty(Gubun))
+			{
+				ViewBag.List = list.ToList().Where(x => x.Gubun == Gubun).OrderByDescending(x => x.Id);
+			}
+
+			return View();
+		}
+
+		public IActionResult HotTechDetail(int Id)
+		{
+			var p = _context.HotTech.Where(x => x.Id == Id).FirstOrDefault();
+			HotTechViewModel model = new HotTechViewModel()
+			{
+				Id = p.Id,
+				Title = p.Title,
+				Content = p.Content,
+				ApplicantImgSrc = p.ApplicantImgSrc,
+				ApplicantName = p.ApplicantName,
+				ApplicantMajor = p.ApplicantMajor
+			};
+			return View(model);
+		}
+
 		[HttpPost]
 		public IActionResult MemberIdCheck(string memberid)
 		{

@@ -76,7 +76,7 @@ function loadAll() {
 	// 특허 TOC
 	let patentCount = 0;
 	let patentData = data["patent"];
-	$("#load_all > #patent_all").html('<tr><th class="no">순번</th><th class="title">발명제목</th><th class="similarity">유사도</th><th class="author">출원인</th><th class="year">출원일</th><th class="report"></th></tr>');
+	$("#load_all > #patent_all").html('<tr><th class="no">순번</th><th class="title">발명제목</th><th class="similarity">유사도</th><th class="year">출원일</th><th class="report"></th></tr>');
 	for (i = 0; i < legends["patent"].length; i++) { // 특허 카테고리 수 만큼
 		let legendNow = legends["patent"][i];
 		if (patentData[legendNow]["inventionname"].length > 0) {
@@ -91,7 +91,7 @@ function loadAll() {
 	// 논문 TOC
 	let articleCount = 0;
 	let articleData = data["article"];
-	$("#load_all > #article_all").html('<tr><th class="no">순번</th><th class="title">제목</th><th class="similarity">유사도</th><th class="author">저자</th><th class="year">연도</th><th class="report"></th></tr>');
+	$("#load_all > #article_all").html('<tr><th class="no">순번</th><th class="title">제목</th><th class="similarity">유사도</th><th class="year">연도</th><th class="report"></th></tr>');
 	for (i = 0; i < legends["article"].length; i++) { // 특허 카테고리 수 만큼
 		let legendNow = legends["article"][i];
 		if (articleData[legendNow]["title"].length > 0) {

@@ -26,7 +26,7 @@
 						<div>
 							<textarea id="summernote" required asp-for="@(Model.Content)"></textarea>
 						</div>
-						<h4>&#183; 출원자사진</h4>
+						<h4>&#183; PM 사진</h4>
 						@{
 							if (ViewBag.Id > 0)
 							{
@@ -35,10 +35,10 @@
 						}
 						<input class="form-control" type="file" asp-for="@(Model.ApplicantImg)" />
 						<br />
-						<h4>&#183; 출원자</h4>
+						<h4>&#183; PM 이름</h4>
 						<input class="form-control" required type="text" asp-for="@(Model.ApplicantName)" />
 						<br />
-						<h4>&#183; 경력</h4>
+						<h4>&#183; PM 이메일</h4>
 						<input class="form-control" required type="text" asp-for="@(Model.ApplicantMajor)" />
 						<div style="margin-top: 20px;">
 							@{

@@ -1,146 +1,6 @@
 ﻿<script src="/js/data.js" language="javascript"></script>
-<script>
-
-    const legends = {
-        patent: ['A90', 'A80', 'A70', 'A60', 'A50', 'A40', 'A30', 'A20', 'A10', 'A00'],
-        article: ['B90', 'B80', 'B70', 'B60', 'B50', 'B40', 'B30', 'B20', 'B10', 'B00'],
-    };
-    const color = {
-        patent: '#CD1F48',
-        article: '#0064FF'
-    }
-
-    function totalAjax() {
-        console.log(new Date());
-        $.when(
-            $.ajax({ // 특허 API
-            //url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
-            url: 'https://k2gdoc2vecthesis.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
-            type: "GET",
-            dataType: "JSON",
-            beforeSend: function () {
-                console.log("patent 비포");
-                $('#loading>div').append('<p>특허데이터를 분석 중입니다.</p>');
-            },
-            success: function (result) {
-                console.log('Patent Success');
-                $('#loading>div').append('<p>특허데이터 분석이 완료되었습니다.</p>');
-                data["patent"] = result;
-                pushSeries("patent");
-            },
-            error: function () {
-                $('#loading>div').append('<p style="color:#C00;">특허데이터 획득에 실패하였습니다.</p>');
-            },
-            complete: function () {
-                console.log('Patent End');
-                //searchArticles();
-            }
-        }),
-            $.ajax({ // 논문 API
-            url: 'https://k2gdoc2vec.azurewebsites.net/thesisData?searchWord=' + '@ViewBag.ArticleKeyword',
-            type: "GET",
-            dataType: "JSON",
-            beforeSend: function () {
-                console.log("Article 비포");
-                $('#loading>div').append('<p>논문데이터를 분석 중입니다.</p>')
-            },
-            success: function (result) {
-                console.log('Article Success');
-                $('#loading>div').append('<p>논문데이터 분석이 완료되었습니다.</p>')
-                data["article"] = result;
-                pushSeries("article");
-            },
-            error: function () {
-                $('#loading>div').append('<p style="color:#C00;">논문데이터 분석이 실패하였습니다.</p>');
-            },
-            complete: function () {
-                console.log('Article Ended');
-                //initiateChart();
-            }
-        })
-        ).done(function () {
-            console.log(new Date());
-            initiateChart();
-        })
-    }
-
-    function searchPatent() {
-        console.log(new Date());
-        $.ajax({ // 특허 API
-            //url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
-            url: 'https://k2gdoc2vecthesis.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
-            type: "GET",
-            dataType: "JSON",
-            beforeSend: function () {
-                console.log("patent 비포");
-                $('#loading>div').append('<p>특허데이터를 분석 중입니다.</p>');
-            },
-            success: function (result) {
-                console.log('Patent Success');
-                $('#loading>div').append('<p>특허데이터 분석이 완료되었습니다.</p>');
-                data["patent"] = result;
-                pushSeries("patent");
-            },
-            error: function () {
-                $('#loading>div').append('<p style="color:#C00;">특허데이터 획득에 실패하였습니다.</p>');
-            },
-            complete: function () {
-                console.log('Patent End');
-                searchArticles();
-            }
-        });
-
-
-    }
-
-    function searchArticles() {
-        $.ajax({ // 논문 API
-            url: 'https://k2gdoc2vec.azurewebsites.net/thesisData?searchWord=' + '@ViewBag.ArticleKeyword',
-            type: "GET",
-            dataType: "JSON",
-            beforeSend: function () {
-                console.log("Article 비포");
-                $('#loading>div').append('<p>논문 데이터를 분석 중입니다.</p>')
-            },
-            success: function (result) {
-                console.log('Article Success');
-                $('#loading>div').append('<p>논문데이터 분석이 완료되었습니다.</p>')
-                data["article"] = result;
-                pushSeries("article");
-            },
-            error: function () {
-                $('#loading>div').append('<p style="color:#C00;">논문데이터 분석이 실패하였습니다.</p>');
-            },
-            complete: function () {
-                console.log('Article Ended');
-                console.log(new Date());
-                initiateChart();
-            }
-        });
-    }
-
-    function initiateChart() {
-        console.log("initchart");
-        showChart();
-        myChart.setOption(option);
-        legendAll();
-    }
-</script>
-
-<style>
-		
-	.ball {
-		position: absolute;
-		border-radius: 100%;
-		opacity: 0.7;
-	}
-
-	body {overflow: hidden;}
-	#loading {top:0;}
-
-</style>
 <div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
-	<div class="tc">
+	<div id="status" class="tc">
 		<h4 class="mb10 wh">검색 중입니다. <wbr>검색어에 따라 2~3분 정도 소요됩니다.</h4>		
 	</div>
 </div>
@@ -151,68 +11,73 @@
 	</div>
 </div>
 <div class="rela">
-	<h3 class="tc">범주를 선택하세요.</h3>
-	<div class="pad20">
-		<div class="flex center">			
-			<select id="legend_all" class="style legendSelect" style="margin:5px;" onChange="selectLegend('all')">
-				<option value="E00">전체</option>
-				<option value="E90">90%</option>
-				<option value="E80">80%</option>
-				<option value="E70">70%</option>
-				<option value="E60">60%</option>
-				<option value="E50">50%</option>
-				<option value="E40">40%</option>
-				<option value="E30">30%</option>
-				<option value="E20">20%</option>
-				<option value="E10">10%</option>
-			</select>
-			<select id="legend_patent" class="style legendSelect" style="margin:5px;" onChange="selectLegend('patent')">
-				<option value="">특허</option>
-			</select>
-			<select id="legend_article" class="style legendSelect" style="margin:5px;" onChange="selectLegend('article')">
-				<option value="">논문</option>
-			</select>
+	<div class="w100">
+		<h3 class="tc">범주를 선택하세요.</h3>
+		<div class="pad20">
+			<div class="flex center">			
+				<select id="legend_all" class="style legendSelect" style="margin:5px;" onChange="selectLegend('all')">
+					<option value="E00">전체</option>
+					<option id="E90" value="E90" class="none">90%</option>
+					<option id="E80" value="E80" class="none">80%</option>
+					<option id="E70" value="E70" class="none">70%</option>
+					<option id="E60" value="E60" class="none">60%</option>
+					<option id="E50" value="E50" class="none">50%</option>
+					<option id="E40" value="E40" class="none">40%</option>
+					<option id="E30" value="E30" class="none">30%</option>
+					<option id="E20" value="E20" class="none">20%</option>
+					<option id="E10" value="E10" class="none">10%</option>
+				</select>
+				<select id="legend_patent" class="style legendSelect" style="margin:5px;" onChange="selectLegend('patent')">
+					<option value="P00">특허</option>						
+				</select>
+				<select id="legend_article" class="style legendSelect" style="margin:5px;" onChange="selectLegend('article')">
+					<option value="A00">논문</option>						
+				</select>
+			</div>
+		</div>
+		<div id="graph_wrap" class="flex center pad10">	
+			<div id="graph">		
+			</div>
+		</div>	
+	</div>
+	<div id="tableWrap" class="pad20 w1400">
+		<div id="patent_wrap" class="post_wrap">
+			<div id="patentTitle" class="flex between">
+				<h3 class="pad20">특허</h3>
+				<div class="btn_wrap"><button class="pad10" onClick="popupReportSelected()">목록 다운로드 (Excel)</button><button class="pad10" onClick="downAll()">리포트 다운로드 (PDF)</button></div>
+			</div>
+			<table id="table_patent" class="w100 tc toc">
+				<thead><tr><th class="no"></th><th class="no">번호</th><th class="title">제목</th><th>유사도</th><th class="year">출원일</th><th class="report"></th></tr></thead>
+				<tbody></tbody>
+			</table>
+			<div class="flex center">
+				<div id="page_patent" class="pagination flex between pad20">
+				</div>
+			</div>
+		</div>
+		<div id="article_wrap" class="post_wrap">
+			<div id="articleTitle" class="flex between">
+				<h3 class="pad20">논문</h3>
+				<div class="btn_wrap"><button class="pad10" onClick="popupReportSelected()">목록 다운로드 (Excel)</button><button class="pad10" onClick="downAll()">리포트 다운로드 (PDF)</button></div>
+			</div>
+			<table id="table_article" class="w100 tc toc">	
+				<thead><tr><th class="no"></th><th class="no">번호</th><th class="title">제목</th><th>유사도</th><th class="year">발행연도</th><th class="report"></th></tr></thead>
+				<tbody></tbody>
+			</table>
+			<div class="flex center">
+				<div id="page_article" class="pagination flex between pad20">
+				</div>
+			</div>
 		</div>
 	</div>
-	<div id="graph_wrap" class="flex center pad10">
-		<div id="graph">
-		</div>
-	</div>
-</div>
-<div id="table_wrap" class="pad20 w1200">
-    <div class="flex between">
-        <h3 id="table_title" class="pad20"></h3>
-        <div id="btn_wrap"></div>
-    </div>
-    <table class="w100 tc">
-    </table>
-
-    <div class="flex center">
-        <div id="pagination" class="pagination flex between pad20">
-        </div>
-    </div>
-</div>
-<div id="load_all" class="pad20 w1400">
-	<div class="flex between" id="patent_all_title" style="display: none;">
-		<h3 class="pad20">특허</h3>
-	</div>
-	<table id="patent_all" class="w100 tc">
-	</table>
-	<div class="mb50"></div>
-	<div class="flex between" id="article_all_title" style="display: none;">
-		<h3 class="pad20">논문</h3>
-	</div>
-	<table id="article_all" class="w100 tc">
-	</table>
 </div>
 <script src="/js/functions.js" language="javascript"></script>
 <script src="/js/functions_scatter.js" language="javascript"></script>
+<script src="/js/functions_contents.js" language="javascript"></script>
 <script src="/js/chart.js" language="javascript"></script>
-<script src="/js/resize.js" language="javascript"></script>
 <script src="/js/animation.js" language="javascript"></script>
-
+<script src="/js/ajax_result.js" language="javascript"></script>
 
 <script>
     totalAjax();
-    //searchPatent();
 </script>

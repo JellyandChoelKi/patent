@@ -1,67 +1,43 @@
-var option = {
-  title: {
-	text: ''
-  },
-  legend: { 
-	  show:false,
-  },
-polar: {
-	center: ['50%', '50%'],
-},
-angleAxis: {
-	min: 0,
-	max: 360,
-	interval: 18,
-	boundaryGap: false,
-	splitLine: {
-	  show: true
-	},
-	axisLabel : {
-	  show : false
-	},
-	axisLine: {
-	  show: false
-	},
-	axisTick: {
-		show: false
-	},
-},
-tooltip: {
-	  formatter: function (params) {
-		  return  'Similarity:' + ((params.value[0] * 100).toFixed(1))+'%';
-	  }
-},
-radiusAxis: {
-		min: 0,
-		max: 1,
-		interval : 0.1,
-	axisLine: {
-		show: true
-	},
-	axisLabel: 
-	{
-		formatter: function (value, index) {
-			return (value * 100).toFixed(1);
-		}
-	},
-		inverse: true,
-	splitArea : 
-	{
-		show : true,
-	}
-  },
+let windowWidth = $(window).width();
+let chartWidth;
+let chartHeight;
 
-  dataZoom: [
-	{
-		id:'dataZoomX',
-		type:'slider',
-		radiusAxisIndex: [0],
-		handleSize: '100%',
-		height: 30,
-		borderColor: "#999",
-		backgroundColor:"#EEE",
-		fillerColor:"#CCC",
+if(windowWidth > 900) {
+	chartWidth = 800;
+	chartHeight = 800;
+} else {
+	chartWidth = windowWidth * 0.8;
+	chartHeight = chartWidth * 1.1;
+}
+
+var myChart = echarts.init(document.getElementById('graph'), null, {
+	width: chartWidth,
+	height: chartHeight,
+});
+
+function initiateChart (chartType) {
+	showChart();
+	loadToc('all', 'E00');
+	if(chartType == 'scatter') {
+		option = scatterOption;
+	} else if (chartType == 'bar') {
+		option = barOption;
+		loadToc("patent", "P00");
+	} else if (chartType == 'net') {
+		option = netOption;
+		loadNetToc("patent");
+		loadNetToc("article");
 	}
-  ],
-  series: scatterData,
-};
+	myChart.setOption(option, true);
+	myChart.on('click',function(params) {
+		let seriesType = params.seriesType;
+		if(seriesType == "graph") {
+			let caPicked = params.data["category"];
+			let noPicked = params.data["name"];
+			if(caPicked != "TechInput") {popupReport(caPicked,noPicked);}
+			
+		} else if (seriesType == "bar") {
+			loadDepthToc(params.name);
+		}
+	});
+}

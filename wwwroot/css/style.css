@@ -282,17 +282,17 @@ select option {
 			margin-right: 5px;
 		}
 
-#table_wrap table, #load_all table {
+table table, #load_all table {
 	border-spacing: 0;
 	vertical-align: middle;
 }
 /*20220210 전체목록 테이블 추가 */
-#table_wrap td, #load_all td {
+table td, #load_all td {
 	padding: 5px 7px;
 	border-bottom: #CCC 1px solid;
 }
 
-#table_wrap th, #load_all th {
+table th, #load_all th {
 	font-size: 0.9em;
 	background-color: #333;
 	color: #FFF;
@@ -301,11 +301,11 @@ select option {
 	white-space: nowrap;
 }
 /*20220210 글자크기 수정 */
-#table_wrap a.href, #load_all a.href {
+table a.href, #load_all a.href {
 	text-decoration: underline;
 }
 
-#table_wrap a.report, #load_all a.report {
+table a.report, #load_all a.report {
 	padding: 5px;
 	background-color: #EEE;
 	border: #CCC 1px solid;
@@ -314,43 +314,42 @@ select option {
 	border-radius: 5px;
 }
 
-#table_wrap .no, #load_all .no {
+table .no, #load_all .no {
 	width: 20px;
 }
 
-#table_wrap .author, #load_all .author {
+table .author, #load_all .author {
 	width: 250px;
 }
 
-#table_wrap .similarity, #load_all .similarity {
+table .similarity, #load_all .similarity {
 	width: 120px;
 }
 
-#table_wrap .report, #load_all .report {
+table .report, #load_all .report {
 	width: 60px;
 }
 
-#table_wrap .year, #load_all .year {
+table .year, #load_all .year {
 	width: 50px;
 }
 
-#table_wrap .href, #load_all .href {
+table .href, #load_all .href {
 	width: 50px;
 }
 
-#table_wrap .link, #load_all .link {
+table .link, #load_all .link {
 	filter: grayscale(1.0);
 }
 
-	#table_wrap .link:hover, #load_all .link:hover {
+	table .link:hover, #load_all .link:hover {
 		filter: grayscale(0);
 	}
 
-#btn_wrap {
+.btn_wrap {
 	display: flex;
 }
-	/*20220210 추가 */
-	#btn_wrap button, .download {
+	.btn_wrap button, .download {
 		margin: 5px;
 		background-color: #111;
 		outline: none;
@@ -360,7 +359,7 @@ select option {
 		font-size: 0.8em;
 	}
 		/*20220210 클래스 추가, 글자크기 수정 */
-		#btn_wrap button:hover, .download:hover {
+		.btn_wrap button:hover, .download:hover {
 			color: #000;
 			background-color: transparent;
 		}
@@ -482,30 +481,16 @@ span.paging {
 		display: none;
 	}
 
-	#table_wrap table {
+	table {
 		font-size: 0.8em;
 		text-align: left;
 	}
 
-		#table_wrap table, #table_wrap table > tbody {
+		table, table > tbody {
 			display: block;
 		}
-
-			#table_wrap table > tbody > tr {
-				display: flex;
-				flex-direction: column;
-				border-bottom: #CCC 1px solid;
-			}
-
-				#table_wrap table > tbody > tr.none {
-					display: none;
-				}
-
-				#table_wrap table > tbody > tr > th {
-					display: none;
-				}
-
-				#table_wrap table > tbody > tr > td {
+	
+				table > tbody > tr > td {
 					display: block;
 					border: none;
 				}

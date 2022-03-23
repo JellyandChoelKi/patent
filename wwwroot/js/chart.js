@@ -2,11 +2,10 @@ let windowWidth = $(window).width();
 let chartWidth;
 let chartHeight;
 
+chartWidth = windowWidth * 0.8;
 if(windowWidth > 900) {
-	chartWidth = 800;
 	chartHeight = 800;
 } else {
-	chartWidth = windowWidth * 0.8;
 	chartHeight = chartWidth * 1.1;
 }
 

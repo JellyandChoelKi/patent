@@ -48,7 +48,7 @@
 				<div class="btn_wrap"><button class="pad10" onClick="popupReportSelected()">목록 다운로드 (Excel)</button><button class="pad10" onClick="downAll()">리포트 다운로드 (PDF)</button></div>
 			</div>
 			<table id="table_patent" class="w100 tc toc">
-				<thead><tr><th class="no"></th><th class="no">번호</th><th class="title">제목</th><th>유사도</th><th class="year">출원일</th><th class="report"></th></tr></thead>
+				<thead><tr><th class="no"><input type="checkbox" name="checkboxAll" value="selectall" onclick="selectAll(this)" /></th><th class="no">번호</th><th class="title">제목</th><th>유사도</th><th class="year">출원일</th><th class="report"></th></tr></thead>
 				<tbody></tbody>
 			</table>
 			<div class="flex center">
@@ -62,7 +62,7 @@
 				<div class="btn_wrap"><button class="pad10" onClick="popupReportSelected()">목록 다운로드 (Excel)</button><button class="pad10" onClick="downAll()">리포트 다운로드 (PDF)</button></div>
 			</div>
 			<table id="table_article" class="w100 tc toc">	
-				<thead><tr><th class="no"></th><th class="no">번호</th><th class="title">제목</th><th>유사도</th><th class="year">발행연도</th><th class="report"></th></tr></thead>
+				<thead><tr><th class="no"><input type="checkbox" name="checkboxAll" value="selectall" onclick="selectAll(this)" /></th><th class="no">번호</th><th class="title">제목</th><th>유사도</th><th class="year">발행연도</th><th class="report"></th></tr></thead>
 				<tbody></tbody>
 			</table>
 			<div class="flex center">

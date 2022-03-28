@@ -1,5 +1,59 @@
 ﻿<script src="/js/data.js" language="javascript"></script>
-<script src="/js/ajax_result.js" language="javascript"></script>
+<script>
+	function totalAjax(target) {
+		const patentUrl = 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord='+'@ViewBag.PatentKeyword';
+		const articleUrl = 'https://K2GDoc2VecThesis.azurewebsites.net/thesisData?searchWord='+'@ViewBag.ArticleKeyword';
+		
+		$.when(
+			$.ajax({ // 특허 API
+			url: patentUrl,
+			type: "GET",
+			dataType: "JSON",
+			beforeSend: function () {
+				console.log("Patent Start");
+				$('#loading>div#status').append('<p>Searching for Patent data...</p>');
+			},
+			success: function (result) {
+				console.log('Patent Success');
+				$('#loading>div#status').append('<p>Searching Patent data has been completed.</p>');
+				data["patent"] = result;
+				pushScatterSeries("patent");
+			},
+			error: function () {
+				$('#loading>div#status').append('<p style="color:#C00;">Failed on Searching Patent data.</p>');
+			},
+			complete: function () {
+				console.log('Patent End');
+				//searchArticles();
+			}
+		}),
+			$.ajax({ // 논문 API
+			url: articleUrl,
+			type: "GET",
+			dataType: "JSON",
+			beforeSend: function () {
+				console.log("Article Start");
+				$('#loading>div#status').append('<p>Searching for Article data...</p>')
+			},
+			success: function (result) {
+				console.log('Article Success');
+				$('#loading>div#status').append('<p>Searching Article data has been completed.</p>')
+				data["article"] = result;
+				pushScatterSeries("article");
+			},
+			error: function () {
+				$('#loading>div#status').append('<p style="color:#C00;">Failed on Searching Article data.</p>');
+			},
+			complete: function () {
+				console.log('Article Ended');
+			}
+		}),			
+
+		).done(function () {
+			initiateChart("scatter");
+		});
+	}	
+</script>
 <div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
 	<div id="status" class="tc">
 		<h4 class="mb10">Searching... It takes 2-3 minutes depending on keywords.</h4>
@@ -78,5 +132,5 @@
 <script src="/js/animation.js" language="javascript"></script>
 
 <script>
-	totalAjax();
+	totalAjax(target);
 </script>

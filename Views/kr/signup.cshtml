@@ -207,47 +207,57 @@
 	<form name="regiform" id="regiform" method="post" action="/Kr/SignUpProc">
 		<input type="hidden" name="id_check_yn" value="N">
 		<input type="hidden" name="email_check_yn" value="N">
-		<div class="flex pad10">
+		<div class="pad10">
+			<label class="small" for="input_id">아이디</label><br>
 			<input id="memberid" class="style required" placeholder="아이디" asp-for="@(Model.MemberId)" autocomplete="off">
 			<input type="button" id="id_check_btn" value="중복확인" onclick="memberid_check();">
 			<input type="button" id="id_recheck_btn" value="다시입력" style="display: none;" onclick="memberid_recheck();">
 		</div>
 		<div class="pad10">
+			<label class="small" for="input_password">비밀번호 입력</label><br>
 			<input id="input_password" type="password" asp-for="@(Model.Password)" class="style required" placeholder="비밀번호 입력 (문자+숫자+특수문자 조합 8 ~ 20자)" maxlength="20" autocomplete="off"><br>
+			<label class="small" for="input_password_re">비밀번호 재입력</label><br>
 			<input id="input_password_re" type="password" class="style required" placeholder="비밀번호 재입력" maxlength="20" autocomplete="off">
 		</div>
 		<div class="flex pad10 vcenter">
 			<input type="radio" asp-for="@(Model.Gubun)" id="gubun1" value="1" checked="checked"><label for="gubun1">개인</label>
 			<input type="radio" asp-for="@(Model.Gubun)" id="gubun2" value="2"><label for="gubun2">기업</label>
 		</div>
-		<div class="flex pad10">
+		<div class="pad10">
+			<label class="small" for="input_name">고객명 (기업명)</label><br>
 			<input id="input_name" class="style required" asp-for="@(Model.Name)" placeholder="고객명(기업명)" autocomplete="off">
 		</div>
 		<div id="enterprise_input_area" style="display: none;">
-			<div class="flex pad10">
-				<input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="사업자등록번호" autocomplete="off">
+			<div class="pad10">
+				<label class="small" for="input_bizno">사업자 등록번호</label><br>
+				<input id="input_bizno" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="사업자등록번호" autocomplete="off">
 			</div>
-			<div class="flex pad10">
-				<input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="대표자명" autocomplete="off">
+			<div class="pad10">
+			<label class="small" for="input_ceo">대표자명</label><br>
+				<input id="input_ceo" class="style required" asp-for="@(Model.Representative)" placeholder="대표자명" autocomplete="off">
 			</div>
-			<div class="flex pad10">
-				<input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="세금계산서 담당자명" autocomplete="off">
+			<div class="pad10">
+				<label class="small" for="input_tax">세금계산서 담당자</label><br>
+				<input id="input_tax" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="세금계산서 담당자명" autocomplete="off">
 			</div>
 		</div>
-		<div class="flex pad10">
-			<input id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="연락처(숫자만)" autocomplete="off">
+		<div class="pad10">
+			<label class="small" for="input_contact">전화번호 (숫자만)</label><br>
+			<input id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="전화번호(숫자만)" autocomplete="off">
 		</div>
-		<div class="flex pad10">
-			<input id="input_contact" class="style required" asp-for="@(Model.Zipcode)" placeholder="우편번호" readonly autocomplete="off">
+		<div class="pad10">
+			<label class="small" for="postcode">주소</label><br>
+			<input id="input_post" class="style required" asp-for="@(Model.Zipcode)" placeholder="우편번호" readonly autocomplete="off">
 			<input type="button" class="style" id="postcode" value="주소찾기" />
 		</div>
-		<div class="flex pad10">
-			<input id="input_contact" class="style required" asp-for="@(Model.Addr1)" placeholder="주소입력" autocomplete="off">
+		<div class="pad10">
+			<input id="input_addr1" class="style w100 required" asp-for="@(Model.Addr1)" placeholder="주소입력" autocomplete="off">
 		</div>
-		<div class="flex pad10">
-			<input id="input_contact" class="style required" asp-for="@(Model.Addr2)" placeholder="주소입력(상세)" autocomplete="off">
+		<div class="pad10">
+			<input id="input_addr2" class="style w100 required" asp-for="@(Model.Addr2)" placeholder="상세주소" autocomplete="off">
 		</div>
-		<div class="flex pad10">
+		<div class="pad10">
+			<label class="small" for="input_email">이메일</label><br>
 			<input id="input_email" class="style required" asp-for="@(Model.Email)" placeholder="이메일" autocomplete="off">
 			<input type="button" class="style" id="email_certification" value="이메일 인증" />
 		</div>

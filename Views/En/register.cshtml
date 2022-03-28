@@ -21,8 +21,8 @@
 </div>
 <script>
     function checkBox() {
-        var allCheck = $('#agreeAll').attr('checked');
-        if (allCheck == 'checked') {
+        var allCheck = $('#agreeAll').prop('checked');
+        if (allCheck == true) {
             $('#agreeTerms').attr('checked', 'checked');
             $('#agreePolicy').attr('checked', 'checked');
         }

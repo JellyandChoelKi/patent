@@ -1,40 +1,27 @@
-// Some random colors
-const ballColors = ["#CD1F48", "#0064FF"];
-const numBalls = 50;
-const balls = [];
+var canvas = document.getElementById('mycanvas');
+var ctx = canvas.getContext('2d');
 
-for (let i = 0; i < numBalls; i++) {
-  let ball = document.createElement("div");
-  ball.classList.add("ball");
-  ball.style.background = ballColors[Math.floor(Math.random() * ballColors.length)];
-  ball.style.left = `${Math.floor(Math.random() * 100)}vw`;
-  ball.style.top = `${Math.floor(Math.random() * 100)}vh`;
-  ball.style.transform = `scale(${Math.random()})`;
-  ball.style.width = `${Math.random()}em`;
-  ball.style.height = ball.style.width;
+var p = { x: 25, y: 25 };
+var velo = 3,
+	corner = 50,
+	rad = 10;
+var ball = { x: p.x, y: p.y };
+var moveX = Math.cos(Math.PI / 180 * corner) * velo;
+var moveY = Math.sin(Math.PI / 180 * corner) * velo;
 
-  balls.push(ball);
-  $('#loading').append(ball);
+function DrawMe() {
+	ctx.clearRect(0, 0, 500, 400);
+
+	if (ball.x > canvas.width - rad || ball.x < rad) moveX = -moveX;
+	if (ball.y > canvas.height - rad || ball.y < rad) moveY = -moveY;
+
+	ball.x += moveX;
+	ball.y += moveY;
+
+	ctx.beginPath();
+	ctx.fillStyle = '#CD1F48';
+	ctx.arc(ball.x, ball.y, rad, 0, Math.PI * 2, false);
+	ctx.fill();
+	ctx.closePath();
 }
-
-// Keyframes
-balls.forEach((el, i, ra) => {
-  let to = {
-	x: Math.random() * (i % 2 === 0 ? -11 : 11),
-	y: Math.random() * 12
-  };
-
-  let anim = el.animate(
-	[
-	  { transform: "translate(0, 0)" },
-	  { transform: `translate(${to.x}rem, ${to.y}rem)` }
-	],
-	{
-	  duration: (Math.random() + 1) * 2000, // random duration
-	  direction: "alternate",
-	  fill: "both",
-	  iterations: Infinity,
-	  easing: "ease-in-out"
-	}
-  );
-});
+setInterval(DrawMe, 10);

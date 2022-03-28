@@ -74,7 +74,7 @@ function pushToc (dataType, legendRange, lang) {
 					similarity : (thisSimilarity * 100).toFixed(1),
 				}
 				rowNo++;
-				addRow += '<tr id="row'+rowNo+'" class="rows_'+dataType+'"><td class=""><input onChange="countCheck(' + i + ', \'' + lang + '\')" type="checkbox" name="checkbox" id="chk' + (i + 1) + '" data-id="' + thisRow["no"] + '"></td><td class="no">'+rowNo+'</td><td>'+thisRow['title']+'</td><td>'+thisRow['similarity']+'</td><td>'+thisRow['year']+'</td><td><a onClick=""><img src="/img/seo.png" style="width:30px;"></a></td></tr>';				
+				addRow += '<tr id="row'+rowNo+'" class="rows_'+dataType+'"><td class=""><input onChange="countCheck(' + i + ', \'' + lang + '\')" type="checkbox" name="checkbox" id="chk' + (i + 1) + '" data-id="' + thisRow["no"] + '"></td><td class="no">'+rowNo+'</td><td style="text-align:left;">'+thisRow['title']+'</td><td>'+thisRow['similarity']+'</td><td>'+thisRow['year']+'</td><td><a onClick=""><img src="/img/seo.png" style="width:30px;"></a></td></tr>';				
 				$('#table_'+dataType+'>tbody').html(addRow);					
 			}
 		} else {		
@@ -86,7 +86,7 @@ function pushToc (dataType, legendRange, lang) {
 					similarity : (thisSimilarity * 100).toFixed(1),
 				}
 				rowNo++;
-				addRow += '<tr id="row'+rowNo+'" class="rows_'+dataType+'"><td class=""><input onChange="countCheck(' + i + ', \'' + lang + '\')" type="checkbox" name="checkbox" id="chk' + (i + 1) + '" data-id="' + thisRow["no"] + '"></td><td class="no">'+rowNo+'</td><td>'+thisRow['title']+'</td><td>'+thisRow['similarity']+'</td><td>'+thisRow['year']+'</td><td><a onClick=""><img src="/img/seo.png"></a></td></tr>';			
+				addRow += '<tr id="row'+rowNo+'" class="rows_'+dataType+'"><td class=""><input onChange="countCheck(' + i + ', \'' + lang + '\')" type="checkbox" name="checkbox" id="chk' + (i + 1) + '" data-id="' + thisRow["no"] + '"></td><td class="no">'+rowNo+'</td><td style="text-align:left;">'+thisRow['title']+'</td><td>'+thisRow['similarity']+'</td><td>'+thisRow['year']+'</td><td><a onClick=""><img src="/img/seo.png"></a></td></tr>';			
 				$('#table_'+dataType+'>tbody').html(addRow);
 			}
 		}

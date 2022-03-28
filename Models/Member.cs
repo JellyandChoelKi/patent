@@ -17,5 +17,8 @@ namespace K2GGTT.Models
 		public string Addr1 { get; set; }
 		public string Addr2 { get; set; }
 		public string Email { get; set; }
+		public string Jobtitle { get; set; }
+		public string Website { get; set; }
+		public string Country { get; set; }
 	}
 }

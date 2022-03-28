@@ -239,10 +239,10 @@ namespace K2GGTT.Controllers
 			member.Representative = model.Representative;
 			member.TaxInvoiceOfficer = model.TaxInvoiceOfficer;
 			member.Contact = model.Contact;
-			member.Zipcode = model.Zipcode;
-			member.Addr1 = model.Addr1;
-			member.Addr2 = model.Addr2;
 			member.Email = model.Email;
+			member.Jobtitle = model.Jobtitle;
+			member.Website = model.Website;
+			member.Country = model.Country;
 			_context.Member.Add(member);
 			_context.SaveChanges();
 
@@ -264,10 +264,10 @@ namespace K2GGTT.Controllers
 				model.Representative = member.Representative;
 				model.TaxInvoiceOfficer = member.TaxInvoiceOfficer;
 				model.Contact = member.Contact;
-				model.Zipcode = member.Zipcode;
-				model.Addr1 = member.Addr1;
-				model.Addr2 = member.Addr2;
 				model.Email = member.Email;
+				model.Jobtitle = member.Jobtitle;
+				model.Website = member.Website;
+				model.Country = member.Country;
 			}
 			return View(model);
 		}
@@ -280,13 +280,16 @@ namespace K2GGTT.Controllers
 				return Content(@"<script type='text/javascript'>alert('The session was terminated for an unknown reason. Please try again.');location.href='/En/Login';</script>", "text/html", System.Text.Encoding.UTF8);
 			}
 			var member = _context.Member.Where(x => x.Id == model.Id).FirstOrDefault();
-			if (member.Password != SHA256Hash(model.CurrentPassword))
+			if (!string.IsNullOrEmpty(model.CurrentPassword))
 			{
-				return Content(@"<script type='text/javascript'>alert('Password is not correct.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
-			}
-			if (!string.IsNullOrEmpty(model.Password))
-			{
-				member.Password = SHA256Hash(model.Password);
+				if (member.Password != SHA256Hash(model.CurrentPassword))
+				{
+					return Content(@"<script type='text/javascript'>alert('Password is not correct.');history.back();</script>", "text/html", System.Text.Encoding.UTF8);
+				}
+				if (!string.IsNullOrEmpty(model.Password))
+				{
+					member.Password = SHA256Hash(model.Password);
+				}
 			}
 			member.Gubun = model.Gubun;
 			member.Name = model.Name;
@@ -294,9 +297,9 @@ namespace K2GGTT.Controllers
 			member.Representative = model.Representative;
 			member.TaxInvoiceOfficer = model.TaxInvoiceOfficer;
 			member.Contact = model.Contact;
-			member.Zipcode = model.Zipcode;
-			member.Addr1 = model.Addr1;
-			member.Addr2 = model.Addr2;
+			member.Jobtitle = model.Jobtitle;
+			member.Website = model.Website;
+			member.Country = model.Country;
 			_context.SaveChanges();
 
 			return Content(@"<script type='text/javascript'>alert('You have completed editing your information.');location.href='/En/MyPage';</script>", "text/html", System.Text.Encoding.UTF8);

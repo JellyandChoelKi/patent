@@ -1,5 +1,4 @@
 ﻿@model K2GGTT.ViewModels.MyInfoViewModel
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script src="/js/countrySelect.js" language="javascript"></script>
 <link href="/css/countrySelect.css" rel="stylesheet">
 <style>	div {overflow: visible;}</style>
@@ -42,21 +41,6 @@
 		$("input[name='id_check_yn']").val("N");
 	}
 	$(document).ready(function () {
-		$("#postcode").click(function () {
-			new daum.Postcode({
-				oncomplete: function (data) {
-					var addr = "";
-					if (data.userSelectedType === 'R') {
-						addr = data.roadAddress;
-					} else {
-						addr = data.jibunAddress;
-					}
-					$("input[name='Zipcode']").val(data.zonecode);
-					$("input[name='Addr1']").val(addr);
-					$("input[name='Addr2']").focus();
-				}
-			}).open();
-		});
 		$("#Save").click(function () {
 			var memberid = $("input[name='MemberId']").val();
 			if (!memberid) {
@@ -122,23 +106,6 @@
 					$("input[name='TaxInvoiceOfficer']").focus();
 					return false;
 				}
-			}
-
-			var zipcode = $("input[name='Zipcode']").val();
-			if (!zipcode) {
-                alert("Please enter the zip code.");
-				return false;
-			}
-			var addr1 = $("input[name='Addr1']").val();
-			if (!addr1) {
-                alert("Please enter the address.");
-				return false;
-			}
-			var addr2 = $("input[name='Addr2']").val();
-			if (!addr2) {
-                alert("Please enter the detailed address.");
-				$("input[name='Addr2']").focus();
-				return false;
 			}
 			var email_check_yn = $("input[name='email_check_yn']").val();
 			if (email_check_yn == "N") {
@@ -260,16 +227,6 @@
         <div class="pad10">
 			<label class="small" for="input_contact">Phone (Only by numbers)</label><br>
             <input id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Phonenumber(Only by numbers)" autocomplete="off">
-        </div>
-        <div class="pad10">
-			<label class="small" for="input_zip">Address</label><br>
-            <input id="input_zip" class="style required" asp-for="@(Model.Zipcode)" placeholder="Zip Code" readonly autocomplete="off">
-        </div>
-        <div class="pad10">
-            <input id="input_addr1" class="w100 style required" asp-for="@(Model.Addr1)" placeholder="Address" autocomplete="off">
-        </div>
-        <div class="pad10">
-            <input id="input_addr2" class="w100 style required" asp-for="@(Model.Addr2)" placeholder="Detailed Address" autocomplete="off">
         </div>
         <div class="pad10">
 			<label class="small" for="input_email">E-mail</label><br>

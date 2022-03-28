@@ -17,3 +17,7 @@ Update-Database -Context DBContext
 -- 2022.03.15 HotTech 테이블 컬럼 추가
 Add-Migration AddColumnHotTech -Context DBContext
 Update-Database -Context DBContext
+
+-- 2022.03.28 Member 테이블 컬럼 추가
+Add-Migration AddColumnMember -Context DBContext
+Update-Database -Context DBContext

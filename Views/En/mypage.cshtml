@@ -1,24 +1,7 @@
 ﻿@model K2GGTT.ViewModels.MyInfoViewModel
-<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <script type="text/javascript">
 	// 엔터로인한 submit 방지
 	$(document).keypress(function (e) { if (e.keyCode == 13) e.preventDefault(); });
-	$(document).ready(function () {
-		$("#postcode").click(function () {
-			new daum.Postcode({
-				oncomplete: function (data) {
-					var addr = "";
-					if (data.userSelectedType === 'R') {
-						addr = data.roadAddress;
-					} else {
-						addr = data.jibunAddress;
-					}
-					$("input[name='Zipcode']").val(data.zonecode);
-					$("input[name='Addr1']").val(addr);
-					$("input[name='Addr2']").focus();
-				}
-			}).open();
-		});
 		$("#Save").click(function () {
 			var CurrentPassword = $("input[name='CurrentPassword']").val();
 			if (!CurrentPassword) {
@@ -82,24 +65,7 @@
 					return false;
 				}
 			}
-
-			var zipcode = $("input[name='Zipcode']").val();
-			if (!zipcode) {
-                alert("Please enter the zip code.");
-				return false;
-			}
-			var addr1 = $("input[name='Addr1']").val();
-			if (!addr1) {
-                alert("Please enter the address.");
-				return false;
-			}
-			var addr2 = $("input[name='Addr2']").val();
-			if (!addr2) {
-                alert("Please enter the detailed address.");
-				$("input[name='Addr2']").focus();
-				return false;
-			}
-			if (confirm("정보를 수정하시겠습니까?")) {
+			if (confirm("would you like to add information?")) {
 				var form = document.regiform;
 				form.submit();
 			}
@@ -117,72 +83,73 @@
 	});
 </script>
 <div class="flex center w100 h100 rela" style="overflow: hidden;">
-    <form name="regiform" id="regiform" method="post" action="/En/MyPageProc">
-        <input type="hidden" asp-for="@(Model.Id)">
-        <div class="flex pad10">
-            <input id="memberid" class="style required" placeholder="ID" asp-for="@(Model.MemberId)" autocomplete="off" readonly style="background-color: lightgray;">
-        </div>
-        <div class="flex pad10">
-            <input type="password" class="style required" placeholder="Current Passwrod" asp-for="@(Model.CurrentPassword)">
-        </div>
-        <div class="flex pad10">
-            <input id="input_password" type="password" asp-for="@(Model.Password)" class="style required" placeholder="Enter the password (8 to 20 characters and a combination of letters + numbers + special characters)" maxlength="20" autocomplete="off"><br>
-        </div>
-        <div class="flex pad10">
-            <input id="input_password_re" type="password" class="style required" placeholder="Enter the password again." maxlength="20" autocomplete="off">
-        </div>
-        <div class="flex pad10 vcenter">
-            <input type="radio" asp-for="@(Model.Gubun)" id="gubun1" value="1" checked="checked"><label for="gubun1">개인</label>
-            <input type="radio" asp-for="@(Model.Gubun)" id="gubun2" value="2"><label for="gubun2">기업</label>
-        </div>
-        <div class="flex pad10">
-            <input id="input_name" class="style required" asp-for="@(Model.Name)" placeholder="Individual(Company)" autocomplete="off">
-        </div>
-        @if (Model.Gubun == 2)
-        {
-            <div id="enterprise_input_area">
-                <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="Business Registration Number" autocomplete="off">
-                </div>
-                <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="Representative's name" autocomplete="off">
-                </div>
-                <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="Name of person in charge of tax invoice" autocomplete="off">
-                </div>
-            </div>
-        }
-        else
-        {
-            <div id="enterprise_input_area" style="display: none;">
-                <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="Business Registration Number" autocomplete="off">
-                </div>
-                <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="Representative's name" autocomplete="off">
-                </div>
-                <div class="flex pad10">
-                    <input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="Name of person in charge of tax invoice" autocomplete="off">
-                </div>
-            </div>
-        }
-        <div class="flex pad10">
-            <input id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Contact Number(Only Number)" autocomplete="off">
-        </div>
-        <div class="flex pad10">
-            <input id="input_contact" class="style required" asp-for="@(Model.Zipcode)" placeholder="Zip code" readonly autocomplete="off">
-        </div>
-        <div class="flex pad10">
-            <input id="input_contact" class="style required" asp-for="@(Model.Addr1)" placeholder="Address" autocomplete="off">
-        </div>
-        <div class="flex pad10">
-            <input id="input_contact" class="style required" asp-for="@(Model.Addr2)" placeholder="Address(Detail)" autocomplete="off">
-        </div>
-        <div class="flex pad10">
-            <input id="input_email" class="style required" asp-for="@(Model.Email)" placeholder="Email" autocomplete="off" readonly style="background-color: lightgray;">
-        </div>
-        <div class="tc pad30">
-            <button class="style" id="Save">Modify</button>
-        </div>
-    </form>
+	<form name="regiform" id="regiform" method="post" action="/En/MyPageProc">
+		<input type="hidden" asp-for="@(Model.Id)">
+		<div class="flex pad10">
+			<input id="memberid" class="style required" placeholder="ID" asp-for="@(Model.MemberId)" autocomplete="off" readonly style="background-color: lightgray;">
+		</div>
+		<div class="flex pad10">
+			<input type="password" class="style required" placeholder="Current Passwrod" asp-for="@(Model.CurrentPassword)">
+		</div>
+		<div class="flex pad10">
+			<input id="input_password" type="password" asp-for="@(Model.Password)" class="style required" placeholder="Enter the password (8 to 20 characters and a combination of letters + numbers + special characters)" maxlength="20" autocomplete="off"><br>
+		</div>
+		<div class="flex pad10">
+			<input id="input_password_re" type="password" class="style required" placeholder="Enter the password again." maxlength="20" autocomplete="off">
+		</div>
+		<div class="flex pad10 vcenter">
+			<input type="radio" asp-for="@(Model.Gubun)" id="gubun1" value="1" checked="checked"><label for="gubun1">Individual</label>
+			<input type="radio" asp-for="@(Model.Gubun)" id="gubun2" value="2"><label for="gubun2">Company</label>
+		</div>
+		<div class="flex pad10">
+			<input id="input_name" class="style required" asp-for="@(Model.Name)" placeholder="Individual(Company)" autocomplete="off">
+		</div>
+		@if (Model.Gubun == 2)
+		{
+			<div id="enterprise_input_area">
+				<div class="flex pad10">
+					<input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="Business Registration Number" autocomplete="off">
+				</div>
+				<div class="flex pad10">
+					<input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="Representative's name" autocomplete="off">
+				</div>
+				<div class="flex pad10">
+					<input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="Name of person in charge of tax invoice" autocomplete="off">
+				</div>
+			</div>
+		}
+		else
+		{
+			<div id="enterprise_input_area" style="display: none;">
+				<div class="flex pad10">
+					<input id="input_name" class="style required" asp-for="@(Model.CompanyRegistrationNumber)" placeholder="Business Registration Number" autocomplete="off">
+				</div>
+				<div class="flex pad10">
+					<input id="input_name" class="style required" asp-for="@(Model.Representative)" placeholder="Representative's name" autocomplete="off">
+				</div>
+				<div class="flex pad10">
+					<input id="input_name" class="style required" asp-for="@(Model.TaxInvoiceOfficer)" placeholder="Name of person in charge of tax invoice" autocomplete="off">
+				</div>
+			</div>
+		}
+		<div class="flex pad10">
+			<input id="input_title" class="style" asp-for="@(Model.Jobtitle)" placeholder="Job title" autocomplete="off">
+		</div>
+
+		<div class="flex pad10">
+			<input id="input_web" class="style" asp-for="@(Model.Website)" placeholder="Website" autocomplete="off">
+		</div>
+		<div class="flex pad10">
+			<input id="country_selector" type="text" class="style" asp-for="@(Model.Country)">
+		</div>
+		<div class="flex pad10">
+			<input id="input_contact" class="style required" asp-for="@(Model.Contact)" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" placeholder="Contact Number(Only Number)" autocomplete="off">
+		</div>
+		<div class="flex pad10">
+			<input id="input_email" class="style required" asp-for="@(Model.Email)" placeholder="Email" autocomplete="off" readonly style="background-color: lightgray;">
+		</div>
+		<div class="tc pad30">
+			<button class="style" id="Save">Modify</button>
+		</div>
+	</form>
 </div>

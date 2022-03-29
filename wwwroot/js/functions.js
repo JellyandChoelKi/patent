@@ -86,7 +86,7 @@ function popupReport(type, id) {
 function popupReportSelected(type) {
 	let id = '';
 	let arr = [];
-	let checkCount = $('input:checkbox[name="checkbox"]:checked').length;
+	let checkCount = $('#table_'+type+' input:checkbox[name="checkbox"]:checked').length;
 	if (checkCount == 0) {
 		alert('선택된 리스트가 없습니다. No list selected.');
 	} else {
@@ -101,9 +101,9 @@ function popupReportSelected(type) {
 	}
 }
 
-function countCheck(e, lang) {
+function countCheck(type, e, lang) {
 	let alertCount = '';
-	let checkCount = $('input:checkbox[name="checkbox"]:checked').length;
+	let checkCount = $('#table_'+type+' input:checkbox[name="checkbox"]:checked').length;
 	console.log(checkCount);
 	if (lang == 'en') {
 		alertCount = "Cannot check more than 10 lists.";

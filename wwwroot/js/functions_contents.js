@@ -94,44 +94,6 @@ function pushToc (dataType, legendRange, lang) {
 	makePage(dataType, rowNo);
 }
 
-function popupReport(type,id) {
-	const url = "./report.html?type="+type+"&id="+id;
-	const name = "Report";
-	const option = "width = 920, height = 1200, top = 100, left = 200";
-	window.open(url, name, option);
-}
-
-function popupReportSelected (type) {
-	let id = '';
-	let checkCount = $('input:checkbox[name="checkbox"]:checked').length;
-	if(checkCount == 0) {
-		alert('선택된 리스트가 없습니다. No list selected.');
-	} else {
-		$('input[name="checkbox"]:checked').each(function (){
-			id += ($(this).data('id')) + '|';
-		});
-		const url = "./report.html?type="+type+"&id="+id;
-		const name = "Report";
-		const option = "width = 920, height = 1200, top = 100, left = 200";
-		window.open(url, name, option);
-	}
-}
-
-function countCheck (e, lang) {
-	let alertCount = '';
-	let checkCount = $('input:checkbox[name="checkbox"]:checked').length;
-	console.log (checkCount);
-	if(lang == 'en') {
-		alertCount = "Cannot check more than 10 lists.";
-	} else {
-		alertCount = "10개 이상 체크할 수 없습니다.";
-	}
-	if(checkCount > 10) {
-		alert(alertCount);
-		$("input#chk"+(e+1)).prop("checked", false);
-	}
-}
-
 let currentPage = {
 	patent:1,
 	article:1,

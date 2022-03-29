@@ -103,7 +103,7 @@
 		<div id="patent_wrap" class="post_wrap">
 			<div id="patentTitle" class="flex between">
 				<h3 class="pad20">특허</h3>
-				<div class="btn_wrap"><button class="pad10" onClick="popupReportSelected()">목록 다운로드 (Excel)</button><button class="pad10" onClick="downAll()">리포트 다운로드 (PDF)</button></div>
+				<div class="btn_wrap"><button class="pad10" onClick="ExcelDownload('patent', 'kr')">목록 다운로드 (Excel)</button><button class="pad10" onClick="downAll('patent', 'kr')">리포트 다운로드 (PDF)</button></div>
 			</div>
 			<table id="table_patent" class="w100 tc toc">
 				<thead><tr><th class="no"><input type="checkbox" name="checkboxAll" value="selectall" onclick="selectAll(this)" /></th><th class="no">번호</th><th class="title">제목</th><th>유사도</th><th class="year">출원일</th><th class="report"></th></tr></thead>
@@ -117,7 +117,7 @@
 		<div id="article_wrap" class="post_wrap">
 			<div id="articleTitle" class="flex between">
 				<h3 class="pad20">논문</h3>
-				<div class="btn_wrap"><button class="pad10" onClick="popupReportSelected()">목록 다운로드 (Excel)</button><button class="pad10" onClick="downAll()">리포트 다운로드 (PDF)</button></div>
+				<div class="btn_wrap"><button class="pad10" onClick="ExcelDownload('article', 'kr')">목록 다운로드 (Excel)</button><button class="pad10" onClick="downAll('article', 'kr')">리포트 다운로드 (PDF)</button></div>
 			</div>
 			<table id="table_article" class="w100 tc toc">	
 				<thead><tr><th class="no"><input type="checkbox" name="checkboxAll" value="selectall" onclick="selectAll(this)" /></th><th class="no">번호</th><th class="title">제목</th><th>유사도</th><th class="year">발행연도</th><th class="report"></th></tr></thead>

@@ -13,7 +13,7 @@ namespace K2GGTT.Controllers
 	{
 		public IActionResult Index()
 		{
-			return RedirectToAction("index", "kr");
+			return RedirectToAction("index", "en");
 		}
 	}
 }

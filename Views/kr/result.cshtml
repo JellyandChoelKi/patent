@@ -11,16 +11,17 @@
 			dataType: "JSON",
 			beforeSend: function () {
 				console.log("Patent Start");
-				$('#loading>div#status').append('<p>특허데이터를 분석 중입니다.</p>');
+				$('div#status').append('<p>특허데이터를 분석 중입니다.</p>');
 			},
 			success: function (result) {
 				console.log('Patent Success');
-				$('#loading>div#status').append('<p>특허데이터 분석이 완료되었습니다.</p>');
+				$('div#status').append('<p>특허데이터 분석이 완료되었습니다.</p>');
 				data["patent"] = result;
 				pushScatterSeries("patent");
 			},
 			error: function () {
 				$('#loading>div#status').append('<p style="color:#C00;">특허데이터 획득에 실패하였습니다.</p>');
+				$('div#btn').html('<a onClick="refresh()" class="btn blue" style="padding:10px 20px;">재검색</a>');
 			},
 			complete: function () {
 				console.log('Patent End');
@@ -33,16 +34,17 @@
 			dataType: "JSON",
 			beforeSend: function () {
 				console.log("Article Start");
-				$('#loading>div#status').append('<p>논문데이터를 분석 중입니다.</p>')
+				$('div#status').append('<p>논문데이터를 분석 중입니다.</p>')
 			},
 			success: function (result) {
 				console.log('Article Success');
-				$('#loading>div#status').append('<p>논문데이터 분석이 완료되었습니다.</p>')
+				$('div#status').append('<p>논문데이터 분석이 완료되었습니다.</p>')
 				data["article"] = result;
 				pushScatterSeries("article");
 			},
 			error: function () {
-				$('#loading>div#status').append('<p style="color:#C00;">논문데이터 분석이 실패하였습니다.</p>');
+				$('div#status').append('<p style="color:#C00;">논문데이터 분석이 실패하였습니다.</p>');
+				$('div#btn').html('<a onClick="refresh()" class="btn blue" style="padding:10px 20px;">재검색</a>');
 			},
 			complete: function () {
 				console.log('Article Ended');
@@ -55,7 +57,7 @@
 	}	
 </script>
 
-<div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000;">
+<div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000; top:0;">
 	<div class="tc">
 		<canvas id="mycanvas"></canvas>
 	<div id="status" class="tc">

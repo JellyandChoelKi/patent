@@ -22,6 +22,10 @@ function underconstruction (e) {
 	if(e == 'en') {alert ('Coming soon.');} else {alert ('준비중입니다.');}
 }
 
+function refresh() {
+	location.reload();
+}
+
 function hamburger () {
 	$('#hamburger').toggleClass('active');
 	$('#mnav').slideToggle("fast");

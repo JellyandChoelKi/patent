@@ -56,13 +56,16 @@
 		});
 	}	
 </script>
-
+<style>
+	body {overflow: hidden;}
+</style>
 <div id="loading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000; top:0;">
 	<div class="tc">
 		<canvas id="mycanvas"></canvas>
-	<div id="status" class="tc">
-		<h4 class="mb10 wh">검색 중입니다. <wbr>검색어에 따라 2~3분 정도 소요됩니다.</h4>		
-	</div>
+		<div id="status" class="tc">
+			<h4 class="mb10 wh">검색 중입니다. <wbr>검색어에 따라 2~3분 정도 소요됩니다.</h4>		
+		</div>
+		<div id="btn"></div>
 	</div>
 </div>
 <div id="pdfloading" class="w100 h100 abs flex center" style="background-color:#FFF; z-index: 1000; display: none;">

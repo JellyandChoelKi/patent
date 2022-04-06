@@ -78,24 +78,31 @@
 		<h3 class="tc">Select a Legend</h3>
 		<div class="pad20">
 			<div class="flex center">			
-				<select id="legend_all" class="style legendSelect" style="margin:5px;" onChange="selectLegend('all')">
-					<option value="E00">All</option>
-					<option id="E90" value="E90" class="none">90%</option>
-					<option id="E80" value="E80" class="none">80%</option>
-					<option id="E70" value="E70" class="none">70%</option>
-					<option id="E60" value="E60" class="none">60%</option>
-					<option id="E50" value="E50" class="none">50%</option>
-					<option id="E40" value="E40" class="none">40%</option>
-					<option id="E30" value="E30" class="none">30%</option>
-					<option id="E20" value="E20" class="none">20%</option>
-					<option id="E10" value="E10" class="none">10%</option>
-				</select>
-				<select id="legend_patent" class="style legendSelect" style="margin:5px;" onChange="selectLegend('patent')">
-					<option value="P00">Patent</option>						
-				</select>
-				<select id="legend_article" class="style legendSelect" style="margin:5px;" onChange="selectLegend('article')">
-					<option value="A00">Article</option>						
-				</select>
+				<div>
+					<label for="legend_all">All</label><br>
+					<select id="legend_all" class="style legendSelect" style="margin:5px;" onChange="selectLegend('all')">
+						<option id="E00" value="E00">All</option>
+						<option id="E90" value="E90" class="none">90%</option>
+						<option id="E80" value="E80" class="none">80%</option>
+						<option id="E70" value="E70" class="none">70%</option>
+						<option id="E60" value="E60" class="none">60%</option>
+						<option id="E50" value="E50" class="none">50%</option>
+						<option id="E40" value="E40" class="none">40%</option>
+						<option id="E30" value="E30" class="none">30%</option>
+						<option id="E20" value="E20" class="none">20%</option>
+						<option id="E10" value="E10" class="none">10%</option>
+					</select>
+				</div>
+				<div>
+					<label for="legend_patent">Patents</label><br>
+					<select id="legend_patent" class="style legendSelect" style="margin:5px;" onChange="selectLegend('patent')">
+					</select>
+				</div>
+				<div>
+					<label for="legend_article">Articles</label><br>
+					<select id="legend_article" class="style legendSelect" style="margin:5px;" onChange="selectLegend('article')">
+					</select>
+				</div>
 			</div>
 		</div>
 		<div id="graph_wrap" class="flex center pad10">	

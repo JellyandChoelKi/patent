@@ -2,7 +2,7 @@ function selectLegend (dataType, e) {
 	let legendName = $('#legend_'+dataType).val();
 	let legendRange = (((legendName.substr(1)*1)-5) * 0.01);
 	if(legendRange == -0.05) {legendRange = 0;}
-	$('.legendSelect').not('#legend_'+dataType).val("");
+	$('.legendSelect').not('#legend_'+dataType).val(" ");
 
 	if(dataType == 'all') {
 		focusRange(legendRange, 'all');

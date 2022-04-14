@@ -55,8 +55,13 @@
 			<nav id="mnav" class="tc" style="padding-top:100px;">
 				<a href="/kr/about" class="pad20">About K2G</a>
 				<a href="/kr" class="pad20">Tech Finder</a>
-				<a class="pad20" onClick="underconstruction('kr')">User Finder</a>
-				<a href="/kr/hottech" class="pad20">Hot Tech</a>
+				@{
+					if (Context.Session.GetString("MemberId") != null)
+					{
+						<a class="pad20" onClick="underconstruction('kr')">User Finder</a>
+						<a href="/kr/hottech" class="pad20">Hot Tech</a>
+					}
+				}
 				<a href="/kr/networks" class="pad20">Networks</a>
 				@{
 					if (Context.Session.GetString("MemberId") != null)
@@ -80,9 +85,14 @@
 				Copyright &copy; <strong><a href="http://k2g.co.kr" target="_blank">K2GPartners</a></strong> 2019.<wbr> All rights Reserved.
 			</span>
 			<nav class="flex center pad20 mhide">
-				<a href="" class="pad10">회원약관</a>
-				<span class="pad10">&nbsp;|&nbsp;</span>
-				<a href="" class="pad10">개인정보보호방침</a>
+				@{
+					if (Context.Session.GetString("MemberId") != null)
+					{
+						<a href="" class="pad10">회원약관</a>
+						<span class="pad10">&nbsp;|&nbsp;</span>
+						<a href="" class="pad10">개인정보보호방침</a>
+					}
+				}
 			</nav>
 		</footer>
 	</div>

@@ -45,32 +45,37 @@
 				<nav id="nav" class="bold">
 					<a href="/en/about" class="pad20">About K2G</a>
 					<a href="/en" class="pad20">Tech Finder</a>
-					<a class="pad20" onClick="underconstruction('en')">User Finder</a> 
-					<a href="/en/hottech" class="pad20">Hot Tech</a>
-					<a href="/en/networks" class="pad20">Networks</a>					
+					@{
+						if (Context.Session.GetString("MemberId") != null)
+						{
+							<a class="pad20" onClick="underconstruction('en')">User Finder</a>
+							<a href="/en/hottech" class="pad20">Hot Tech</a>
+						}
+					}
+					<a href="/en/networks" class="pad20">Networks</a>
 				</nav>
 			</div>
         </header>
         <div>
-            <nav id="mnav" class="tc">
-                <a href="/en/about" class="pad20">About K2G</a>
-                <a href="/en" class="pad20">Tech Finder</a>
+			<nav id="mnav" class="tc">
+				<a href="/en/about" class="pad20">About K2G</a>
+				<a href="/en" class="pad20">Tech Finder</a>
 				<a class="pad20" onClick="underconstruction('en')">User Finder</a>
-                <a href="/en/hottech" class="pad20">Hot Tech</a>
+				<a href="/en/hottech" class="pad20">Hot Tech</a>
 				<a href="/en/networks" class="pad20">Networks</a>
-                @{
-                    if (Context.Session.GetString("MemberId") != null)
-                    {
-                        <a href="/en/mypage" class="pad20">My Page</a>
-                        <a href="/en/logout" class="pad20">Log Out</a>
-                    }
-                    else
-                    {
-                        <a href="/en/login" class="pad20">Log in</a>
-                    }
-                }
-                <a href="/kr" class="pad20">Korean</a>
-            </nav>
+				@{
+					if (Context.Session.GetString("MemberId") != null)
+					{
+						<a href="/en/mypage" class="pad20">My Page</a>
+						<a href="/en/logout" class="pad20">Log Out</a>
+					}
+					else
+					{
+						<a href="/en/login" class="pad20">Log in</a>
+					}
+				}
+				<a href="/kr" class="pad20">Korean</a>
+			</nav>
         </div>
     </div>
     @RenderBody()
@@ -79,11 +84,16 @@
             <span class="pad30" style="white-space: nowrap;">
                 Copyright &copy; <strong><a href="http://k2g.co.kr">K2GPartners</a></strong> 2019.<wbr> All rights Reserved.
             </span>
-            <nav class="flex center pad20 mhide">
-                <a href="" class="pad10">Terms of Agreement</a>
-                <span class="pad10">&nbsp;|&nbsp;</span>
-                <a href="" class="pad10">Privacy Policy</a>
-            </nav>
+			<nav class="flex center pad20 mhide">
+				@{
+					if (Context.Session.GetString("MemberId") != null)
+					{
+						<a href="" class="pad10">Terms of Agreement</a>
+						<span class="pad10">&nbsp;|&nbsp;</span>
+						<a href="" class="pad10">Privacy Policy</a>
+					}
+				}
+			</nav>
         </footer>
     </div>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

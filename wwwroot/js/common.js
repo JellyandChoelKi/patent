@@ -15,7 +15,7 @@ let getParameters = function (paramName) {
 		}
 	}
 };
-		
+	
 let keywords = getParameters('keywords');
 
 function underconstruction (e) {

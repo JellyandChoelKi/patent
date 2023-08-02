@@ -1,0 +1,110 @@
+﻿<style>
+	.cf{
+		display:block;
+		content:"";
+		clear:both;
+	}
+	body {
+		font-family: 'Noto Sans KR',sans-serif;
+	}
+	#wrap {
+		width: 100%;
+		/* width: 1920px; height= 1080 */
+	}
+	.userbox {
+		margin-top: 5.555556vh;
+		width: 100%;
+		padding-top:8vh;
+		height: 32.666667vh;
+		background-color: #00B2EC;
+	}
+	.userbox h2{
+		color:#D7E4E8;
+		font-size:4.766667vh;
+		font-weight:900;
+		text-shadow: 0px 1px 1px #000;
+	}
+	.userbox p {
+		font-size:1.35vh;
+		font-weight:400;
+	}
+	#usersearch{
+		margin-left:0 ;
+		padding-left:0 ;
+		margin-top:8px;
+	}
+	#usersearch input{
+		background-image:url(~/img/userfinderimage.png/);
+	}
+	.userreact {
+		width:72%;
+		margin: 0 auto;
+	}
+	.userbox_left{
+		width:75%;
+		float:left;
+	}
+	.userbox_left div{
+		max-width:1000px;
+	}
+	.userbox_right{
+		width:22%;
+		float:left;
+		margin-left:30px;
+	}
+	.userbox_right img{
+		margin:0;
+		margin-top:1.503704vh;
+		width: 14.8125vw;  
+		height: 21.296296vh;
+		padding:0;
+	}
+	.searchside {
+		position:absolute;
+		right:12px;
+		top:22px;
+		z-index:222;
+	}
+	.userimgline{
+		margin: 0 auto;
+		width:72%;
+		margin-top:4.503704vh;
+		display:flex;
+		justify-content: space-between;
+	}
+	.userimgline img{
+		width:17.65625vw;
+		height:25.185185vh;
+	}
+	.userimgline img:nth-child(2){
+		/*margin-left: 12.2vw;*/
+		width:41.09375vw;
+	}
+</style>
+<div id="wrap">
+	<form name="search" method="post" class="flex center w100 h100" action="usresult">
+			<div class="userbox">
+				<div class="userreact cf">
+					<div class="userbox_left">
+						<h2>K2G User Finder service</h2>
+						<div class="pad20" id="usersearch">
+    						<div style="box-sizing: border-box; position:relative;">
+    							<input name="searchWord" id="main_search" placeholder="검색어를 입력하세요.">
+								<div class="searchside">
+									<img src="./img/search.png"/>
+								</div>
+    						</div>
+    					</div>
+						<p>한국)출원번호:10-2016-0002154,등록번호:10-1623332&nbsp;|&nbsp;미국)출원번호:13-532918,등록번호:US7787591&nbsp;|&nbsp;유럽)출원번호:EP201588794,등록번호:EP02594436B1</p>
+					</div>
+					<div class="userbox_right">
+						<img src="~/img/userimg.png"/>
+					</div>
+				</div>
+			</div>
+	</form>
+	<div class="userimgline">
+		<img src="~/img/userimgt.png"/>
+		<img src="~/img/treand.png"/>
+	</div>
+</div>

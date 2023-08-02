@@ -17,22 +17,24 @@
         @foreach (var m in ViewBag.List)
         {
             <div class="mb30">
-                <li style="border: #CCC 1px solid;" class="pad30">
-                    <h3><a href="/En/hottechdetail?id=@(m.Id)">@(m.Title)</a></h3>
-                    <hr>
-                    <div class="flex w100" style="box-sizing: border-box;">
-                        <p>@(Extension.HtmlIncode(m.Content))</p>
-                        <div style="width:400px;">
-                            <img style="width: 100px;" src="~/ufile/@(m.ApplicantImgSrc)" alt="Image">
-                            <div class="pad10">
-                                <h5>@(m.ApplicantName)</h5>
-                                <p>
-                                    @(m.ApplicantMajor)
-                                </p>
+                <ul>
+                    <li style="border: #CCC 1px solid;" class="pad30">
+                        <h3><a href="/En/hottechdetail?id=@(m.Id)">@(m.Title)</a></h3>
+                        <hr>
+                        <div class="flex w100" style="box-sizing: border-box;">
+                            <p>@(Extension.HtmlIncode(m.Content))</p>
+                            <div style="width:400px;">
+                                <img style="width: 100px;" src="~/ufile/@(m.ApplicantImgSrc)" alt="Image">
+                                <div class="pad10">
+                                    <h5>@(m.ApplicantName)</h5>
+                                    <h5>
+                                        @(m.ApplicantMajor)
+                                    </h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                </ul>
             </div>
         }
     </div>

@@ -578,7 +578,11 @@ namespace K2GGTT.Controllers
 			ViewBag.Keywords = keywords;
 			return View();
 		}
-
+		public IActionResult usresult(string keywords)
+		{
+			ViewBag.PatentKeyword = searchWord.Replace(" ", "");
+			return View();
+		}
 		public IActionResult Result(string keywords)
 		{
 			ViewBag.PatentKeyword = keywords.Replace(" ", "").Replace("+", "|");
@@ -586,6 +590,7 @@ namespace K2GGTT.Controllers
 
 			return View();
 		}
+		
 
 		public IActionResult PatentReport(string id)
 		{
@@ -1062,6 +1067,11 @@ namespace K2GGTT.Controllers
 		{
 			MyInfoViewModel model = new MyInfoViewModel();
 			return View(model);
+		}
+
+		public IActionResult Userfinder()
+		{
+			return View();
 		}
 
 		public IActionResult Networks()

@@ -47,4 +47,34 @@ function totalAjax() {
         ).done(function () {
 			initiateChart("scatter");
         })
-    }
+}
+
+
+function totalAjax2() {
+    $.when(
+        $.ajax({ // 특허 API
+            url: 'https://k2gdoc2vec.azurewebsites.net/patentData?searchWord=' + '@ViewBag.PatentKeyword',
+            type: "GET",
+            dataType: "JSON",
+            beforeSend: function () {
+                console.log("Patent Start");
+                $('#loading>div#status').append('<p>특허데이터를 분석 중입니다.</p>');
+            },
+            success: function (result2) {
+                console.log('Patent Success');
+                $('#loading>div#status').append('<p>특허데이터 분석이 완료되었습니다.</p>');
+                data["patent"] = result2;
+                pushScatterSeries("patent");
+            },
+            error: function () {
+                $('#loading>div#status').append('<p style="color:#C00;">특허데이터 획득에 실패하였습니다.</p>');
+            },
+            complete: function () {
+                console.log('Patent End');
+                //searchArticles();
+            }
+        }),
+    ).done(function () {
+        initiateChart("scatter");
+    })
+}
